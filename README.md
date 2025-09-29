@@ -46,7 +46,53 @@ A Model Context Protocol (MCP) server for integrating with the Tomba.io API. Thi
 -   npm or yarn
 -   Tomba API account ([Sign up here](https://tomba.io))
 
-### Build the Server
+### Option 1: Install via NPX (Recommended)
+
+The easiest way to use the Tomba MCP server is via npx, which doesn't require cloning the repository:
+
+#### macOS/Linux
+
+Add to your `claude_desktop_config.json` (`~/Library/Application Support/Claude/claude_desktop_config.json`):
+
+```json
+{
+    "mcpServers": {
+        "tomba": {
+            "command": "npx",
+            "args": ["-y", "tomba-mcp-server"],
+            "env": {
+                "TOMBA_API_KEY": "your-api-key-here",
+                "TOMBA_SECRET_KEY": "your-secret-key-here"
+            }
+        }
+    }
+}
+```
+
+#### Windows
+
+Add to your `claude_desktop_config.json` (`%APPDATA%\Claude\claude_desktop_config.json`):
+
+```json
+{
+    "mcpServers": {
+        "tomba": {
+            "command": "npx",
+            "args": ["-y", "tomba-mcp-server"],
+            "env": {
+                "TOMBA_API_KEY": "your-api-key-here",
+                "TOMBA_SECRET_KEY": "your-secret-key-here"
+            }
+        }
+    }
+}
+```
+
+**Note:** The `-y` flag automatically accepts the installation prompt, and npx will always fetch the latest version.
+
+### Option 2: Install from Source
+
+If you want to modify the server or contribute to development:
 
 ```bash
 # Clone the repository
@@ -64,11 +110,51 @@ yarn build
 
 ### Claude Desktop Setup
 
-To use this server with Claude Desktop, add the following configuration to your `claude_desktop_config.json`:
+To use this server with Claude Desktop, add the configuration to your `claude_desktop_config.json` file.
 
-#### macOS/Linux
+#### Using NPX (Recommended)
 
-Location: `~/Library/Application Support/Claude/claude_desktop_config.json`
+This method automatically uses the latest published version:
+
+**macOS/Linux** (`~/Library/Application Support/Claude/claude_desktop_config.json`):
+
+```json
+{
+    "mcpServers": {
+        "tomba": {
+            "command": "npx",
+            "args": ["-y", "tomba-mcp-server"],
+            "env": {
+                "TOMBA_API_KEY": "your-api-key-here",
+                "TOMBA_SECRET_KEY": "your-secret-key-here"
+            }
+        }
+    }
+}
+```
+
+**Windows** (`%APPDATA%\Claude\claude_desktop_config.json`):
+
+```json
+{
+    "mcpServers": {
+        "tomba": {
+            "command": "npx",
+            "args": ["-y", "tomba-mcp-server"],
+            "env": {
+                "TOMBA_API_KEY": "your-api-key-here",
+                "TOMBA_SECRET_KEY": "your-secret-key-here"
+            }
+        }
+    }
+}
+```
+
+#### Using Local Installation
+
+If you've built from source, use the absolute path to your installation:
+
+**macOS/Linux:**
 
 ```json
 {
@@ -85,9 +171,7 @@ Location: `~/Library/Application Support/Claude/claude_desktop_config.json`
 }
 ```
 
-#### Windows
-
-Location: `%APPDATA%\Claude\claude_desktop_config.json`
+**Windows:**
 
 ```json
 {
@@ -108,8 +192,8 @@ Location: `%APPDATA%\Claude\claude_desktop_config.json`
 
 **Important Notes:**
 
--   Replace `/ABSOLUTE/PATH/TO/tomba-mcp-server` with the full path to your installation directory
 -   Replace `your-api-key-here` and `your-secret-key-here` with your actual Tomba API credentials
+-   For local installation, replace `/ABSOLUTE/PATH/TO/tomba-mcp-server` with the full path to your installation directory
 -   Restart Claude Desktop after updating the configuration
 
 ### Getting Tomba API Credentials
@@ -122,7 +206,31 @@ Location: `%APPDATA%\Claude\claude_desktop_config.json`
 
 ### Alternative: Using HTTP Transport
 
-For HTTP transport, update your Claude Desktop config:
+For HTTP transport with npx:
+
+```json
+{
+    "mcpServers": {
+        "tomba": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "tomba-mcp-server",
+                "--transport",
+                "http",
+                "--port",
+                "3000"
+            ],
+            "env": {
+                "TOMBA_API_KEY": "your-api-key-here",
+                "TOMBA_SECRET_KEY": "your-secret-key-here"
+            }
+        }
+    }
+}
+```
+
+For HTTP transport with local installation:
 
 ```json
 {
@@ -437,19 +545,41 @@ Validate phone numbers and check carrier information.
     node --version
     ```
 
-2. **Verify absolute path**: Make sure you're using the absolute path to `dist/index.js` in your config
+2. **Using NPX:**
 
-3. **Check build output**: Ensure `dist/index.js` exists
+    - Ensure you have a stable internet connection for the first run
+    - The `-y` flag should auto-accept the installation
+    - NPX will cache the package after first use
 
-    ```bash
-    ls -la dist/index.js
-    ```
+3. **Using Local Installation:**
+
+    - Verify absolute path is correct in your config
+    - Ensure `dist/index.js` exists: `ls -la dist/index.js`
+    - Make sure you ran `yarn build` successfully
 
 4. **Verify API credentials**: Ensure your Tomba API keys are correct
 
 5. **Check Claude logs**:
     - macOS: `~/Library/Logs/Claude/mcp*.log`
     - Windows: `%APPDATA%\Claude\logs\mcp*.log`
+
+### NPX-Specific Issues
+
+**"npx command not found":**
+
+-   Ensure npm is installed: `npm --version`
+-   NPX comes with npm 5.2.0+, update if needed: `npm install -g npm`
+
+**Package not found:**
+
+-   Verify the package is published: `npm view tomba-mcp-server`
+-   Try clearing npm cache: `npm cache clean --force`
+
+**Always downloading package:**
+
+-   This is normal behavior with `-y` flag
+-   NPX caches the package after first download
+-   For a permanent installation, use local installation method
 
 ### Authentication Errors
 
