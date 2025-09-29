@@ -1,0 +1,146 @@
+{
+    "manifest_version": "0.2",
+    "name": "tomba-mcp-server",
+    "display_name": "Tomba MCP Server",
+    "version": "1.0.0",
+    "description": "MCP server for Tomba email finder and verification API",
+    "long_description": "This MCP server integrates with the Tomba.io API to provide tools for finding and verifying email addresses, enriching contact information, and discovering phone numbers. It offers a variety of tools, resources, and prompts to help users leverage Tomba's capabilities for lead generation, email verification, and contact enrichment.",
+    "author": {
+        "name": "Tomba technology web service LLC",
+        "email": "info@tomba.io",
+        "url": "https://tomba.io"
+    },
+    "license": "Apache-2.0",
+    "homepage": "https://tomba.io",
+    "icon": "icon.png",
+    "documentation": "https://docs.tomba.io/mcp/introduction",
+    "support": "https://github.com/tomba-io/tomba-mcp-server/issues",
+    "screenshots": [
+        "assets/screenshots/screenshot1.png",
+        "assets/screenshots/screenshot2.png",
+        "assets/screenshots/screenshot3.png",
+        "assets/screenshots/screenshot4.png",
+        "assets/screenshots/screenshot5.png"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/tomba-io/tomba-mcp-server.git"
+    },
+    "keywords": [
+        "mcp",
+        "model-context-protocol",
+        "tomba",
+        "email-finder",
+        "email-verification",
+        "email-enrichment",
+        "lead-generation",
+        "contact-discovery",
+        "phone-finder",
+        "phone-validator"
+    ],
+    "server": {
+        "type": "node",
+        "entry_point": "server/index.js",
+        "mcp_config": {
+            "command": "node",
+            "args": ["${__dirname}/server/index.js"],
+            "env": {
+                "TOMBA_API_KEY": "${user_config.TOMBA_API_KEY}",
+                "TOMBA_SECRET_KEY": "${user_config.TOMBA_SECRET_KEY}"
+            }
+        }
+    },
+    "tools": [
+        {
+            "name": "domain_search",
+            "description": "Search for all email addresses associated with a domain"
+        },
+        {
+            "name": "email_finder",
+            "description": "Find a specific person's email address using their name and company domain"
+        },
+        {
+            "name": "email_verifier",
+            "description": "Verify if an email address is valid and deliverable"
+        },
+        {
+            "name": "email_enrichment",
+            "description": "Enrich an email address with additional information about the person"
+        },
+        {
+            "name": "author_finder",
+            "description": "Find the email address of an article's author from a URL"
+        },
+        {
+            "name": "linkedin_finder",
+            "description": "Find email address from a LinkedIn profile URL"
+        },
+        {
+            "name": "phone_finder",
+            "description": "Find phone numbers associated with an email, domain, or LinkedIn profile"
+        },
+        {
+            "name": "phone_validator",
+            "description": "Validate a phone number and get carrier information"
+        }
+    ],
+    "prompts": [
+        {
+            "name": "find_contact",
+            "description": "Find complete contact information for a person at a company",
+            "arguments": ["firstName", "lastName", "company"],
+            "text": "Find the contact information for {firstName} {lastName} who works at {company}."
+        },
+        {
+            "name": "verify_email_list",
+            "description": "Verify a list of email addresses for deliverability",
+            "arguments": ["emails"],
+            "text": "Verify the following email addresses for deliverability: {emails}."
+        },
+        {
+            "name": "research_company",
+            "description": "Research a company's contact information and organizational structure",
+            "arguments": ["domain", "department"],
+            "text": "Research the contact information and organizational structure for {domain} in the {department} department."
+        },
+        {
+            "name": "enrich_lead",
+            "description": "Enrich a lead with all available contact information",
+            "arguments": ["email", "linkedin"],
+            "text": "Enrich the lead with email {email} and LinkedIn profile {linkedin} with all available contact information."
+        },
+        {
+            "name": "find_journalists",
+            "description": "Find contact information for journalists who wrote specific articles",
+            "arguments": ["urls"],
+            "text": "Find the contact information for journalists who wrote the following articles: {urls}."
+        },
+        {
+            "name": "finder_phone",
+            "description": "Find phone numbers for a contact",
+            "arguments": ["email", "linkedin", "domain"],
+            "text": "Find phone numbers for the contact with email {email}, LinkedIn profile {linkedin}, or domain {domain}."
+        },
+        {
+            "name": "validate_phone",
+            "description": "Validate a phone number",
+            "arguments": ["phone"],
+            "text": "Validate the phone number {phone} and provide carrier information."
+        }
+    ],
+    "user_config": {
+        "TOMBA_API_KEY": {
+            "type": "string",
+            "title": "Tomba API Key",
+            "description": "",
+            "required": true
+        },
+        "TOMBA_SECRET_KEY": {
+            "type": "string",
+            "title": "Tomba Secret Key",
+            "description": "Your Tomba secret key",
+            "required": true
+        }
+    },
+    "privacy_policies": ["https://tomba.io/privacy-policy"]
+}
