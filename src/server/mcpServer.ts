@@ -574,9 +574,6 @@ export class TombaMCPServer {
 Tomba is a powerful email finding and verification service that helps you discover and validate email addresses.
 
 ## Authentication
-All API requests require authentication using:
-- API Key (X-Tomba-Key header)
-- Secret Key (X-Tomba-Secret header)
 
 ## Rate Limits
 - Free tier: 50 requests per month
