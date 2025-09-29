@@ -1,9 +1,94 @@
 #!/usr/bin/env node
 
 import { TombaMCPServer } from "./server/mcpServer.js";
+import { parseArgs } from "node:util";
+
+interface ParsedArgs {
+  values: {
+    transport?: string;
+    port?: string;
+    help?: boolean;
+  };
+}
+
+function printHelp() {
+  console.log(`
+Usage: tomba-mcp-server [options]
+
+Options:
+  --transport <type>    Transport type: 'stdio' or 'http' (default: stdio)
+  --port <number>       Port number for HTTP transport (default: 3000)
+  --help                Show this help message
+
+Environment Variables:
+  TOMBA_API_KEY         Your Tomba API key (required)
+  TOMBA_SECRET_KEY      Your Tomba secret key (required)
+
+Examples:
+  # Run with stdio transport (default)
+  tomba-mcp-server
+
+  # Run with HTTP transport on default port (3000)
+  tomba-mcp-server --transport http
+
+  # Run with HTTP transport on custom port
+  tomba-mcp-server --transport http --port 8080
+`);
+}
 
 async function main() {
-  const server = new TombaMCPServer();
+  // Parse command line arguments
+  let args: ParsedArgs;
+  try {
+    args = parseArgs({
+      options: {
+        transport: {
+          type: "string",
+          short: "t",
+          default: "stdio",
+        },
+        port: {
+          type: "string",
+          short: "p",
+          default: "3000",
+        },
+        help: {
+          type: "boolean",
+          short: "h",
+          default: false,
+        },
+      },
+    }) as ParsedArgs;
+  } catch (error) {
+    console.error("Error parsing arguments:", error);
+    printHelp();
+    process.exit(1);
+  }
+
+  // Show help if requested
+  if (args.values.help) {
+    printHelp();
+    process.exit(0);
+  }
+
+  const transport = args.values.transport?.toLowerCase() || "stdio";
+  const port = parseInt(args.values.port || "3000", 10);
+
+  // Validate transport type
+  if (transport !== "stdio" && transport !== "http") {
+    console.error(
+      `Error: Invalid transport type '${transport}'. Must be 'stdio' or 'http'`
+    );
+    process.exit(1);
+  }
+
+  // Validate port number
+  if (transport === "http" && (isNaN(port) || port < 1 || port > 65535)) {
+    console.error(
+      `Error: Invalid port number '${args.values.port}'. Must be between 1 and 65535`
+    );
+    process.exit(1);
+  }
 
   // Get credentials from environment variables
   const apiKey = process.env.TOMBA_API_KEY;
@@ -16,12 +101,13 @@ async function main() {
     process.exit(1);
   }
 
+  const server = new TombaMCPServer();
   server.setCredentials({
     apiKey,
     secretKey,
   });
 
-  await server.run();
+  await server.run(transport, port);
 }
 
 // Handle graceful shutdown
