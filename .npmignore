@@ -1,5 +1,6 @@
 # Ignore build artifacts and config files
 node_modules/
+server/
 dist/
 tsconfig.json
 .eslintrc.js
@@ -17,3 +18,4 @@ test/
 .DS_Store
 *.swp
 *.swo
+*.pem
