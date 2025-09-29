@@ -987,16 +987,12 @@ Please:
         //   });
         // }
 
-        // if (
-        //   !this.tombaMcpClient ||
-        //   this.tombaMcpClient.apiKey !== apiKey ||
-        //   this.tombaMcpClient.secretKey !== secretKey
-        // ) {
-        //   res.status(401).json({
-        //     error: "Unauthorized",
-        //     message: "Invalid API credentials",
-        //   });
-        // }
+        if (!this.tombaMcpClient) {
+            res.status(401).json({
+                error: "Unauthorized",
+                message: "Invalid API credentials",
+            });
+        }
 
         next();
     }
