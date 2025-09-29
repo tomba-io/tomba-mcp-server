@@ -1,6 +1,6 @@
 {
     "name": "tomba-mcp-server",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "MCP Server for Tomba.io API integration",
     "main": "server/index.js",
     "type": "module",
@@ -19,7 +19,7 @@
         "pack": "mcpb pack . tomba-mcp-server.mcpb"
     },
     "bin": {
-        "tomba-mcp-server": "dist/index.js"
+        "tomba-mcp-server": "server/index.js"
     },
     "keywords": [
         "mcp",
