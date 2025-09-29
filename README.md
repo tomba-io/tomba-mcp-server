@@ -4,69 +4,233 @@ A Model Context Protocol (MCP) server for integrating with the Tomba.io API. Thi
 
 ## Features
 
-- **Domain Search**: Find all email addresses associated with a domain
-- **Email Finder**: Generate likely email addresses from names and domains
-- **Email Verifier**: Verify email deliverability and check database presence
-- **Email Enrichment**: Enrich emails with additional contact data
-- **Author Finder**: Discover email addresses of article authors
-- **LinkedIn Finder**: Find emails from LinkedIn profile URLs
-- **Phone Finder**: Search phone numbers by email, domain, or LinkedIn
-- **Phone Validator**: Validate phone numbers and check carrier info
+### Tools (8 available)
+
+-   **[Domain Search](https://tomba.io/domain-search)**: Find all email addresses associated with a domain
+-   **[Email Finder](https://tomba.io/email-finder)**: Generate likely email addresses from names and domains
+-   **[Email Verifier](https://tomba.io/email-verifier)**: Verify email deliverability and check database presence
+-   **[Email Enrichment](https://tomba.io/enrichment)**: Enrich emails with additional contact data
+-   **[Author Finder](https://tomba.io/author-finder)**: Discover email addresses of article authors
+-   **[LinkedIn Finder](https://tomba.io/linkedin-finder)**: Find emails from LinkedIn profile URLs
+-   **[Phone Finder](https://tomba.io/phone-finder)**: Search phone numbers by email, domain, or LinkedIn
+-   **[Phone Validator](https://tomba.io/phone-validator)**: Validate phone numbers and check carrier info
+
+### Resources (5 available)
+
+-   `tomba://api/status` - API status and account info
+-   `tomba://domain/{domain}` - Domain information
+-   `tomba://email/{email}` - Email information
+-   `tomba://docs/api` - API documentation
+-   `tomba://docs/tools` - Tools documentation
+
+### Prompts (7 pre-built workflows)
+
+-   **find_contact** - Find complete contact info for a person
+-   **verify_email_list** - Batch verify email addresses
+-   **research_company** - Research company contacts and structure
+-   **enrich_lead** - Enrich a lead with all available data
+-   **find_journalists** - Find journalist contacts from articles
+-   **finder_phone** - Find phone numbers for contacts
+-   **validate_phone** - Validate a phone number
+
+### Transport Options
+
+-   **stdio** - Standard input/output (default, for Claude Desktop)
+-   **http** - HTTP server with REST endpoints
 
 ## Installation
 
+### Prerequisites
+
+-   Node.js 18 or higher
+-   npm or yarn
+-   Tomba API account ([Sign up here](https://tomba.io))
+
+### Build the Server
+
 ```bash
-yarn
+# Clone the repository
+git clone https://github.com/tomba-io/tomba-mcp-server.git
+cd tomba-mcp-server
+
+# Install dependencies
+yarn install
+
+# Build the project
+yarn build
 ```
 
 ## Configuration
 
-Set your Tomba.io API credentials as environment variables:
+### Claude Desktop Setup
 
-```bash
-export TOMBA_API_KEY="your_api_key"
-export TOMBA_SECRET_KEY="your_secret_key"
+To use this server with Claude Desktop, add the following configuration to your `claude_desktop_config.json`:
+
+#### macOS/Linux
+
+Location: `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+```json
+{
+    "mcpServers": {
+        "tomba": {
+            "command": "node",
+            "args": ["/ABSOLUTE/PATH/TO/tomba-mcp-server/dist/index.js"],
+            "env": {
+                "TOMBA_API_KEY": "your-api-key-here",
+                "TOMBA_SECRET_KEY": "your-secret-key-here"
+            }
+        }
+    }
+}
 ```
 
-Alternatively, create a `.env` file in the root directory:
+#### Windows
 
-```env
-TOMBA_API_KEY=your_api_key
-TOMBA_SECRET_KEY=your_secret_key
+Location: `%APPDATA%\Claude\claude_desktop_config.json`
+
+```json
+{
+    "mcpServers": {
+        "tomba": {
+            "command": "node",
+            "args": [
+                "C:\\ABSOLUTE\\PATH\\TO\\tomba-mcp-server\\dist\\index.js"
+            ],
+            "env": {
+                "TOMBA_API_KEY": "your-api-key-here",
+                "TOMBA_SECRET_KEY": "your-secret-key-here"
+            }
+        }
+    }
+}
+```
+
+**Important Notes:**
+
+-   Replace `/ABSOLUTE/PATH/TO/tomba-mcp-server` with the full path to your installation directory
+-   Replace `your-api-key-here` and `your-secret-key-here` with your actual Tomba API credentials
+-   Restart Claude Desktop after updating the configuration
+
+### Getting Tomba API Credentials
+
+1. Visit [https://tomba.io](https://tomba.io)
+2. Sign up for an account or log in
+3. Navigate to your dashboard
+4. Go to API settings
+5. Copy your API Key and Secret Key
+
+### Alternative: Using HTTP Transport
+
+For HTTP transport, update your Claude Desktop config:
+
+```json
+{
+    "mcpServers": {
+        "tomba": {
+            "command": "node",
+            "args": [
+                "/ABSOLUTE/PATH/TO/tomba-mcp-server/dist/index.js",
+                "--transport",
+                "http",
+                "--port",
+                "3000"
+            ],
+            "env": {
+                "TOMBA_API_KEY": "your-api-key-here",
+                "TOMBA_SECRET_KEY": "your-secret-key-here"
+            }
+        }
+    }
+}
 ```
 
 ## Usage
 
-### Development
+### Command-line Options
 
 ```bash
+Usage: tomba-mcp-server [options]
+
+Options:
+  --transport <type>    Transport type: 'stdio' or 'http' (default: stdio)
+  --port <number>       Port number for HTTP transport (default: 3000)
+  --help                Show help message
+
+Environment Variables:
+  TOMBA_API_KEY         Your Tomba API key (required)
+  TOMBA_SECRET_KEY      Your Tomba secret key (required)
+
+Examples:
+  # Run with stdio transport (default)
+  node dist/index.js
+
+  # Run with HTTP transport on default port (3000)
+  node dist/index.js --transport http
+
+  # Run with HTTP transport on custom port
+  node dist/index.js --transport http --port 8080
+```
+
+### Standalone HTTP Server
+
+You can also run the server as a standalone HTTP service:
+
+```bash
+export TOMBA_API_KEY="your-api-key"
+export TOMBA_SECRET_KEY="your-secret-key"
+node dist/index.js --transport http --port 3000
+```
+
+#### HTTP API Endpoints
+
+-   **POST /mcp** - Send JSON-RPC requests
+-   **GET /mcp** - Server-Sent Events for notifications (requires X-Session-Id header)
+-   **DELETE /mcp** - Terminate a session (requires X-Session-Id header)
+-   **GET /health** - Health check endpoint
+-   **GET /sessions** - List active sessions (requires authentication)
+
+#### Example HTTP Request
+
+```bash
+curl -X POST http://localhost:3000/mcp \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "tools/call",
+    "params": {
+      "name": "email_finder",
+      "arguments": {
+        "domain": "stripe.com",
+        "firstName": "Patrick",
+        "lastName": "Collison"
+      }
+    },
+    "id": 1
+  }'
+```
+
+## 🔧 Development
+
+### Development Commands
+
+```bash
+# Run in development mode
 yarn dev
-```
 
-### Production
-
-```bash
+# Build the project
 yarn build
-npm start
-```
 
-### Running Tests
-
-```bash
-# Run tests once
-npm test
+# Run tests
+yarn test
 
 # Run tests in watch mode
 yarn test:watch
 
 # Run tests with coverage
 yarn test:coverage
-```
 
-### Linting
-
-```bash
-# Check for linting errors
+# Lint code
 yarn lint
 
 # Fix linting errors
@@ -86,10 +250,10 @@ yarn debug
 
 This opens a web interface where you can:
 
-- 📋 View all available tools
-- 🧪 Test tools interactively
-- 📊 Inspect requests/responses
-- 🐛 Debug in real-time
+-   📋 View all available tools
+-   🧪 Test tools interactively
+-   📊 Inspect requests/responses
+-   🐛 Debug in real-time
 
 ### Alternative Debug Methods
 
@@ -109,10 +273,10 @@ echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | node dist/index.js
 
 If using VS Code, use the included debug configurations:
 
-- **Debug MCP Server**: Debug the compiled JavaScript
-- **Debug TypeScript**: Debug TypeScript source directly
-- **Debug with Inspector**: Debug with MCP Inspector
-- **Run Tests**: Debug Jest tests
+-   **Debug MCP Server**: Debug the compiled JavaScript
+-   **Debug TypeScript**: Debug TypeScript source directly
+-   **Debug with Inspector**: Debug with MCP Inspector
+-   **Run Tests**: Debug Jest tests
 
 See `DEBUG_GUIDE.md` for comprehensive debugging instructions.
 
@@ -124,14 +288,34 @@ Search for email addresses associated with a domain name.
 
 ```json
 {
-  "name": "domain_search",
-  "arguments": {
+    "name": "domain_search",
+    "arguments": {
+        "domain": "example.com",
+        "limit": 10,
+        "page": 1,
+        "department": "engineering",
+        "country": "US"
+    }
+}
+```
+
+**Response:**
+
+```json
+{
     "domain": "example.com",
-    "limit": 10,
-    "offset": 0,
-    "type": "personal",
-    "sources": true
-  }
+    "emails": [
+        {
+            "email": "john.doe@example.com",
+            "first_name": "John",
+            "last_name": "Doe",
+            "position": "Developer",
+            "department": "Engineering",
+            "type": "personal",
+            "confidence": 95
+        }
+    ],
+    "total": 1
 }
 ```
 
@@ -141,12 +325,12 @@ Generate likely email addresses from domain, first name, and last name.
 
 ```json
 {
-  "name": "email_finder",
-  "arguments": {
-    "domain": "example.com",
-    "firstName": "John",
-    "lastName": "Doe"
-  }
+    "name": "email_finder",
+    "arguments": {
+        "domain": "example.com",
+        "firstName": "John",
+        "lastName": "Doe"
+    }
 }
 ```
 
@@ -156,10 +340,25 @@ Verify email address deliverability and check database presence.
 
 ```json
 {
-  "name": "email_verifier",
-  "arguments": {
-    "email": "john.doe@example.com"
-  }
+    "name": "email_verifier",
+    "arguments": {
+        "email": "john.doe@example.com"
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "email": {
+        "email": "john.doe@example.com",
+        "gibberish": false,
+        "disposable": false,
+        "webmail": false,
+        "result": "deliverable",
+        "score": 95
+    }
 }
 ```
 
@@ -169,10 +368,10 @@ Enrich an email address with additional contact information.
 
 ```json
 {
-  "name": "email_enrichment",
-  "arguments": {
-    "email": "john.doe@example.com"
-  }
+    "name": "email_enrichment",
+    "arguments": {
+        "email": "john.doe@example.com"
+    }
 }
 ```
 
@@ -182,10 +381,10 @@ Find email addresses of article authors from a URL.
 
 ```json
 {
-  "name": "author_finder",
-  "arguments": {
-    "url": "https://example.com/article"
-  }
+    "name": "author_finder",
+    "arguments": {
+        "url": "https://example.com/article"
+    }
 }
 ```
 
@@ -195,95 +394,82 @@ Find email addresses from LinkedIn profile URLs.
 
 ```json
 {
-  "name": "linkedin_finder",
-  "arguments": {
-    "url": "https://linkedin.com/in/johndoe"
-  }
+    "name": "linkedin_finder",
+    "arguments": {
+        "url": "https://linkedin.com/in/johndoe"
+    }
 }
 ```
 
-### 8. Phone Finder
+### 7. Phone Finder
 
 Search for phone numbers based on email, domain, or LinkedIn profile.
 
 ```json
 {
-  "name": "phone_finder",
-  "arguments": {
-    "email": "john.doe@example.com"
-  }
+    "name": "phone_finder",
+    "arguments": {
+        "email": "john.doe@example.com"
+    }
 }
 ```
 
-### 9. Phone Validator
+### 8. Phone Validator
 
 Validate phone numbers and check carrier information.
 
 ```json
 {
-  "name": "phone_validator",
-  "arguments": {
-    "phone": "+1234567890"
-  }
-}
-```
-
-## API Response Examples
-
-### Domain Search Response
-
-```json
-{
-  "domain": "example.com",
-  "emails": [
-    {
-      "email": "john.doe@example.com",
-      "first_name": "John",
-      "last_name": "Doe",
-      "position": "Developer",
-      "department": "Engineering",
-      "type": "personal",
-      "confidence": 95,
-      "sources": [
-        {
-          "uri": "https://example.com/about",
-          "website_piece": "contact",
-          "extracted_on": "2023-01-01",
-          "last_seen_on": "2023-01-01",
-          "still_on_page": true
-        }
-      ]
+    "name": "phone_validator",
+    "arguments": {
+        "phone": "+1234567890"
     }
-  ],
-  "total": 1,
-  "limit": 10,
-  "offset": 0
 }
 ```
 
-### Email Verification Response
+## Troubleshooting
 
-```json
-{
-  "email": {
-    "email": "john.doe@example.com",
-    "gibberish": false,
-    "disposable": false,
-    "webmail": false,
-    "result": "deliverable",
-    "score": 95
-  },
-  "sources": []
-}
-```
+### Server Not Starting in Claude Desktop
 
-### About Tomba
+1. **Check Node.js version**: Ensure you have Node.js 18 or higher
 
-Founded in 2020, Tomba prides itself on being the most reliable, accurate, and in-depth source of Email address data available anywhere. We process terabytes of data to produce our Email finder API, company.
+    ```bash
+    node --version
+    ```
+
+2. **Verify absolute path**: Make sure you're using the absolute path to `dist/index.js` in your config
+
+3. **Check build output**: Ensure `dist/index.js` exists
+
+    ```bash
+    ls -la dist/index.js
+    ```
+
+4. **Verify API credentials**: Ensure your Tomba API keys are correct
+
+5. **Check Claude logs**:
+    - macOS: `~/Library/Logs/Claude/mcp*.log`
+    - Windows: `%APPDATA%\Claude\logs\mcp*.log`
+
+### Authentication Errors
+
+-   Verify your API keys at [https://tomba.io/dashboard](https://tomba.io/dashboard)
+-   Ensure environment variables are properly set in the config
+-   Check that your API subscription is active
+
+### Tools Not Responding
+
+-   Check your Tomba API rate limits
+-   Verify network connectivity
+-   Review server logs for error messages
+
+## About Tomba
+
+Founded in 2020, Tomba prides itself on being the most reliable, accurate, and in-depth source of email address data available anywhere. We process terabytes of data to produce our Email finder API.
 
 [![image](https://avatars.githubusercontent.com/u/67979591?s=200&v=4)](https://tomba.io/)
 
-## Contribution
+## Contributing
 
 1. Fork it (<https://github.com/tomba-io/tomba-mcp-server/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
@@ -294,3 +480,9 @@ Founded in 2020, Tomba prides itself on being the most reliable, accurate, and i
 ## License
 
 Please see the [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0.html) file for more information.
+
+## Support
+
+-   [GitHub Issues](https://github.com/tomba-io/tomba-mcp-server/issues)
+-   [Email Support](mailto:support@tomba.io)
+-   [Website](https://tomba.io)
