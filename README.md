@@ -161,7 +161,7 @@ If you've built from source, use the absolute path to your installation:
     "mcpServers": {
         "tomba": {
             "command": "node",
-            "args": ["/ABSOLUTE/PATH/TO/tomba-mcp-server/dist/index.js"],
+            "args": ["/ABSOLUTE/PATH/TO/tomba-mcp-server/server/index.js"],
             "env": {
                 "TOMBA_API_KEY": "your-api-key-here",
                 "TOMBA_SECRET_KEY": "your-secret-key-here"
@@ -179,7 +179,7 @@ If you've built from source, use the absolute path to your installation:
         "tomba": {
             "command": "node",
             "args": [
-                "C:\\ABSOLUTE\\PATH\\TO\\tomba-mcp-server\\dist\\index.js"
+                "C:\\ABSOLUTE\\PATH\\TO\\tomba-mcp-server\\server\\index.js"
             ],
             "env": {
                 "TOMBA_API_KEY": "your-api-key-here",
@@ -238,7 +238,7 @@ For HTTP transport with local installation:
         "tomba": {
             "command": "node",
             "args": [
-                "/ABSOLUTE/PATH/TO/tomba-mcp-server/dist/index.js",
+                "/ABSOLUTE/PATH/TO/tomba-mcp-server/server/index.js",
                 "--transport",
                 "http",
                 "--port",
@@ -271,13 +271,13 @@ Environment Variables:
 
 Examples:
   # Run with stdio transport (default)
-  node dist/index.js
+  node server/index.js
 
   # Run with HTTP transport on default port (3000)
-  node dist/index.js --transport http
+  node server/index.js --transport http
 
   # Run with HTTP transport on custom port
-  node dist/index.js --transport http --port 8080
+  node server/index.js --transport http --port 8080
 ```
 
 ### Standalone HTTP Server
@@ -287,7 +287,7 @@ You can also run the server as a standalone HTTP service:
 ```bash
 export TOMBA_API_KEY="your-api-key"
 export TOMBA_SECRET_KEY="your-secret-key"
-node dist/index.js --transport http --port 3000
+node server/index.js --transport http --port 3000
 ```
 
 #### HTTP API Endpoints
@@ -374,7 +374,7 @@ yarn test:integration
 
 # Manual testing
 yarn build
-echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | node dist/index.js
+echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | node server/index.js
 ```
 
 ### VS Code Debugging
@@ -554,7 +554,7 @@ Validate phone numbers and check carrier information.
 3. **Using Local Installation:**
 
     - Verify absolute path is correct in your config
-    - Ensure `dist/index.js` exists: `ls -la dist/index.js`
+    - Ensure `server/index.js` exists: `ls -la server/index.js`
     - Make sure you ran `yarn build` successfully
 
 4. **Verify API credentials**: Ensure your Tomba API keys are correct

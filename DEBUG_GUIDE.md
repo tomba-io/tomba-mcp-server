@@ -13,9 +13,9 @@ yarn debug
 
 This will:
 
-- Compile TypeScript to JavaScript
-- Launch the MCP Inspector web interface
-- Open your browser to inspect and test tools
+-   Compile TypeScript to JavaScript
+-   Launch the MCP Inspector web interface
+-   Open your browser to inspect and test tools
 
 ### 2. Development Mode with Inspector
 
@@ -40,7 +40,7 @@ The MCP Inspector provides a web-based UI for testing MCP servers:
 ```bash
 # Option A: Build first, then inspect
 yarn build
-npx @modelcontextprotocol/inspector dist/index.js
+npx @modelcontextprotocol/inspector server/index.js
 
 # Option B: Use npm script
 yarn debug
@@ -48,11 +48,11 @@ yarn debug
 
 **What you'll see:**
 
-- 🌐 Browser opens automatically
-- 📋 List of all available tools
-- 🧪 Interactive tool testing interface
-- 📊 Request/response inspection
-- ⚡ Real-time debugging
+-   🌐 Browser opens automatically
+-   📋 List of all available tools
+-   🧪 Interactive tool testing interface
+-   📊 Request/response inspection
+-   ⚡ Real-time debugging
 
 ### Method 2: Manual MCP Testing
 
@@ -61,12 +61,12 @@ Test the server directly via JSON-RPC:
 ```bash
 # Start the server
 yarn build
-node dist/index.js
+node server/index.js
 
 # In another terminal, send MCP messages:
-echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"test","version":"1.0.0"}}}' | node dist/index.js
+echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"test","version":"1.0.0"}}}' | node server/index.js
 
-echo '{"jsonrpc":"2.0","id":2,"method":"tools/list"}' | node dist/index.js
+echo '{"jsonrpc":"2.0","id":2,"method":"tools/list"}' | node server/index.js
 ```
 
 ### Method 3: Integration Testing
@@ -79,12 +79,12 @@ yarn test:integration
 
 This test:
 
-- ✅ Starts the MCP server
-- ✅ Sends initialization requests
-- ✅ Lists available tools
-- ✅ Tests tool calls
-- ✅ Validates responses
-- ✅ Handles cleanup
+-   ✅ Starts the MCP server
+-   ✅ Sends initialization requests
+-   ✅ Lists available tools
+-   ✅ Tests tool calls
+-   ✅ Validates responses
+-   ✅ Handles cleanup
 
 ## 🧪 Testing Individual Tools
 
@@ -92,33 +92,45 @@ This test:
 
 1. **Start the inspector**:
 
-   ```bash
-   yarn debug
-   ```
+    ```bash
+    yarn debug
+    ```
 
 2. **Test Domain Search**:
 
-   - Tool: `domain_search`
-   - Arguments: `{"domain": "example.com", "limit": 10}`
+    - Tool: `domain_search`
+    - Arguments: `{"domain": "example.com", "limit": 10}`
 
 3. **Test Email Finder**:
 
-   - Tool: `email_finder`
-   - Arguments: `{"domain": "example.com", "firstName": "John", "lastName": "Doe"}`
+    - Tool: `email_finder`
+    - Arguments: `{"domain": "example.com", "firstName": "John", "lastName": "Doe"}`
 
 4. **Test Email Verifier**:
-   - Tool: `email_verifier`
-   - Arguments: `{"email": "test@example.com"}`
+    - Tool: `email_verifier`
+    - Arguments: `{"email": "test@example.com"}`
 
 ### Using cURL (Advanced)
 
-Test tools via HTTP if you set up an HTTP wrapper:
+Test tools via HTTP API:
 
 ```bash
 # Example domain search
-curl -X POST http://localhost:3000/tools/domain_search \
+curl -X POST http://localhost:3000/mcp \
   -H "Content-Type: application/json" \
-  -d '{"domain": "example.com", "limit": 10}'
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "tools/call",
+    "params": {
+      "name": "email_finder",
+      "arguments": {
+        "domain": "stripe.com",
+        "firstName": "Patrick",
+        "lastName": "Collison"
+      }
+    },
+    "id": 1
+  }'
 ```
 
 ## 🐛 Common Issues & Solutions
@@ -194,14 +206,14 @@ Use the MCP Inspector's network tab to see all JSON-RPC messages.
 ```javascript
 // Test all tools with sample data
 const testCases = [
-  { tool: "domain_search", args: { domain: "github.com" } },
-  {
-    tool: "email_finder",
-    args: { domain: "github.com", firstName: "John", lastName: "Doe" },
-  },
-  { tool: "email_verifier", args: { email: "test@github.com" } },
-  { tool: "email_enrichment", args: { email: "test@github.com" } },
-  { tool: "phone_validator", args: { phone: "+1234567890" } },
+    { tool: "domain_search", args: { domain: "github.com" } },
+    {
+        tool: "email_finder",
+        args: { domain: "github.com", firstName: "John", lastName: "Doe" },
+    },
+    { tool: "email_verifier", args: { email: "test@github.com" } },
+    { tool: "email_enrichment", args: { email: "test@github.com" } },
+    { tool: "phone_validator", args: { phone: "+1234567890" } },
 ];
 ```
 
@@ -212,9 +224,9 @@ Test with invalid inputs:
 ```javascript
 // Test error responses
 const errorTests = [
-  { tool: "domain_search", args: { domain: "" } }, // Empty domain
-  { tool: "email_finder", args: { domain: "test" } }, // Missing required fields
-  { tool: "phone_validator", args: { phone: "invalid" } }, // Invalid phone
+    { tool: "domain_search", args: { domain: "" } }, // Empty domain
+    { tool: "email_finder", args: { domain: "test" } }, // Missing required fields
+    { tool: "phone_validator", args: { phone: "invalid" } }, // Invalid phone
 ];
 ```
 
@@ -223,7 +235,7 @@ const errorTests = [
 ```javascript
 // Test multiple rapid requests
 for (let i = 0; i < 10; i++) {
-  // Send requests quickly to test rate limiting
+    // Send requests quickly to test rate limiting
 }
 ```
 
@@ -261,7 +273,7 @@ artillery run load-test.yml
 
 ```bash
 # Start with debugger
-node --inspect-brk dist/index.js
+node --inspect-brk server/index.js
 
 # Then open Chrome DevTools at chrome://inspect
 ```
@@ -270,14 +282,14 @@ node --inspect-brk dist/index.js
 
 ```bash
 # Profile memory usage
-node --inspect --heap-prof dist/index.js
+node --inspect --heap-prof server/index.js
 ```
 
 ### CPU Profiling
 
 ```bash
 # Profile CPU usage
-node --prof dist/index.js
+node --prof server/index.js
 node --prof-process isolate-*.log > profile.txt
 ```
 
@@ -285,14 +297,14 @@ node --prof-process isolate-*.log > profile.txt
 
 Before reporting issues, check:
 
-- [ ] Environment variables are set correctly
-- [ ] TypeScript compiles without errors (`yarn build`)
-- [ ] Tests pass (`yarn test`)
-- [ ] Integration test passes (`yarn test:integration`)
-- [ ] MCP Inspector can connect (`yarn debug`)
-- [ ] Server starts without errors
-- [ ] Tools are listed correctly
-- [ ] Sample tool calls work
+-   [ ] Environment variables are set correctly
+-   [ ] TypeScript compiles without errors (`yarn build`)
+-   [ ] Tests pass (`yarn test`)
+-   [ ] Integration test passes (`yarn test:integration`)
+-   [ ] MCP Inspector can connect (`yarn debug`)
+-   [ ] Server starts without errors
+-   [ ] Tools are listed correctly
+-   [ ] Sample tool calls work
 
 ## 🆘 Getting Help
 
@@ -306,7 +318,7 @@ If you're still having issues:
 
 ## 📚 Resources
 
-- [MCP Specification](https://modelcontextprotocol.io/)
-- [Tomba.io API Documentation](https://docs.tomba.io/introduction/)
-- [TypeScript Debugging Guide](https://code.visualstudio.com/docs/typescript/typescript-debugging)
-- [Node.js Debugging Guide](https://nodejs.org/en/guides/debugging-getting-started/)
+-   [MCP Specification](https://modelcontextprotocol.io/)
+-   [Tomba.io API Documentation](https://docs.tomba.io/introduction/)
+-   [TypeScript Debugging Guide](https://code.visualstudio.com/docs/typescript/typescript-debugging)
+-   [Node.js Debugging Guide](https://nodejs.org/en/guides/debugging-getting-started/)
