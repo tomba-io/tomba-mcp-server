@@ -1,6 +1,6 @@
 {
     "name": "tomba-mcp-server",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "MCP Server for Tomba.io API integration",
     "main": "server/index.js",
     "type": "module",
@@ -16,7 +16,7 @@
         "test:integration": "npm run build && node test/integration.js",
         "lint": "eslint src/**/*.ts",
         "lint:fix": "eslint src/**/*.ts --fix",
-        "pack": "mcpb pack . tomba-mcp-server.mcpb"
+        "pack": "mcpb pack . tomba-mcp-server-$(npm pkg get version | tr -d '\"').mcpb"
     },
     "bin": {
         "tomba-mcp-server": "server/index.js"
@@ -37,7 +37,7 @@
     "bugs": {
         "url": "https://github.com/tomba-io/tomba-mcp-server/issues"
     },
-    "license": "Apache-2.0",
+    "license": "MIT",
     "dependencies": {
         "@modelcontextprotocol/sdk": "^1.18.2",
         "cors": "^2.8.5",
