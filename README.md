@@ -609,7 +609,7 @@ Founded in 2020, Tomba prides itself on being the most reliable, accurate, and i
 
 ## License
 
-Please see the [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0.html) file for more information.
+Please see the [License](LICENSE) file for more information.
 
 ## Support
 

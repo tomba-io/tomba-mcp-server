@@ -10,7 +10,7 @@
         "email": "info@tomba.io",
         "url": "https://tomba.io"
     },
-    "license": "Apache-2.0",
+    "license": "MIT",
     "homepage": "https://tomba.io",
     "icon": "icon.png",
     "documentation": "https://docs.tomba.io/mcp/introduction",
@@ -142,5 +142,12 @@
             "required": true
         }
     },
-    "privacy_policies": ["https://tomba.io/privacy-policy"]
+    "privacy_policies": ["https://tomba.io/privacy-policy"],
+    "compatibility": {
+        "claude_desktop": ">=0.10.0",
+        "platforms": ["darwin", "win32", "linux"],
+        "runtimes": {
+            "node": ">=18.0.0"
+        }
+    }
 }
