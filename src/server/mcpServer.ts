@@ -15,16 +15,21 @@ import cors from "cors";
 import { randomUUID } from "crypto";
 
 import { TombaMcpClient } from "../client/mcpClient.js";
-import type {
-    AuthorFinderParams,
-    DomainSearchParams,
-    EmailEnrichmentParams,
-    EmailFinderParams,
-    LinkedinFinderParams,
-    PhoneFinderParams,
-    PhoneValidatorParams,
-    TombaConfig,
-} from "../types/index";
+import type { TombaConfig } from "../types/index";
+import {
+    DomainSearchParamsSchema,
+    EmailFinderParamsSchema,
+    EmailVerifierParamsSchema,
+    EmailEnrichmentParamsSchema,
+    AuthorFinderParamsSchema,
+    LinkedinFinderParamsSchema,
+    PhoneFinderParamsSchema,
+    PhoneValidatorParamsSchema,
+    EmailCountParamsSchema,
+    SimilarFinderParamsSchema,
+    TechnologyFinderParamsSchema,
+} from "../types/index.js";
+import { validateToolArguments, ValidationError } from "../utils/validation.js";
 import pkg from "../../package.json" assert { type: "json" };
 export class TombaMCPServer {
     private server: Server;
@@ -58,6 +63,7 @@ export class TombaMCPServer {
                     {
                         name: "domain_search",
                         description: "Search emails based on domain name",
+                        annotations: { readOnly: true },
                         inputSchema: {
                             type: "object",
                             properties: {
@@ -93,6 +99,7 @@ export class TombaMCPServer {
                         name: "email_finder",
                         description:
                             "Find email address from domain, first name and last name",
+                        annotations: { readOnly: true },
                         inputSchema: {
                             type: "object",
                             properties: {
@@ -115,6 +122,7 @@ export class TombaMCPServer {
                     {
                         name: "email_verifier",
                         description: "Verify email address deliverability",
+                        annotations: { readOnly: true },
                         inputSchema: {
                             type: "object",
                             properties: {
@@ -129,6 +137,7 @@ export class TombaMCPServer {
                     {
                         name: "email_enrichment",
                         description: "Enrich email with additional data",
+                        annotations: { readOnly: true },
                         inputSchema: {
                             type: "object",
                             properties: {
@@ -143,6 +152,7 @@ export class TombaMCPServer {
                     {
                         name: "author_finder",
                         description: "Find email addresses of article authors",
+                        annotations: { readOnly: true },
                         inputSchema: {
                             type: "object",
                             properties: {
@@ -157,6 +167,7 @@ export class TombaMCPServer {
                     {
                         name: "linkedin_finder",
                         description: "Find email addresses from LinkedIn URLs",
+                        annotations: { readOnly: true },
                         inputSchema: {
                             type: "object",
                             properties: {
@@ -172,6 +183,7 @@ export class TombaMCPServer {
                         name: "phone_finder",
                         description:
                             "Search phone numbers based on email, domain, or LinkedIn",
+                        annotations: { readOnly: true },
                         inputSchema: {
                             type: "object",
                             properties: {
@@ -194,6 +206,7 @@ export class TombaMCPServer {
                         name: "phone_validator",
                         description:
                             "Validate phone numbers and check carrier information",
+                        annotations: { readOnly: true },
                         inputSchema: {
                             type: "object",
                             properties: {
@@ -201,8 +214,64 @@ export class TombaMCPServer {
                                     type: "string",
                                     description: "Phone number to validate",
                                 },
+                                country: {
+                                    type: "string",
+                                    description:
+                                        "Country code (e.g., +1 for US)",
+                                },
                             },
                             required: ["phone"],
+                        },
+                    },
+                    {
+                        name: "email_count",
+                        description:
+                            "Get the total number of email addresses for a domain",
+                        annotations: { readOnly: true },
+                        inputSchema: {
+                            type: "object",
+                            properties: {
+                                domain: {
+                                    type: "string",
+                                    description:
+                                        "Domain name to count emails for",
+                                },
+                            },
+                            required: ["domain"],
+                        },
+                    },
+                    {
+                        name: "similar_finder",
+                        description:
+                            "Find similar domains based on a specific domain",
+                        annotations: { readOnly: true },
+                        inputSchema: {
+                            type: "object",
+                            properties: {
+                                domain: {
+                                    type: "string",
+                                    description:
+                                        "Domain name to find similar domains for",
+                                },
+                            },
+                            required: ["domain"],
+                        },
+                    },
+                    {
+                        name: "technology_finder",
+                        description:
+                            "Instantly reveal the technology stack of any website",
+                        annotations: { readOnly: true },
+                        inputSchema: {
+                            type: "object",
+                            properties: {
+                                domain: {
+                                    type: "string",
+                                    description:
+                                        "Domain name to analyze technology stack for",
+                                },
+                            },
+                            required: ["domain"],
                         },
                     },
                 ],
@@ -224,20 +293,14 @@ export class TombaMCPServer {
                 try {
                     switch (name) {
                         case "domain_search":
-                            const searchParams =
-                                args as unknown as DomainSearchParams;
-                            if (!searchParams.domain) {
-                                throw new Error(
-                                    "Domain is required for domain_search tool"
-                                );
-                            }
-                            const domainResult = await client.domainSearch({
-                                domain: searchParams.domain,
-                                country: searchParams.country,
-                                department: searchParams.department,
-                                limit: searchParams.limit,
-                                page: searchParams.page,
-                            });
+                            const searchParams = validateToolArguments(
+                                DomainSearchParamsSchema,
+                                args,
+                                "domain_search"
+                            );
+                            const domainResult = await client.domainSearch(
+                                searchParams
+                            );
                             return {
                                 content: [
                                     {
@@ -252,22 +315,14 @@ export class TombaMCPServer {
                             };
 
                         case "email_finder":
-                            const finderParams =
-                                args as unknown as EmailFinderParams;
-                            if (
-                                !finderParams.domain ||
-                                !finderParams.firstName ||
-                                !finderParams.lastName
-                            ) {
-                                throw new Error(
-                                    "Domain, firstName and lastName are required for email_finder tool"
-                                );
-                            }
-                            const finderResult = await client.emailFinder({
-                                domain: finderParams.domain,
-                                firstName: finderParams.firstName,
-                                lastName: finderParams.lastName,
-                            });
+                            const finderParams = validateToolArguments(
+                                EmailFinderParamsSchema,
+                                args,
+                                "email_finder"
+                            );
+                            const finderResult = await client.emailFinder(
+                                finderParams
+                            );
                             return {
                                 content: [
                                     {
@@ -282,17 +337,14 @@ export class TombaMCPServer {
                             };
 
                         case "email_verifier":
-                            const verifierParams = args as unknown as {
-                                email: string;
-                            };
-                            if (!verifierParams.email) {
-                                throw new Error(
-                                    "Email is required for email_verifier tool"
-                                );
-                            }
-                            const verifierResult = await client.emailVerifier({
-                                email: verifierParams.email,
-                            });
+                            const verifierParams = validateToolArguments(
+                                EmailVerifierParamsSchema,
+                                args,
+                                "email_verifier"
+                            );
+                            const verifierResult = await client.emailVerifier(
+                                verifierParams
+                            );
                             return {
                                 content: [
                                     {
@@ -307,17 +359,13 @@ export class TombaMCPServer {
                             };
 
                         case "email_enrichment":
-                            const enrichmentParams =
-                                args as unknown as EmailEnrichmentParams;
-                            if (!enrichmentParams.email) {
-                                throw new Error(
-                                    "Email is required for email_enrichment tool"
-                                );
-                            }
+                            const enrichmentParams = validateToolArguments(
+                                EmailEnrichmentParamsSchema,
+                                args,
+                                "email_enrichment"
+                            );
                             const enrichmentResult =
-                                await client.emailEnrichment({
-                                    email: enrichmentParams.email,
-                                });
+                                await client.emailEnrichment(enrichmentParams);
                             return {
                                 content: [
                                     {
@@ -332,16 +380,14 @@ export class TombaMCPServer {
                             };
 
                         case "author_finder":
-                            const authorParams =
-                                args as unknown as AuthorFinderParams;
-                            if (!authorParams.url) {
-                                throw new Error(
-                                    "URL is required for author_finder tool"
-                                );
-                            }
-                            const authorResult = await client.authorFinder({
-                                url: authorParams.url,
-                            });
+                            const authorParams = validateToolArguments(
+                                AuthorFinderParamsSchema,
+                                args,
+                                "author_finder"
+                            );
+                            const authorResult = await client.authorFinder(
+                                authorParams
+                            );
                             return {
                                 content: [
                                     {
@@ -356,16 +402,14 @@ export class TombaMCPServer {
                             };
 
                         case "linkedin_finder":
-                            const linkedinParams =
-                                args as unknown as LinkedinFinderParams;
-                            if (!linkedinParams.url) {
-                                throw new Error(
-                                    "URL is required for linkedin_finder tool"
-                                );
-                            }
-                            const linkedinResult = await client.linkedinFinder({
-                                url: linkedinParams.url,
-                            });
+                            const linkedinParams = validateToolArguments(
+                                LinkedinFinderParamsSchema,
+                                args,
+                                "linkedin_finder"
+                            );
+                            const linkedinResult = await client.linkedinFinder(
+                                linkedinParams
+                            );
                             return {
                                 content: [
                                     {
@@ -380,17 +424,11 @@ export class TombaMCPServer {
                             };
 
                         case "phone_finder":
-                            const phoneParams =
-                                args as unknown as PhoneFinderParams;
-                            if (
-                                !phoneParams.email &&
-                                !phoneParams.domain &&
-                                !phoneParams.linkedin
-                            ) {
-                                throw new Error(
-                                    "At least one of email, domain, or linkedin is required for phone_finder tool"
-                                );
-                            }
+                            const phoneParams = validateToolArguments(
+                                PhoneFinderParamsSchema,
+                                args,
+                                "phone_finder"
+                            );
                             const phoneResult = await client.phoneFinder(
                                 phoneParams
                             );
@@ -408,17 +446,13 @@ export class TombaMCPServer {
                             };
 
                         case "phone_validator":
-                            const validatorParams =
-                                args as unknown as PhoneValidatorParams;
-                            if (!validatorParams.phone) {
-                                throw new Error(
-                                    "Phone is required for phone_validator tool"
-                                );
-                            }
+                            const validatorParams = validateToolArguments(
+                                PhoneValidatorParamsSchema,
+                                args,
+                                "phone_validator"
+                            );
                             const validatorResult = await client.phoneValidator(
-                                {
-                                    phone: validatorParams.phone,
-                                }
+                                validatorParams
                             );
                             return {
                                 content: [
@@ -433,10 +467,91 @@ export class TombaMCPServer {
                                 ],
                             };
 
+                        case "email_count":
+                            const countParams = validateToolArguments(
+                                EmailCountParamsSchema,
+                                args,
+                                "email_count"
+                            );
+                            const countResult = await client.emailCount(
+                                countParams
+                            );
+                            return {
+                                content: [
+                                    {
+                                        type: "text",
+                                        text: JSON.stringify(
+                                            countResult,
+                                            null,
+                                            2
+                                        ),
+                                    },
+                                ],
+                            };
+
+                        case "similar_finder":
+                            const similarParams = validateToolArguments(
+                                SimilarFinderParamsSchema,
+                                args,
+                                "similar_finder"
+                            );
+                            const similarResult = await client.similarFinder(
+                                similarParams
+                            );
+                            return {
+                                content: [
+                                    {
+                                        type: "text",
+                                        text: JSON.stringify(
+                                            similarResult,
+                                            null,
+                                            2
+                                        ),
+                                    },
+                                ],
+                            };
+
+                        case "technology_finder":
+                            const technologyParams = validateToolArguments(
+                                TechnologyFinderParamsSchema,
+                                args,
+                                "technology_finder"
+                            );
+                            const technologyResult =
+                                await client.technologyFinder(technologyParams);
+                            return {
+                                content: [
+                                    {
+                                        type: "text",
+                                        text: JSON.stringify(
+                                            technologyResult,
+                                            null,
+                                            2
+                                        ),
+                                    },
+                                ],
+                            };
+
                         default:
                             throw new Error(`Unknown tool: ${name}`);
                     }
                 } catch (error) {
+                    if (error instanceof ValidationError) {
+                        return {
+                            content: [
+                                {
+                                    type: "text",
+                                    text: `Validation Error: ${error.message}${
+                                        error.field
+                                            ? ` (Field: ${error.field})`
+                                            : ""
+                                    }`,
+                                },
+                            ],
+                            isError: true,
+                        };
+                    }
+
                     return {
                         content: [
                             {
@@ -492,6 +607,20 @@ export class TombaMCPServer {
                         description:
                             "List and description of all available Tomba tools",
                         mimeType: "text/markdown",
+                    },
+                    {
+                        uri: "tomba://similar/{domain}",
+                        name: "Similar Domains",
+                        description:
+                            "Find similar domains based on a specific domain",
+                        mimeType: "application/json",
+                    },
+                    {
+                        uri: "tomba://technology/{domain}",
+                        name: "Domain Technology Stack",
+                        description:
+                            "Get technology stack information for a specific domain",
+                        mimeType: "application/json",
                     },
                 ],
             };
@@ -637,7 +766,50 @@ Find phone numbers associated with emails or domains.
 ## 8. phone_validator
 Validate phone numbers and get carrier information.
 - **Required**: phone
+- **Optional**: country
+
+## 9. email_count
+Get the total number of email addresses for a domain.
+- **Required**: domain
+
+## 10. similar_finder
+Find similar domains based on a specific domain.
+- **Required**: domain
+
+## 11. technology_finder
+Discover the technology stack used by a website.
+- **Required**: domain
 `,
+                                },
+                            ],
+                        };
+                    }
+
+                    if (uri.startsWith("tomba://similar/")) {
+                        const domain = uri.replace("tomba://similar/", "");
+                        const result = await client.similarFinder({ domain });
+                        return {
+                            contents: [
+                                {
+                                    uri,
+                                    mimeType: "application/json",
+                                    text: JSON.stringify(result, null, 2),
+                                },
+                            ],
+                        };
+                    }
+
+                    if (uri.startsWith("tomba://technology/")) {
+                        const domain = uri.replace("tomba://technology/", "");
+                        const result = await client.technologyFinder({
+                            domain,
+                        });
+                        return {
+                            contents: [
+                                {
+                                    uri,
+                                    mimeType: "application/json",
+                                    text: JSON.stringify(result, null, 2),
                                 },
                             ],
                         };
@@ -769,6 +941,87 @@ Validate phone numbers and get carrier information.
                                 name: "phone",
                                 description: "Phone number to validate",
                                 required: true,
+                            },
+                            {
+                                name: "country",
+                                description:
+                                    "Country code for the phone number (optional)",
+                                required: false,
+                            },
+                        ],
+                    },
+                    {
+                        name: "competitor_analysis",
+                        description:
+                            "Analyze competitors using similar domain finder and technology stack",
+                        arguments: [
+                            {
+                                name: "domain",
+                                description:
+                                    "Target domain to analyze competitors for",
+                                required: true,
+                            },
+                            {
+                                name: "include_technology",
+                                description:
+                                    "Include technology stack analysis (true/false)",
+                                required: false,
+                            },
+                        ],
+                    },
+                    {
+                        name: "technology_audit",
+                        description:
+                            "Comprehensive technology audit of a website",
+                        arguments: [
+                            {
+                                name: "domain",
+                                description:
+                                    "Domain to audit technology stack for",
+                                required: true,
+                            },
+                            {
+                                name: "include_similar",
+                                description:
+                                    "Include similar domains analysis (true/false)",
+                                required: false,
+                            },
+                        ],
+                    },
+                    {
+                        name: "domain_insights",
+                        description:
+                            "Get comprehensive insights about a domain including email count and technology",
+                        arguments: [
+                            {
+                                name: "domain",
+                                description: "Domain to analyze",
+                                required: true,
+                            },
+                            {
+                                name: "include_samples",
+                                description:
+                                    "Include sample email addresses (true/false)",
+                                required: false,
+                            },
+                        ],
+                    },
+                    {
+                        name: "bulk_domain_research",
+                        description:
+                            "Research multiple domains for email counts and basic information",
+                        arguments: [
+                            {
+                                name: "domains",
+                                description:
+                                    "Comma-separated list of domains to research",
+                                required: true,
+                            },
+                            {
+                                name: "include_technology",
+                                description:
+                                    "Include technology stack for each domain (true/false)",
+                                required: false,
                             },
                         ],
                     },
@@ -964,6 +1217,177 @@ Please:
                             ],
                         };
 
+                    case "competitor_analysis":
+                        const targetDomain = args?.domain as string;
+                        const includeTechnology =
+                            args?.include_technology as string;
+
+                        if (!targetDomain) {
+                            throw new Error("domain parameter is required");
+                        }
+
+                        let analysisText = `I need to analyze competitors for the domain: ${targetDomain}\n\nPlease:\n`;
+                        analysisText += `1. Use the similar_finder tool to find similar domains\n`;
+                        analysisText += `2. Analyze the competition landscape and market positioning\n`;
+                        analysisText += `3. For each similar domain, provide:\n`;
+                        analysisText += `   - Domain name and similarity score\n`;
+                        analysisText += `   - Business category and description\n`;
+                        analysisText += `   - Competitive advantages/differences\n`;
+
+                        if (includeTechnology === "true") {
+                            analysisText += `4. Use the technology_finder tool to analyze the target domain's tech stack\n`;
+                            analysisText += `5. Compare technology choices with competitors\n`;
+                        }
+
+                        analysisText += `\nProvide a comprehensive competitive analysis report including:\n`;
+                        analysisText += `- Market positioning insights\n`;
+                        analysisText += `- Key competitors and their strengths\n`;
+                        analysisText += `- Opportunities and threats\n`;
+                        if (includeTechnology === "true") {
+                            analysisText += `- Technology stack comparison\n`;
+                        }
+
+                        return {
+                            messages: [
+                                {
+                                    role: "user",
+                                    content: {
+                                        type: "text",
+                                        text: analysisText,
+                                    },
+                                },
+                            ],
+                        };
+
+                    case "technology_audit":
+                        const auditDomain = args?.domain as string;
+                        const includeSimilar = args?.include_similar as string;
+
+                        if (!auditDomain) {
+                            throw new Error("domain parameter is required");
+                        }
+
+                        let auditText = `I need to perform a comprehensive technology audit for: ${auditDomain}\n\nPlease:\n`;
+                        auditText += `1. Use the technology_finder tool to discover the complete technology stack\n`;
+                        auditText += `2. Analyze the technologies by category:\n`;
+                        auditText += `   - Web frameworks and libraries\n`;
+                        auditText += `   - Frontend technologies\n`;
+                        auditText += `   - Backend and server technologies\n`;
+                        auditText += `   - Database and storage solutions\n`;
+                        auditText += `   - Analytics and tracking tools\n`;
+                        auditText += `   - Security and performance tools\n`;
+                        auditText += `3. Evaluate technology choices for:\n`;
+                        auditText += `   - Performance implications\n`;
+                        auditText += `   - Security considerations\n`;
+                        auditText += `   - Scalability factors\n`;
+                        auditText += `   - Development efficiency\n`;
+
+                        if (includeSimilar === "true") {
+                            auditText += `4. Use the similar_finder tool to find comparable websites\n`;
+                            auditText += `5. Compare technology choices with industry peers\n`;
+                        }
+
+                        auditText += `\nProvide a detailed technology audit report including:\n`;
+                        auditText += `- Complete technology inventory\n`;
+                        auditText += `- Technology assessment and recommendations\n`;
+                        auditText += `- Performance and security analysis\n`;
+                        auditText += `- Modernization opportunities\n`;
+                        if (includeSimilar === "true") {
+                            auditText += `- Industry technology trends and comparisons\n`;
+                        }
+
+                        return {
+                            messages: [
+                                {
+                                    role: "user",
+                                    content: {
+                                        type: "text",
+                                        text: auditText,
+                                    },
+                                },
+                            ],
+                        };
+
+                    case "domain_insights":
+                        const insightDomain = args?.domain as string;
+                        const includeSamples = args?.include_samples as string;
+
+                        if (!insightDomain) {
+                            throw new Error("domain parameter is required");
+                        }
+
+                        let insightText = `I need comprehensive insights about the domain: ${insightDomain}\n\nPlease:\n`;
+                        insightText += `1. Use the email_count tool to get the total number of email addresses\n`;
+                        insightText += `2. Use the technology_finder tool to discover the technology stack\n`;
+                        insightText += `3. Use the similar_finder tool to find comparable domains\n`;
+
+                        if (includeSamples === "true") {
+                            insightText += `4. Use the domain_search tool to get sample email addresses (limit 5)\n`;
+                        }
+
+                        insightText += `\nProvide a comprehensive domain analysis report including:\n`;
+                        insightText += `- Email infrastructure overview (total count, estimated patterns)\n`;
+                        insightText += `- Technology stack summary and analysis\n`;
+                        insightText += `- Market positioning and similar competitors\n`;
+                        insightText += `- Business insights and opportunities\n`;
+                        if (includeSamples === "true") {
+                            insightText += `- Sample email patterns and structure\n`;
+                        }
+
+                        return {
+                            messages: [
+                                {
+                                    role: "user",
+                                    content: {
+                                        type: "text",
+                                        text: insightText,
+                                    },
+                                },
+                            ],
+                        };
+
+                    case "bulk_domain_research":
+                        const domains = (args?.domains as string)
+                            ?.split(",")
+                            .map((d) => d.trim());
+                        const includeTech = args?.include_technology as string;
+
+                        if (!domains || domains.length === 0) {
+                            throw new Error("domains parameter is required");
+                        }
+
+                        let bulkText = `I need to research the following domains:\n\n${domains
+                            .map((domain, i) => `${i + 1}. ${domain}`)
+                            .join("\n")}\n\nPlease:\n`;
+                        bulkText += `1. Use the email_count tool for each domain to get total email counts\n`;
+                        bulkText += `2. Use the domain_search tool for each domain to understand email structure (limit 3 per domain)\n`;
+
+                        if (includeTech === "true") {
+                            bulkText += `3. Use the technology_finder tool for each domain to analyze tech stacks\n`;
+                        }
+
+                        bulkText += `\nProvide a comparative analysis table including:\n`;
+                        bulkText += `- Domain name\n`;
+                        bulkText += `- Total email count\n`;
+                        bulkText += `- Sample email patterns\n`;
+                        bulkText += `- Business category/industry\n`;
+                        if (includeTech === "true") {
+                            bulkText += `- Key technologies used\n`;
+                        }
+                        bulkText += `- Insights and recommendations\n`;
+
+                        return {
+                            messages: [
+                                {
+                                    role: "user",
+                                    content: {
+                                        type: "text",
+                                        text: bulkText,
+                                    },
+                                },
+                            ],
+                        };
+
                     default:
                         throw new Error(`Unknown prompt: ${name}`);
                 }
@@ -977,16 +1401,6 @@ Please:
         res: express.Response,
         next: express.NextFunction
     ) {
-        const apiKey = req.headers["x-tomba-key"] as string;
-        const secretKey = req.headers["x-tomba-secret"] as string;
-
-        // if (!apiKey || !secretKey) {
-        //   res.status(401).json({
-        //     error: "Unauthorized",
-        //     message: "Missing X-Tomba-Key or X-Tomba-Secret headers",
-        //   });
-        // }
-
         if (!this.tombaMcpClient) {
             res.status(401).json({
                 error: "Unauthorized",
