@@ -1051,7 +1051,7 @@ When you exceed your rate limit, the API returns a `429 Too Many Requests` statu
 
 ### Authentication Errors
 
--   Verify your API keys at [https://tomba.io/dashboard](https://tomba.io/dashboard)
+-   Verify your API keys at [https://app.tomba.io/dashboard](https://app.tomba.io/dashboard)
 -   Ensure environment variables are properly set in the config
 -   Check that your API subscription is active
 
