@@ -4,7 +4,7 @@ A Model Context Protocol (MCP) server for integrating with the Tomba.io API. Thi
 
 ## Features
 
-### Tools (8 available)
+### Tools (11 available)
 
 -   **[Domain Search](https://tomba.io/domain-search)**: Find all email addresses associated with a domain
 -   **[Email Finder](https://tomba.io/email-finder)**: Generate likely email addresses from names and domains
@@ -14,16 +14,21 @@ A Model Context Protocol (MCP) server for integrating with the Tomba.io API. Thi
 -   **[LinkedIn Finder](https://tomba.io/linkedin-finder)**: Find emails from LinkedIn profile URLs
 -   **[Phone Finder](https://tomba.io/phone-finder)**: Search phone numbers by email, domain, or LinkedIn
 -   **[Phone Validator](https://tomba.io/phone-validator)**: Validate phone numbers and check carrier info
+-   **[Email Count](https://tomba.io/email-count)**: Get total email counts for domains
+-   **[Similar Finder](https://tomba.io/similar-domains)**: Find similar domains based on a target domain
+-   **[Technology Finder](https://tomba.io/technology-finder)**: Discover technology stacks used by websites
 
-### Resources (5 available)
+### Resources (7 available)
 
 -   `tomba://api/status` - API status and account info
 -   `tomba://domain/{domain}` - Domain information
 -   `tomba://email/{email}` - Email information
+-   `tomba://similar/{domain}` - Similar domains analysis
+-   `tomba://technology/{domain}` - Technology stack information
 -   `tomba://docs/api` - API documentation
 -   `tomba://docs/tools` - Tools documentation
 
-### Prompts (7 pre-built workflows)
+### Prompts (11 pre-built workflows)
 
 -   **find_contact** - Find complete contact info for a person
 -   **verify_email_list** - Batch verify email addresses
@@ -32,6 +37,10 @@ A Model Context Protocol (MCP) server for integrating with the Tomba.io API. Thi
 -   **find_journalists** - Find journalist contacts from articles
 -   **finder_phone** - Find phone numbers for contacts
 -   **validate_phone** - Validate a phone number
+-   **competitor_analysis** - Analyze competitors using similar domains and technology
+-   **technology_audit** - Comprehensive technology audit of a website
+-   **domain_insights** - Get comprehensive insights about a domain including email count and technology
+-   **bulk_domain_research** - Research multiple domains for email counts and basic information
 
 ### Transport Options
 
@@ -398,11 +407,9 @@ Search for email addresses associated with a domain name.
 {
     "name": "domain_search",
     "arguments": {
-        "domain": "example.com",
+        "domain": "tomba.io",
         "limit": 10,
-        "page": 1,
-        "department": "engineering",
-        "country": "US"
+        "page": 1
     }
 }
 ```
@@ -411,19 +418,98 @@ Search for email addresses associated with a domain name.
 
 ```json
 {
-    "domain": "example.com",
+  "data": {
+    "organization": {
+      "website_url": "tomba.io",
+      "organization": "Tomba technology web service LLC",
+      "location": {
+        "country": "US",
+        "city": "Claymont",
+        "state": "Delaware",
+        "street_address": "1228 claymont",
+        "postal_code": "19703"
+      },
+      "social_links": {
+        "twitter_url": "https://twitter.com/tombaplatforum",
+        "facebook_url": "https://www.facebook.com/tombaplatforum",
+        "linkedin_url": "https://www.linkedin.com/company/tomba-io"
+      },
+      "disposable": false,
+      "webmail": false,
+      "phone_number": "(850) 790-5575",
+      "industries": "Information Technology and Services",
+      "founded": "2021",
+      "company_size": "1-10",
+      "company_type": "privately held",
+      "revenue": "$0-$1M",
+      "accept_all": false,
+      "description": "the most powerful email-finding tool which is able to list all the email addresses of people who are working in a particular company.",
+      "pattern": "{l}.{first}",
+      "total_similar": 35,
+      "keywords": [
+        "lead generation software"
+      ],
+      "ranking": 661495,
+      "whois": {
+        "registrar_name": "namecheap, inc.",
+        "created_date": "2020-07-07T20:54:07+02:00",
+        "referral_url": "https://www.namecheap.com/"
+      },
+      "last_updated": "2025-09-06T00:22:01+02:00"
+    },
     "emails": [
-        {
-            "email": "john.doe@example.com",
-            "first_name": "John",
-            "last_name": "Doe",
-            "position": "Developer",
-            "department": "Engineering",
-            "type": "personal",
-            "confidence": 95
-        }
-    ],
-    "total": 1
+      {
+        "email": "b.mohamed@tomba.io",
+        "first_name": "Mohamed",
+        "last_name": "Ben rebia",
+        "full_name": "Mohamed Ben rebia",
+        "gender": "male",
+        "phone_number": false,
+        "type": "personal",
+        "country": "DZ",
+        "position": "CEO",
+        "department": "executive",
+        "seniority": "senior",
+        "twitter": null,
+        "linkedin": "https://www.linkedin.com/in/mohamed-ben-rebia",
+        "score": 100,
+        "verification": {
+          "date": "2025-09-22T00:00:00+02:00",
+          "status": "valid"
+        },
+        "sources": [
+          {
+            "uri": "https://github.com/tomba-io/generic-emails/blob/084fc1a63d3cdaf9a34f255bedc2baea49a8e8b9/src/lib/validation/hash.ts",
+            "website_url": "github.com",
+            "extracted_on": "2021-02-08T20:09:54+01:00",
+            "last_seen_on": "2021-02-08T22:43:40+01:00",
+            "still_on_page": true
+          },
+          ....
+        ]
+      },
+      ...
+      ...
+      ...
+      ...
+      ...
+    ]
+  },
+  "meta": {
+    "total": 21,
+    "pageSize": 10,
+    "current": 1,
+    "total_pages": 3,
+    "params": {
+      "domain": "tomba.io",
+      "page": 1,
+      "limit": 10,
+      "department": null,
+      "country": null,
+      "type": "all",
+      "live": false
+    }
+  }
 }
 ```
 
@@ -442,6 +528,42 @@ Generate likely email addresses from domain, first name, and last name.
 }
 ```
 
+**Response:**
+
+```json
+{
+    "data": {
+        "email": "b.mohamed@tomba.io",
+        "first_name": "Mohamed",
+        "last_name": "Ben rebia",
+        "full_name": "Mohamed Ben rebia",
+        "website_url": "tomba.io",
+        "company": "Tomba technology web service LLC",
+        "position": "CEO",
+        "country": "DZ",
+        "gender": "male",
+        "twitter": null,
+        "linkedin": "https://www.linkedin.com/in/mohamed-ben-rebia",
+        "score": 100,
+        "accept_all": null,
+        "phone_number": false,
+        "verification": {
+            "date": "2025-09-22T00:00:00+02:00",
+            "status": "valid"
+        },
+        "sources": [
+            {
+                "uri": "https://github.com/tomba-io/generic-emails/blob/084fc1a63d3cdaf9a34f255bedc2baea49a8e8b9/src/lib/validation/hash.ts",
+                "website_url": "github.com",
+                "extracted_on": "2021-02-08T20:09:54+01:00",
+                "last_seen_on": "2021-02-08T22:43:40+01:00",
+                "still_on_page": true
+            }
+        ]
+    }
+}
+```
+
 ### 3. Email Verifier
 
 Verify email address deliverability and check database presence.
@@ -450,7 +572,7 @@ Verify email address deliverability and check database presence.
 {
     "name": "email_verifier",
     "arguments": {
-        "email": "john.doe@example.com"
+        "email": "b.mohamed@tomba.io"
     }
 }
 ```
@@ -459,13 +581,47 @@ Verify email address deliverability and check database presence.
 
 ```json
 {
-    "email": {
-        "email": "john.doe@example.com",
-        "gibberish": false,
-        "disposable": false,
-        "webmail": false,
-        "result": "deliverable",
-        "score": 95
+    "data": {
+        "email": {
+            "email": "b.mohamed@tomba.io",
+            "result": "deliverable",
+            "status": "valid",
+            "score": 99,
+            "smtp_provider": "Google Workspace",
+            "mx": {
+                "records": [
+                    "aspmx.l.google.com",
+                    "alt2.aspmx.l.google.com",
+                    "alt1.aspmx.l.google.com",
+                    "alt4.aspmx.l.google.com",
+                    "alt3.aspmx.l.google.com"
+                ]
+            },
+            "mx_check": true,
+            "smtp_server": true,
+            "smtp_check": true,
+            "accept_all": false,
+            "greylisted": false,
+            "block": true,
+            "gibberish": false,
+            "disposable": false,
+            "webmail": false,
+            "regex": true,
+            "whois": {
+                "registrar_name": "namecheap, inc.",
+                "referral_url": "https://www.namecheap.com/",
+                "created_date": "2020-07-07T20:54:07+02:00"
+            }
+        },
+        "sources": [
+            {
+                "uri": "https://github.com/tomba-io/generic-emails/blob/084fc1a63d3cdaf9a34f255bedc2baea49a8e8b9/src/lib/validation/hash.ts",
+                "website_url": "github.com",
+                "extracted_on": "2021-02-08T20:09:54+01:00",
+                "last_seen_on": "2021-02-08T22:43:40+01:00",
+                "still_on_page": true
+            }
+        ]
     }
 }
 ```
@@ -478,7 +634,43 @@ Enrich an email address with additional contact information.
 {
     "name": "email_enrichment",
     "arguments": {
-        "email": "john.doe@example.com"
+        "email": "b.mohamed@tomba.io"
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "data": {
+        "email": "b.mohamed@tomba.io",
+        "first_name": "Mohamed",
+        "last_name": "Ben rebia",
+        "full_name": "Mohamed Ben rebia",
+        "website_url": "tomba.io",
+        "company": "Tomba technology web service LLC",
+        "position": "CEO",
+        "country": "DZ",
+        "gender": "male",
+        "twitter": null,
+        "linkedin": "https://www.linkedin.com/in/mohamed-ben-rebia",
+        "score": 100,
+        "accept_all": null,
+        "phone_number": false,
+        "verification": {
+            "date": "2025-09-22T00:00:00+02:00",
+            "status": "valid"
+        },
+        "sources": [
+            {
+                "uri": "https://github.com/tomba-io/generic-emails/blob/084fc1a63d3cdaf9a34f255bedc2baea49a8e8b9/src/lib/validation/hash.ts",
+                "website_url": "github.com",
+                "extracted_on": "2021-02-08T20:09:54+01:00",
+                "last_seen_on": "2021-02-08T22:43:40+01:00",
+                "still_on_page": true
+            }
+        ]
     }
 }
 ```
@@ -496,6 +688,42 @@ Find email addresses of article authors from a URL.
 }
 ```
 
+**Response:**
+
+```json
+{
+    "data": {
+        "email": "b.mohamed@tomba.io",
+        "first_name": "Mohamed",
+        "last_name": "Ben rebia",
+        "full_name": "Mohamed Ben rebia",
+        "website_url": "tomba.io",
+        "company": "Tomba technology web service LLC",
+        "position": "CEO",
+        "country": "DZ",
+        "gender": "male",
+        "twitter": null,
+        "linkedin": "https://www.linkedin.com/in/mohamed-ben-rebia",
+        "score": 100,
+        "accept_all": null,
+        "phone_number": false,
+        "verification": {
+            "date": "2025-09-22T00:00:00+02:00",
+            "status": "valid"
+        },
+        "sources": [
+            {
+                "uri": "https://github.com/tomba-io/generic-emails/blob/084fc1a63d3cdaf9a34f255bedc2baea49a8e8b9/src/lib/validation/hash.ts",
+                "website_url": "github.com",
+                "extracted_on": "2021-02-08T20:09:54+01:00",
+                "last_seen_on": "2021-02-08T22:43:40+01:00",
+                "still_on_page": true
+            }
+        ]
+    }
+}
+```
+
 ### 6. LinkedIn Finder
 
 Find email addresses from LinkedIn profile URLs.
@@ -509,6 +737,42 @@ Find email addresses from LinkedIn profile URLs.
 }
 ```
 
+**Response:**
+
+```json
+{
+    "data": {
+        "email": "b.mohamed@tomba.io",
+        "first_name": "Mohamed",
+        "last_name": "Ben rebia",
+        "full_name": "Mohamed Ben rebia",
+        "website_url": "tomba.io",
+        "company": "Tomba technology web service LLC",
+        "position": "CEO",
+        "country": "DZ",
+        "gender": "male",
+        "twitter": null,
+        "linkedin": "https://www.linkedin.com/in/mohamed-ben-rebia",
+        "score": 100,
+        "accept_all": null,
+        "phone_number": false,
+        "verification": {
+            "date": "2025-09-22T00:00:00+02:00",
+            "status": "valid"
+        },
+        "sources": [
+            {
+                "uri": "https://github.com/tomba-io/generic-emails/blob/084fc1a63d3cdaf9a34f255bedc2baea49a8e8b9/src/lib/validation/hash.ts",
+                "website_url": "github.com",
+                "extracted_on": "2021-02-08T20:09:54+01:00",
+                "last_seen_on": "2021-02-08T22:43:40+01:00",
+                "still_on_page": true
+            }
+        ]
+    }
+}
+```
+
 ### 7. Phone Finder
 
 Search for phone numbers based on email, domain, or LinkedIn profile.
@@ -517,7 +781,26 @@ Search for phone numbers based on email, domain, or LinkedIn profile.
 {
     "name": "phone_finder",
     "arguments": {
-        "email": "john.doe@example.com"
+        "domain": "tomba.io"
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "data": {
+        "domain": "tomba.io",
+        "valid": true,
+        "local_format": "(850) 790-5575",
+        "intl_format": "+1 850-790-5575",
+        "e164_format": "+18507905575",
+        "rfc3966_format": "tel:+1-850-790-5575",
+        "country_code": "US",
+        "line_type": "FIXED_LINE_OR_MOBILE",
+        "carrier": "",
+        "timezones": ["America/New_York"]
     }
 }
 ```
@@ -530,10 +813,195 @@ Validate phone numbers and check carrier information.
 {
     "name": "phone_validator",
     "arguments": {
-        "phone": "+1234567890"
+        "phone": "+213667945402"
     }
 }
 ```
+
+**Response:**
+
+```json
+{
+    "data": {
+        "valid": true,
+        "local_format": "0667 94 54 02",
+        "intl_format": "+213 667 94 54 02",
+        "e164_format": "+213667945402",
+        "rfc3966_format": "tel:+213-667-94-54-02",
+        "country_code": "DZ",
+        "line_type": "MOBILE",
+        "carrier": "Mobilis",
+        "timezones": ["Europe/Paris"]
+    }
+}
+```
+
+### 9. Email Count
+
+Get the total number of email addresses for a domain.
+
+```json
+{
+    "name": "email_count",
+    "arguments": {
+        "domain": "tomba.io"
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "domain": "tomba.io",
+    "total": 245,
+    "personalEmails": 198,
+    "genericEmails": 47,
+    "department": {
+        "engineering": 45,
+        "sales": 38,
+        "marketing": 32,
+        "hr": 15,
+        "finance": 12,
+        "legal": 8,
+        "executive": 25,
+        "support": 28,
+        "other": 42
+    },
+    "seniority": {
+        "junior": 89,
+        "senior": 125,
+        "executive": 31
+    },
+    "source": "tomba_email_count"
+}
+```
+
+### 10. Similar Finder
+
+Find similar domains based on a specific domain.
+
+```json
+{
+    "name": "similar_finder",
+    "arguments": {
+        "domain": "tomba.io"
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "data": [
+        {
+            "website_url": "summit.com",
+            "name": "Summit",
+            "industries": "Wholesale"
+        },
+        {
+            "website_url": "hunter.io",
+            "name": "Hunter",
+            "industries": "Information Technology and Services"
+        },
+        {
+            "website_url": "voilaNorbert.com",
+            "name": "VoilaNorbert",
+            "industries": "Information Technology and Services"
+        }
+    ]
+}
+```
+
+### 11. Technology Finder
+
+Instantly reveal the technology stack of any website.
+
+```json
+{
+    "name": "technology_finder",
+    "arguments": {
+        "domain": "tomba.io"
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "domain": "tomba.io",
+    "data": [
+        {
+            "slug": "intercom",
+            "name": "Intercom",
+            "icon": "Intercom.png",
+            "website": "https://www.intercom.com",
+            "categories": {
+                "id": 10,
+                "slug": "analytics",
+                "name": "Analytics"
+            }
+        }
+    ]
+}
+```
+
+## Rate Limiting & Usage
+
+### API Rate Limits
+
+Tomba.io implements rate limiting based on your subscription plan:
+
+-   **Free Plan**: 50 requests per month
+-   **Growth Plan**: 5,000 requests per month + 10,000 verifications requests
+-   **Pro Plan**: 10,000 requests per month
+-   **Enterprise Plan**: 50,000 requests per month
+-   **Custom Plan**: Custom limits
+
+Learn more about [Tomba Pricing Plans](https://tomba.io/pricing).
+
+### Rate Limit Headers
+
+Each API response includes rate limit information:
+
+```
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 999
+X-RateLimit-Reset: 1609459200
+```
+
+Learn more about [Tomba API Rate Limits](https://docs.tomba.io/rate-limits).
+
+### Handling Rate Limits
+
+When you exceed your rate limit, the API returns a `429 Too Many Requests` status with:
+
+```json
+{
+    "error": {
+        "type": "rate_limit",
+        "message": "Rate limit exceeded. Please try again in 60 seconds",
+        "code": 429
+    }
+}
+```
+
+### Best Practices
+
+1. **Monitor Usage**: Check your dashboard at [tomba.io/dashboard](https://app.tomba.io/dashboard)
+2. **Implement Backoff**: Handle 429 responses with exponential backoff
+3. **Batch Operations**: Use domain search for multiple emails from the same domain
+4. **Cache Results**: Store results locally to avoid duplicate requests
+5. **Plan Accordingly**: Upgrade your plan based on usage patterns
+
+### Usage Tips
+
+-   Domain search returns multiple emails per request (more efficient than individual lookups)
+-   Email verification consumes credits only for valid email formats
+-   Phone finder may return multiple numbers per request
+-   Enrichment provides comprehensive data in a single request
 
 ## Troubleshooting
 
