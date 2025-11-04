@@ -3691,10 +3691,10 @@ toidentifier@1.0.1:
   resolved "https://registry.yarnpkg.com/toidentifier/-/toidentifier-1.0.1.tgz#3be34321a88a820ed1bd80dfaa33e479fbb8dd35"
   integrity sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==
 
-tomba@1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/tomba/-/tomba-1.0.4.tgz#38387379b20b153b94053fda7389f4e1b3b49e0d"
-  integrity sha512-F+QUkVbR08QSaB4UwDHWOW21sy0cOLhWsBdZoig5H7ulw161JixM5FSemrn3qjkN4aafEvf7nTh0WajeILDfoA==
+tomba@1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/tomba/-/tomba-1.0.5.tgz#ff4e243e379ecbe00bf31157b5164c72651a7ec7"
+  integrity sha512-dqXdnLLe7crE0bYI4HPgJnY5etflqkD2y9b3mt0sk/qy8n03CjIPvGn0a9GmUqXqWik5mq/EL9FUv5M21X+VeA==
   dependencies:
     axios "^1.12.2"
 
@@ -3925,3 +3925,8 @@ zod@^3.23.8, zod@^3.25.67:
   version "3.25.76"
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.76.tgz#26841c3f6fd22a6a2760e7ccb719179768471e34"
   integrity sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==
+
+zod@^4.1.12:
+  version "4.1.12"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-4.1.12.tgz#64f1ea53d00eab91853195653b5af9eee68970f0"
+  integrity sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ==
