@@ -13,7 +13,7 @@
     "license": "MIT",
     "homepage": "https://tomba.io",
     "icon": "icon.png",
-    "documentation": "https://docs.tomba.io/mcp/introduction",
+    "documentation": "https://docs.tomba.io/llm/local-mcp/introduction",
     "support": "https://github.com/tomba-io/tomba-mcp-server/issues",
     "screenshots": [
         "assets/screenshots/screenshot1.png",
@@ -82,6 +82,18 @@
         {
             "name": "phone_validator",
             "description": "Validate a phone number and get carrier information"
+        },
+        {
+            "name": "email_count",
+            "description": "Get the total number of email addresses for a domain"
+        },
+        {
+            "name": "similar_finder",
+            "description": "Find similar domains based on a specific domain"
+        },
+        {
+            "name": "technology_finder",
+            "description": "Instantly reveal the technology stack of any website"
         }
     ],
     "prompts": [
@@ -126,6 +138,30 @@
             "description": "Validate a phone number",
             "arguments": ["phone"],
             "text": "Validate the phone number {phone} and provide carrier information."
+        },
+        {
+            "name": "competitor_analysis",
+            "description": "Analyze competitors using similar domains and technology",
+            "arguments": ["domain", "include_technology"],
+            "text": "Analyze competitors for {domain} and optionally include technology comparison if {include_technology} is true."
+        },
+        {
+            "name": "technology_audit",
+            "description": "Comprehensive technology audit of a website",
+            "arguments": ["domain", "include_similar"],
+            "text": "Perform a comprehensive technology audit for {domain} and optionally include similar domain comparison if {include_similar} is true."
+        },
+        {
+            "name": "domain_insights",
+            "description": "Get comprehensive insights about a domain including email count and technology",
+            "arguments": ["domain", "include_samples"],
+            "text": "Get comprehensive insights about {domain} including email count and technology, optionally include sample emails if {include_samples} is true."
+        },
+        {
+            "name": "bulk_domain_research",
+            "description": "Research multiple domains for email counts and basic information",
+            "arguments": ["domains", "include_technology"],
+            "text": "Research the following domains for email counts and basic information: {domains}. Optionally include technology analysis if {include_technology} is true."
         }
     ],
     "user_config": {
