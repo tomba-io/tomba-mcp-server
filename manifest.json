@@ -2,7 +2,7 @@
     "manifest_version": "0.2",
     "name": "tomba-mcp-server",
     "display_name": "Tomba MCP Server",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "MCP server for Tomba email finder and verification API",
     "long_description": "This MCP server integrates with the Tomba.io API to provide tools for finding and verifying email addresses, enriching contact information, and discovering phone numbers. It offers a variety of tools, resources, and prompts to help users leverage Tomba's capabilities for lead generation, email verification, and contact enrichment.",
     "author": {
