@@ -2,7 +2,7 @@
 
 import { TombaMCPServer } from "./server/mcpServer.js";
 import { parseArgs } from "node:util";
-import pkg from "../package.json" assert { type: "json" };
+import pkg from "../package.json" with { type: "json" };
 
 interface ParsedArgs {
     values: {

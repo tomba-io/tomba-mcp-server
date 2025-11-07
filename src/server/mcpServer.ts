@@ -30,7 +30,7 @@ import {
     TechnologyFinderParamsSchema,
 } from "../types/index.js";
 import { validateToolArguments, ValidationError } from "../utils/validation.js";
-import pkg from "../../package.json" assert { type: "json" };
+import pkg from "../../package.json" with { type: "json" };
 export class TombaMCPServer {
     private server: Server;
     private tombaMcpClient: TombaConfig | null = null;
