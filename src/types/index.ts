@@ -184,6 +184,92 @@ export const TechnologyFinderParamsSchema = z.object({
         .regex(/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid domain format"),
 });
 
+export const CompaniesSearchParamsSchema = z.object({
+    query: z
+        .string()
+        .min(
+            10,
+            "Natural language query - AI assistant will select appropriate filters for you"
+        )
+        .optional(),
+    filters: z
+        .object({
+            location_city: z
+                .object({
+                    include: z.array(z.string()).optional(),
+                    exclude: z.array(z.string()).optional(),
+                })
+                .optional(),
+            location_state: z
+                .object({
+                    include: z.array(z.string()).optional(),
+                    exclude: z.array(z.string()).optional(),
+                })
+                .optional(),
+            location_country: z
+                .object({
+                    include: z.array(z.string()).optional(),
+                    exclude: z.array(z.string()).optional(),
+                })
+                .optional(),
+            industry: z
+                .object({
+                    include: z.array(z.string()).optional(),
+                    exclude: z.array(z.string()).optional(),
+                })
+                .optional(),
+            size: z
+                .object({
+                    include: z.array(z.string()).optional(),
+                    exclude: z.array(z.string()).optional(),
+                })
+                .optional(),
+            revenue: z
+                .object({
+                    include: z.array(z.string()).optional(),
+                    exclude: z.array(z.string()).optional(),
+                })
+                .optional(),
+            sic: z
+                .object({
+                    include: z.array(z.string()).optional(),
+                    exclude: z.array(z.string()).optional(),
+                })
+                .optional(),
+            naics: z
+                .object({
+                    include: z.array(z.string()).optional(),
+                    exclude: z.array(z.string()).optional(),
+                })
+                .optional(),
+            keywords: z
+                .object({
+                    include: z.array(z.string()).optional(),
+                    exclude: z.array(z.string()).optional(),
+                })
+                .optional(),
+            founded: z
+                .object({
+                    include: z.array(z.string()).optional(),
+                    exclude: z.array(z.string()).optional(),
+                })
+                .optional(),
+            similar: z
+                .object({
+                    include: z.array(z.string()).optional(),
+                    exclude: z.array(z.string()).optional(),
+                })
+                .optional(),
+        })
+        .optional(),
+    page: z
+        .number()
+        .int()
+        .min(1, "Page must be at least 1")
+        .optional()
+        .default(1),
+});
+
 // Additional validation schemas for common patterns
 export const PaginationSchema = z.object({
     page: z.number().int().min(1).default(1),

@@ -7,6 +7,7 @@ import {
     Count,
     Similar,
     Technology,
+    Reveal,
 } from "tomba";
 import type {
     VerifierResponse,
@@ -16,6 +17,8 @@ import type {
     SimilarResponse,
     TechnologyResponse,
     EmailCountResponse,
+    CompaniesSearchRequest,
+    CompaniesSearchResponse,
 } from "tomba";
 import {
     TombaConfig,
@@ -220,6 +223,27 @@ export class TombaMcpClient {
         } catch (error) {
             throw new Error(
                 `Technology finder failed: ${
+                    error instanceof Error ? error.message : "Unknown error"
+                }`
+            );
+        }
+    }
+
+    async companiesSearch(
+        params: CompaniesSearchRequest
+    ): Promise<CompaniesSearchResponse> {
+        try {
+            const reveal = new Reveal(this.client);
+            const requestParams: any = {
+                query: params.query,
+                filters: params.filters,
+                page: params.page,
+            };
+            const response = await reveal.companiesSearch(requestParams);
+            return response as CompaniesSearchResponse;
+        } catch (error) {
+            throw new Error(
+                `Companies search failed: ${
                     error instanceof Error ? error.message : "Unknown error"
                 }`
             );

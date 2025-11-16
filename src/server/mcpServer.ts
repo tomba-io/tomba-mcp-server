@@ -28,6 +28,7 @@ import {
     EmailCountParamsSchema,
     SimilarFinderParamsSchema,
     TechnologyFinderParamsSchema,
+    CompaniesSearchParamsSchema,
 } from "../types/index.js";
 import { validateToolArguments, ValidationError } from "../utils/validation.js";
 import pkg from "../../package.json" with { type: "json" };
@@ -272,6 +273,129 @@ export class TombaMCPServer {
                                 },
                             },
                             required: ["domain"],
+                        },
+                    },
+                    {
+                        name: "companies_search",
+                        description:
+                            "Search for companies using natural language queries with advanced filters",
+                        annotations: { readOnly: true },
+                        inputSchema: {
+                            type: "object",
+                            properties: {
+                                query: {
+                                    type: "string",
+                                    description:
+                                        "Natural language search query (e.g., 'technology companies in san francisco')",
+                                },
+                                filters: {
+                                    type: "object",
+                                    description: "Advanced filters for company search",
+                                    properties: {
+                                        location_city: {
+                                            type: "object",
+                                            properties: {
+                                                include: {
+                                                    type: "array",
+                                                    items: { type: "string" },
+                                                    description: "Cities to include",
+                                                },
+                                                exclude: {
+                                                    type: "array",
+                                                    items: { type: "string" },
+                                                    description: "Cities to exclude",
+                                                },
+                                            },
+                                        },
+                                        location_state: {
+                                            type: "object",
+                                            properties: {
+                                                include: {
+                                                    type: "array",
+                                                    items: { type: "string" },
+                                                    description: "States to include",
+                                                },
+                                                exclude: {
+                                                    type: "array",
+                                                    items: { type: "string" },
+                                                    description: "States to exclude",
+                                                },
+                                            },
+                                        },
+                                        location_country: {
+                                            type: "object",
+                                            properties: {
+                                                include: {
+                                                    type: "array",
+                                                    items: { type: "string" },
+                                                    description: "Countries to include",
+                                                },
+                                                exclude: {
+                                                    type: "array",
+                                                    items: { type: "string" },
+                                                    description: "Countries to exclude",
+                                                },
+                                            },
+                                        },
+                                        industry: {
+                                            type: "object",
+                                            properties: {
+                                                include: {
+                                                    type: "array",
+                                                    items: { type: "string" },
+                                                    description: "Industries to include",
+                                                },
+                                                exclude: {
+                                                    type: "array",
+                                                    items: { type: "string" },
+                                                    description: "Industries to exclude",
+                                                },
+                                            },
+                                        },
+                                        size: {
+                                            type: "object",
+                                            properties: {
+                                                include: {
+                                                    type: "array",
+                                                    items: { type: "string" },
+                                                    description:
+                                                        "Company sizes to include (e.g., '51-200', '201-500')",
+                                                },
+                                                exclude: {
+                                                    type: "array",
+                                                    items: { type: "string" },
+                                                    description: "Company sizes to exclude",
+                                                },
+                                            },
+                                        },
+                                        revenue: {
+                                            type: "object",
+                                            properties: {
+                                                include: {
+                                                    type: "array",
+                                                    items: { type: "string" },
+                                                    description: "Revenue ranges to include",
+                                                },
+                                                exclude: {
+                                                    type: "array",
+                                                    items: { type: "string" },
+                                                    description: "Revenue ranges to exclude",
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                                page: {
+                                    type: "number",
+                                    description: "Page number for pagination (default: 1)",
+                                },
+                                limit: {
+                                    type: "number",
+                                    description:
+                                        "Number of results per page (default: 10, max: 100)",
+                                },
+                            },
+                            required: ["query"],
                         },
                     },
                 ],
@@ -532,6 +656,27 @@ export class TombaMCPServer {
                                 ],
                             };
 
+                        case "companies_search":
+                            const companiesParams = validateToolArguments(
+                                CompaniesSearchParamsSchema,
+                                args,
+                                "companies_search"
+                            );
+                            const companiesResult =
+                                await client.companiesSearch(companiesParams);
+                            return {
+                                content: [
+                                    {
+                                        type: "text",
+                                        text: JSON.stringify(
+                                            companiesResult,
+                                            null,
+                                            2
+                                        ),
+                                    },
+                                ],
+                            };
+
                         default:
                             throw new Error(`Unknown tool: ${name}`);
                     }
@@ -779,6 +924,11 @@ Find similar domains based on a specific domain.
 ## 11. technology_finder
 Discover the technology stack used by a website.
 - **Required**: domain
+
+## 12. companies_search
+Search for companies using natural language queries with advanced filters.
+- **Required**: query
+- **Optional**: filters (location_city, location_state, location_country, industry, size, revenue), page, limit
 `,
                                 },
                             ],
@@ -1021,6 +1171,146 @@ Discover the technology stack used by a website.
                                 name: "include_technology",
                                 description:
                                     "Include technology stack for each domain (true/false)",
+                                required: false,
+                            },
+                        ],
+                    },
+                    {
+                        name: "find_target_companies",
+                        description:
+                            "Find companies matching specific criteria using natural language search",
+                        arguments: [
+                            {
+                                name: "query",
+                                description:
+                                    "Natural language search query for companies",
+                                required: true,
+                            },
+                            {
+                                name: "location",
+                                description: "Target location (city, state, or country)",
+                                required: false,
+                            },
+                            {
+                                name: "industry",
+                                description: "Industry sector to focus on",
+                                required: false,
+                            },
+                            {
+                                name: "size",
+                                description:
+                                    "Company size range (e.g., '51-200', '201-500')",
+                                required: false,
+                            },
+                        ],
+                    },
+                    {
+                        name: "market_research",
+                        description:
+                            "Research companies in a specific market segment",
+                        arguments: [
+                            {
+                                name: "industry",
+                                description: "Industry to research",
+                                required: true,
+                            },
+                            {
+                                name: "location",
+                                description: "Geographic location",
+                                required: true,
+                            },
+                            {
+                                name: "size_range",
+                                description:
+                                    "Company size range (e.g., '51-200')",
+                                required: false,
+                            },
+                            {
+                                name: "include_contacts",
+                                description:
+                                    "Include contact information for companies (true/false)",
+                                required: false,
+                            },
+                        ],
+                    },
+                    {
+                        name: "lead_generation",
+                        description:
+                            "Generate leads by finding companies and their contacts",
+                        arguments: [
+                            {
+                                name: "company_query",
+                                description: "Search query for target companies",
+                                required: true,
+                            },
+                            {
+                                name: "target_department",
+                                description:
+                                    "Department to find contacts in (optional)",
+                                required: false,
+                            },
+                            {
+                                name: "contact_role",
+                                description:
+                                    "Role or position to target (optional)",
+                                required: false,
+                            },
+                        ],
+                    },
+                    {
+                        name: "prospect_enrichment",
+                        description:
+                            "Enrich company prospects with comprehensive data",
+                        arguments: [
+                            {
+                                name: "company_name",
+                                description: "Name of the company to enrich",
+                                required: true,
+                            },
+                            {
+                                name: "location",
+                                description: "Company location (optional)",
+                                required: false,
+                            },
+                            {
+                                name: "get_technology",
+                                description:
+                                    "Include technology stack analysis (true/false)",
+                                required: false,
+                            },
+                            {
+                                name: "get_contacts",
+                                description:
+                                    "Include contact information (true/false)",
+                                required: false,
+                            },
+                        ],
+                    },
+                    {
+                        name: "industry_analysis",
+                        description:
+                            "Analyze companies within a specific industry and location",
+                        arguments: [
+                            {
+                                name: "industry",
+                                description: "Industry to analyze",
+                                required: true,
+                            },
+                            {
+                                name: "location",
+                                description: "Geographic location",
+                                required: true,
+                            },
+                            {
+                                name: "company_sizes",
+                                description:
+                                    "Comma-separated list of company sizes (e.g., '51-200,201-500')",
+                                required: false,
+                            },
+                            {
+                                name: "include_technology",
+                                description:
+                                    "Include technology analysis (true/false)",
                                 required: false,
                             },
                         ],
@@ -1383,6 +1673,296 @@ Please:
                                     content: {
                                         type: "text",
                                         text: bulkText,
+                                    },
+                                },
+                            ],
+                        };
+
+                    case "find_target_companies":
+                        const query = args?.query as string;
+                        const location = args?.location as string;
+                        const industry = args?.industry as string;
+                        const size = args?.size as string;
+
+                        if (!query) {
+                            throw new Error("query parameter is required");
+                        }
+
+                        let filters: any = {};
+                        if (location) {
+                            if (location.includes(",")) {
+                                filters.location_city = {
+                                    include: location.split(",").map((l) => l.trim()),
+                                };
+                            } else {
+                                filters.location_city = { include: [location] };
+                            }
+                        }
+                        if (industry) {
+                            filters.industry = {
+                                include: industry.split(",").map((i) => i.trim()),
+                            };
+                        }
+                        if (size) {
+                            filters.size = {
+                                include: size.split(",").map((s) => s.trim()),
+                            };
+                        }
+
+                        const hasFilters = Object.keys(filters).length > 0;
+                        let targetText = `I need to find companies matching: "${query}"\n\n`;
+                        if (hasFilters) {
+                            targetText += `Filters:\n`;
+                            if (location)
+                                targetText += `- Location: ${location}\n`;
+                            if (industry)
+                                targetText += `- Industry: ${industry}\n`;
+                            if (size) targetText += `- Size: ${size}\n`;
+                            targetText += `\n`;
+                        }
+
+                        targetText += `Please:\n`;
+                        targetText += `1. Use the companies_search tool with query: "${query}"`;
+                        if (hasFilters) {
+                            targetText += ` and filters: ${JSON.stringify(
+                                filters,
+                                null,
+                                2
+                            )}`;
+                        }
+                        targetText += `\n2. Analyze the results and provide:\n`;
+                        targetText += `   - List of matching companies with key details\n`;
+                        targetText += `   - Company names and domains\n`;
+                        targetText += `   - Business descriptions\n`;
+                        targetText += `   - Contact opportunities\n`;
+                        targetText += `3. Suggest next steps for outreach or engagement\n`;
+
+                        return {
+                            messages: [
+                                {
+                                    role: "user",
+                                    content: {
+                                        type: "text",
+                                        text: targetText,
+                                    },
+                                },
+                            ],
+                        };
+
+                    case "market_research":
+                        const researchIndustry = args?.industry as string;
+                        const researchLocation = args?.location as string;
+                        const sizeRange = args?.size_range as string;
+                        const includeContacts = args?.include_contacts as string;
+
+                        if (!researchIndustry || !researchLocation) {
+                            throw new Error(
+                                "industry and location parameters are required"
+                            );
+                        }
+
+                        let marketFilters: any = {
+                            industry: { include: [researchIndustry] },
+                            location_city: { include: [researchLocation] },
+                        };
+                        if (sizeRange) {
+                            marketFilters.size = { include: [sizeRange] };
+                        }
+
+                        let marketText = `I need to research the ${researchIndustry} market in ${researchLocation}\n\n`;
+                        marketText += `Please:\n`;
+                        marketText += `1. Use the companies_search tool to find companies in ${researchIndustry} industry located in ${researchLocation}`;
+                        if (sizeRange) {
+                            marketText += ` with size ${sizeRange}`;
+                        }
+                        marketText += `\n2. Analyze market landscape including:\n`;
+                        marketText += `   - Total number of companies found\n`;
+                        marketText += `   - Company size distribution\n`;
+                        marketText += `   - Key players and their domains\n`;
+                        marketText += `   - Market trends and insights\n`;
+
+                        if (includeContacts === "true") {
+                            marketText += `3. For top 5 companies, use domain_search to find key contacts\n`;
+                            marketText += `4. Provide contact information for decision makers\n`;
+                        }
+
+                        marketText += `\nProvide a comprehensive market research report with actionable insights.\n`;
+
+                        return {
+                            messages: [
+                                {
+                                    role: "user",
+                                    content: {
+                                        type: "text",
+                                        text: marketText,
+                                    },
+                                },
+                            ],
+                        };
+
+                    case "lead_generation":
+                        const companyQuery = args?.company_query as string;
+                        const targetDepartment = args?.target_department as string;
+                        const contactRole = args?.contact_role as string;
+
+                        if (!companyQuery) {
+                            throw new Error(
+                                "company_query parameter is required"
+                            );
+                        }
+
+                        let leadText = `I need to generate leads from companies matching: "${companyQuery}"\n\n`;
+                        leadText += `Please:\n`;
+                        leadText += `1. Use the companies_search tool to find companies matching: "${companyQuery}"\n`;
+                        leadText += `2. For each company found:\n`;
+                        leadText += `   - Extract the company domain\n`;
+                        leadText += `   - Use domain_search to find email addresses`;
+                        if (targetDepartment) {
+                            leadText += ` in ${targetDepartment} department`;
+                        }
+                        leadText += `\n`;
+
+                        if (contactRole) {
+                            leadText += `3. Filter contacts for ${contactRole} roles\n`;
+                        }
+
+                        leadText += `4. Create a lead list with:\n`;
+                        leadText += `   - Company name and domain\n`;
+                        leadText += `   - Contact name and email\n`;
+                        leadText += `   - Role/title\n`;
+                        leadText += `   - Department\n`;
+                        leadText += `5. Prioritize leads based on relevance and contact quality\n`;
+
+                        return {
+                            messages: [
+                                {
+                                    role: "user",
+                                    content: {
+                                        type: "text",
+                                        text: leadText,
+                                    },
+                                },
+                            ],
+                        };
+
+                    case "prospect_enrichment":
+                        const companyName = args?.company_name as string;
+                        const prospectLocation = args?.location as string;
+                        const getTechnology = args?.get_technology as string;
+                        const getContacts = args?.get_contacts as string;
+
+                        if (!companyName) {
+                            throw new Error(
+                                "company_name parameter is required"
+                            );
+                        }
+
+                        let enrichQuery = companyName;
+                        if (prospectLocation) {
+                            enrichQuery += ` in ${prospectLocation}`;
+                        }
+
+                        let prospectText = `I need to enrich prospect information for: ${companyName}`;
+                        if (prospectLocation) {
+                            prospectText += ` (${prospectLocation})`;
+                        }
+                        prospectText += `\n\nPlease:\n`;
+                        prospectText += `1. Use companies_search to find "${enrichQuery}"\n`;
+                        prospectText += `2. Extract the company domain from results\n`;
+
+                        if (getTechnology === "true") {
+                            prospectText += `3. Use technology_finder to analyze the tech stack\n`;
+                        }
+
+                        if (getContacts === "true") {
+                            prospectText += `${
+                                getTechnology === "true" ? "4" : "3"
+                            }. Use domain_search to find key contacts\n`;
+                            prospectText += `${
+                                getTechnology === "true" ? "5" : "4"
+                            }. Use email_verifier to verify contact emails\n`;
+                        }
+
+                        prospectText += `\nProvide a comprehensive prospect profile including:\n`;
+                        prospectText += `- Company overview and domain\n`;
+                        prospectText += `- Industry and location details\n`;
+                        if (getTechnology === "true") {
+                            prospectText += `- Technology stack analysis\n`;
+                        }
+                        if (getContacts === "true") {
+                            prospectText += `- Key contact information with verification status\n`;
+                        }
+                        prospectText += `- Engagement recommendations\n`;
+
+                        return {
+                            messages: [
+                                {
+                                    role: "user",
+                                    content: {
+                                        type: "text",
+                                        text: prospectText,
+                                    },
+                                },
+                            ],
+                        };
+
+                    case "industry_analysis":
+                        const analysisIndustry = args?.industry as string;
+                        const analysisLocation = args?.location as string;
+                        const companySizes = args?.company_sizes as string;
+                        const industryIncludeTechnology =
+                            args?.include_technology as string;
+
+                        if (!analysisIndustry || !analysisLocation) {
+                            throw new Error(
+                                "industry and location parameters are required"
+                            );
+                        }
+
+                        let analysisFilters: any = {
+                            industry: { include: [analysisIndustry] },
+                            location_city: { include: [analysisLocation] },
+                        };
+                        if (companySizes) {
+                            analysisFilters.size = {
+                                include: companySizes
+                                    .split(",")
+                                    .map((s) => s.trim()),
+                            };
+                        }
+
+                        let industryText = `I need to analyze the ${analysisIndustry} industry in ${analysisLocation}\n\n`;
+                        industryText += `Please:\n`;
+                        industryText += `1. Use companies_search to find all ${analysisIndustry} companies in ${analysisLocation}`;
+                        if (companySizes) {
+                            industryText += ` with sizes: ${companySizes}`;
+                        }
+                        industryText += `\n2. Segment companies by size and analyze:\n`;
+                        industryText += `   - Market composition\n`;
+                        industryText += `   - Company distribution by size\n`;
+                        industryText += `   - Key industry players\n`;
+
+                        if (industryIncludeTechnology === "true") {
+                            industryText += `3. For top 10 companies, use technology_finder to analyze tech adoption\n`;
+                            industryText += `4. Identify technology trends in the industry\n`;
+                        }
+
+                        industryText += `\nProvide a detailed industry analysis report including:\n`;
+                        industryText += `- Market overview and statistics\n`;
+                        industryText += `- Competitive landscape\n`;
+                        industryText += `- Key companies and their domains\n`;
+                        if (industryIncludeTechnology === "true") {
+                            industryText += `- Technology trends and adoption patterns\n`;
+                        }
+                        industryText += `- Market opportunities and insights\n`;
+
+                        return {
+                            messages: [
+                                {
+                                    role: "user",
+                                    content: {
+                                        type: "text",
+                                        text: industryText,
                                     },
                                 },
                             ],

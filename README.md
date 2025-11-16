@@ -4,7 +4,7 @@ A Model Context Protocol (MCP) server for integrating with the Tomba.io API. Thi
 
 ## Features
 
-### Tools (11 available)
+### Tools (12 available)
 
 -   **[Domain Search](https://tomba.io/domain-search)**: Find all email addresses associated with a domain
 -   **[Email Finder](https://tomba.io/email-finder)**: Generate likely email addresses from names and domains
@@ -17,6 +17,7 @@ A Model Context Protocol (MCP) server for integrating with the Tomba.io API. Thi
 -   **[Email Count](https://tomba.io/email-count)**: Get total email counts for domains
 -   **[Similar Finder](https://tomba.io/similar-domains)**: Find similar domains based on a target domain
 -   **[Technology Finder](https://tomba.io/technology-finder)**: Discover technology stacks used by websites
+-   **[Companies Search](https://app.tomba.io/reveal)**: Search for companies using natural language queries with advanced filters
 
 ### Resources (7 available)
 
@@ -28,7 +29,7 @@ A Model Context Protocol (MCP) server for integrating with the Tomba.io API. Thi
 -   `tomba://docs/api` - API documentation
 -   `tomba://docs/tools` - Tools documentation
 
-### Prompts (11 pre-built workflows)
+### Prompts (16 pre-built workflows)
 
 -   **find_contact** - Find complete contact info for a person
 -   **verify_email_list** - Batch verify email addresses
@@ -41,6 +42,11 @@ A Model Context Protocol (MCP) server for integrating with the Tomba.io API. Thi
 -   **technology_audit** - Comprehensive technology audit of a website
 -   **domain_insights** - Get comprehensive insights about a domain including email count and technology
 -   **bulk_domain_research** - Research multiple domains for email counts and basic information
+-   **find_target_companies** - Find companies matching specific criteria using natural language search
+-   **market_research** - Research companies in a specific market segment
+-   **lead_generation** - Generate leads by finding companies and their contacts
+-   **prospect_enrichment** - Enrich company prospects with comprehensive data
+-   **industry_analysis** - Analyze companies within a specific industry and location
 
 ### Transport Options
 
@@ -947,6 +953,70 @@ Instantly reveal the technology stack of any website.
     ]
 }
 ```
+
+### 12. Companies Search
+
+Search for companies using natural language queries with advanced filters including location, industry, size, and revenue.
+
+```json
+{
+    "name": "companies_search",
+    "arguments": {
+        "filters": {
+            "location_city": {
+                "include": ["san francisco"]
+            },
+            "industry": {
+                "include": ["technology"]
+            },
+            "size": {
+                "include": ["51-200", "201-500"]
+            }
+        },
+        "page": 1,
+        "limit": 10
+    }
+}
+```
+
+**Response:**
+
+```json
+{
+    "data": {
+        "companies": [
+            {
+                "name": "Tech Company Inc",
+                "domain": "techcompany.com",
+                "industry": "Technology",
+                "location": {
+                    "city": "San Francisco",
+                    "state": "California",
+                    "country": "United States"
+                },
+                "size": "51-200",
+                "revenue": "$10M-$50M"
+            }
+        ],
+        "total": 150,
+        "page": 1
+    }
+}
+```
+
+**Available Filters:**
+
+-   `location_city`: Filter by city with include/exclude arrays
+-   `location_state`: Filter by state with include/exclude arrays
+-   `location_country`: Filter by country with include/exclude arrays
+-   `industry`: Filter by industry with include/exclude arrays
+-   `size`: Filter by company size (e.g., "1-10", "11-50", "51-200", "201-500", "501-1000", "1000+")
+-   `revenue`: Filter by revenue range with include/exclude arrays
+-   `founded_year`: Filter by founding year with include/exclude arrays
+-   `keywords`: Filter by keywords with include/exclude arrays
+-   `industry`: Filter by industry with include/exclude arrays
+-   `sic`: Filter by SIC codes with include/exclude arrays
+-   `naics`: Filter by NAICS codes with include/exclude arrays
 
 ## Rate Limiting & Usage
 
