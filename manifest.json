@@ -2,7 +2,7 @@
     "manifest_version": "0.2",
     "name": "tomba-mcp-server",
     "display_name": "Tomba MCP Server",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "MCP server for Tomba email finder and verification API",
     "long_description": "This MCP server integrates with the Tomba.io API to provide tools for finding and verifying email addresses, enriching contact information, and discovering phone numbers. It offers a variety of tools, resources, and prompts to help users leverage Tomba's capabilities for lead generation, email verification, and contact enrichment.",
     "author": {
@@ -94,6 +94,10 @@
         {
             "name": "technology_finder",
             "description": "Instantly reveal the technology stack of any website"
+        },
+        {
+            "name": "companies_search",
+            "description": "Search for companies using natural language queries with advanced filters for location, industry, size, and revenue"
         }
     ],
     "prompts": [
@@ -162,6 +166,51 @@
             "description": "Research multiple domains for email counts and basic information",
             "arguments": ["domains", "include_technology"],
             "text": "Research the following domains for email counts and basic information: {domains}. Optionally include technology analysis if {include_technology} is true."
+        },
+        {
+            "name": "find_target_companies",
+            "description": "Find companies matching specific criteria using natural language search",
+            "arguments": ["query", "location", "industry", "size"],
+            "text": "Find companies matching the query '{query}' in {location}, focusing on {industry} industry with company size {size}."
+        },
+        {
+            "name": "market_research",
+            "description": "Research companies in a specific market segment",
+            "arguments": [
+                "industry",
+                "location",
+                "size_range",
+                "include_contacts"
+            ],
+            "text": "Research companies in the {industry} industry located in {location} with size range {size_range}. Optionally include contact information if {include_contacts} is true."
+        },
+        {
+            "name": "lead_generation",
+            "description": "Generate leads by finding companies and their contacts",
+            "arguments": ["company_query", "target_department", "contact_role"],
+            "text": "Generate leads by searching for companies matching '{company_query}', then find contacts in {target_department} department with role {contact_role}."
+        },
+        {
+            "name": "prospect_enrichment",
+            "description": "Enrich company prospects with comprehensive data",
+            "arguments": [
+                "company_name",
+                "location",
+                "get_technology",
+                "get_contacts"
+            ],
+            "text": "Enrich prospect information for {company_name} in {location}. Include technology stack if {get_technology} is true and contact information if {get_contacts} is true."
+        },
+        {
+            "name": "industry_analysis",
+            "description": "Analyze companies within a specific industry and location",
+            "arguments": [
+                "industry",
+                "location",
+                "company_sizes",
+                "include_technology"
+            ],
+            "text": "Analyze companies in the {industry} industry located in {location} with company sizes {company_sizes}. Include technology analysis if {include_technology} is true."
         }
     ],
     "user_config": {
