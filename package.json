@@ -42,7 +42,7 @@
         "@modelcontextprotocol/sdk": "^1.18.2",
         "cors": "^2.8.5",
         "express": "^5.1.0",
-        "tomba": "1.0.5",
+        "tomba": "1.0.7",
         "zod": "^4.1.12"
     },
     "devDependencies": {
