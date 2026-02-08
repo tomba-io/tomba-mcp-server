@@ -6,25 +6,51 @@ export interface TombaConfig {
 }
 
 export interface DomainSearchParams {
-    domain: string;
-    limit?: number;
+    domain?: string;
+    company?: string;
     page?: number;
-    department?: string;
+    limit?: "10" | "20" | "50";
     country?: string;
+    department?:
+        | "engineering"
+        | "sales"
+        | "finance"
+        | "hr"
+        | "it"
+        | "marketing"
+        | "operations"
+        | "management"
+        | "executive"
+        | "legal"
+        | "support"
+        | "communication"
+        | "software"
+        | "security"
+        | "pr"
+        | "warehouse"
+        | "diversity"
+        | "administrative"
+        | "facilities"
+        | "accounting";
 }
 
 export interface EmailFinderParams {
-    domain: string;
-    firstName: string;
-    lastName: string;
+    domain?: string;
+    company?: string;
+    fullName?: string;
+    firstName?: string;
+    lastName?: string;
+    enrich_mobile?: boolean;
 }
 
 export interface EmailVerifierParams {
     email: string;
+    enrich_mobile?: boolean;
 }
 
 export interface EmailEnrichmentParams {
     email: string;
+    enrich_mobile?: boolean;
 }
 
 export interface AuthorFinderParams {
@@ -33,12 +59,14 @@ export interface AuthorFinderParams {
 
 export interface LinkedinFinderParams {
     url: string;
+    enrich_mobile?: boolean;
 }
 
 export interface PhoneFinderParams {
     email?: string;
     domain?: string;
     linkedin?: string;
+    full?: boolean;
 }
 
 export interface PhoneValidatorParams {
@@ -58,83 +86,172 @@ export interface TechnologyFinderParams {
 }
 
 // Zod Schemas for validation
-export const TombaConfigSchema = z.object({
-    apiKey: z
-        .string()
-        .min(1, "API key is required")
-        .regex(
-            /^ta_[a-z0-9]+$/,
-            "API key must start with 'ta_' followed by lowercase alphanumeric characters"
-        ),
-    secretKey: z
-        .string()
-        .min(1, "Secret key is required")
-        .regex(
-            /^ts_[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/,
-            "Secret key must start with 'ts_' followed by UUID format"
-        ),
-});
-export const DomainSearchParamsSchema = z.object({
-    domain: z
-        .string()
-        .min(1, "Domain is required")
-        .regex(/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid domain format"),
-    limit: z
-        .number()
-        .int()
-        .min(1, "Limit must be at least 1")
-        .max(100, "Limit cannot exceed 100")
-        .optional()
-        .default(10),
-    page: z
-        .number()
-        .int()
-        .min(1, "Page must be at least 1")
-        .optional()
-        .default(1),
-    department: z.string().min(1, "Department cannot be empty").optional(),
-    country: z
-        .string()
-        .length(2, "Country code must be 2 characters")
-        .regex(/^[A-Z]{2}$/, "Country code must be uppercase letters")
-        .optional(),
-});
+export const TombaConfigSchema = z
+    .object({
+        apiKey: z
+            .string()
+            .min(1, "API key is required")
+            .regex(
+                /^ta_[a-z0-9]+$/,
+                "API key must start with 'ta_' followed by lowercase alphanumeric characters",
+            ),
+        secretKey: z
+            .string()
+            .min(1, "Secret key is required")
+            .regex(
+                /^ts_[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/,
+                "Secret key must start with 'ts_' followed by UUID format",
+            ),
+    })
+    .describe("Configuration schema for Tomba API authentication");
+export const DomainSearchParamsSchema = z
+    .object({
+        domain: z
+            .string()
+            .regex(/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid domain format")
+            .optional()
+            .describe("The domain to search for emails (e.g., 'example.com')"),
+        company: z
+            .string()
+            .min(3, "Company name must be at least 3 characters")
+            .max(75, "Company name must be at most 75 characters")
+            .optional()
+            .describe("The company name to search for"),
+        page: z
+            .number()
+            .int()
+            .min(1, "Page must be at least 1")
+            .optional()
+            .default(1)
+            .describe("Page number for pagination"),
+        limit: z
+            .enum(["10", "20", "50"])
+            .default("10")
+            .optional()
+            .describe("Maximum number of results to return (10, 20, or 50)"),
+        country: z
+            .string()
+            .length(2, "Country code must be 2 characters")
+            .regex(/^[A-Z]{2}$/, "Country code must be uppercase letters")
+            .optional()
+            .describe("Country code in ISO 3166-1 alpha-2 format (e.g., 'US')"),
+        department: z
+            .enum([
+                "engineering",
+                "sales",
+                "finance",
+                "hr",
+                "it",
+                "marketing",
+                "operations",
+                "management",
+                "executive",
+                "legal",
+                "support",
+                "communication",
+                "software",
+                "security",
+                "pr",
+                "warehouse",
+                "diversity",
+                "administrative",
+                "facilities",
+                "accounting",
+            ])
+            .optional()
+            .describe("Filter results by department"),
+    })
+    .describe(
+        "Search for email addresses associated with a domain name or company",
+    );
 
-export const EmailFinderParamsSchema = z.object({
-    domain: z
-        .string()
-        .min(1, "Domain is required")
-        .regex(/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid domain format"),
-    firstName: z
-        .string()
-        .min(1, "First name is required")
-        .max(50, "First name too long")
-        .regex(/^[a-zA-Z\s-']+$/, "Invalid characters in first name"),
-    lastName: z
-        .string()
-        .min(1, "Last name is required")
-        .max(50, "Last name too long")
-        .regex(/^[a-zA-Z\s-']+$/, "Invalid characters in last name"),
-});
+export const EmailFinderParamsSchema = z
+    .object({
+        domain: z
+            .string()
+            .regex(/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid domain format")
+            .optional()
+            .describe("The domain of the company (e.g., 'example.com')"),
+        company: z
+            .string()
+            .min(3, "Company name must be at least 3 characters")
+            .max(75, "Company name must be at most 75 characters")
+            .optional()
+            .describe("The company name to search in"),
+        fullName: z
+            .string()
+            .min(1, "Full name is required")
+            .optional()
+            .describe(
+                "The full name of the person (alternative to firstName/lastName)",
+            ),
+        firstName: z
+            .string()
+            .min(1, "First name is required")
+            .max(50, "First name too long")
+            .regex(/^[a-zA-Z\s-']+$/, "Invalid characters in first name")
+            .optional(),
+        lastName: z
+            .string()
+            .min(1, "Last name is required")
+            .max(50, "Last name too long")
+            .regex(/^[a-zA-Z\s-']+$/, "Invalid characters in last name")
+            .optional(),
+        enrichMobile: z
+            .boolean()
+            .optional()
+            .describe("Whether to enrich with mobile phone data"),
+    })
+    .describe(
+        "Find email addresses by providing a domain and person's first/last name",
+    );
 
-export const EmailVerifierParamsSchema = z.object({
-    email: z.email("Invalid email format").min(1, "Email is required"),
-});
+export const EmailVerifierParamsSchema = z
+    .object({
+        email: z.email("Invalid email format").min(1, "Email is required"),
+        enrich_mobile: z
+            .boolean()
+            .optional()
+            .describe("Whether to enrich with mobile phone data"),
+    })
+    .describe(
+        "Verify email address deliverability and validity with detailed verification data",
+    );
 
-export const EmailEnrichmentParamsSchema = z.object({
-    email: z.email("Invalid email format").min(1, "Email is required"),
-});
+export const EmailEnrichmentParamsSchema = z
+    .object({
+        email: z.email("Invalid email format").min(1, "Email is required"),
+        enrich_mobile: z
+            .boolean()
+            .optional()
+            .describe("Whether to enrich with mobile phone data"),
+    })
+    .describe(
+        "Enrich email addresses with additional data including social profiles and company information",
+    );
 
-export const AuthorFinderParamsSchema = z.object({
-    url: z.string().min(1, "URL is required"),
-});
+export const AuthorFinderParamsSchema = z
+    .object({
+        url: z.string().min(1, "URL is required"),
+    })
+    .describe(
+        "Find email addresses of article authors from a given webpage URL",
+    );
 
-export const LinkedinFinderParamsSchema = z.object({
-    url: z
-        .string()
-        .regex(/linkedin\.com/, "Must be a LinkedIn URL")
-        .min(1, "LinkedIn URL is required"),
-});
+export const LinkedinFinderParamsSchema = z
+    .object({
+        url: z
+            .string()
+            .regex(/linkedin\.com/, "Must be a LinkedIn URL")
+            .min(1, "LinkedIn URL is required"),
+        enrich_mobile: z
+            .boolean()
+            .optional()
+            .describe("Whether to enrich with mobile phone data"),
+    })
+    .describe(
+        "Find email addresses from LinkedIn profile URLs with optional phone enrichment",
+    );
 
 export const PhoneFinderParamsSchema = z
     .object({
@@ -142,138 +259,165 @@ export const PhoneFinderParamsSchema = z
         domain: z
             .string()
             .regex(/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid domain format")
+            .describe("The domain of the company (e.g., 'example.com')")
             .optional(),
         linkedin: z
             .url("Invalid LinkedIn URL format")
             .regex(/linkedin\.com/, "Must be a LinkedIn URL")
             .optional(),
+        full: z
+            .boolean()
+            .optional()
+            .describe("Whether to return full phone details"),
     })
     .refine((data) => data.email || data.domain || data.linkedin, {
         message: "At least one of email, domain, or linkedin must be provided",
         path: ["email", "domain", "linkedin"],
-    });
+    })
+    .describe(
+        "Find phone numbers based on email address, domain, or LinkedIn profile",
+    );
 
-export const PhoneValidatorParamsSchema = z.object({
-    phone: z.string().min(1, "Phone number is required"),
+export const PhoneValidatorParamsSchema = z
+    .object({
+        phone: z.string().min(1, "Phone number is required"),
+        country: z
+            .string()
+            .length(2, "Country code must be 2 characters")
+            .regex(/^[A-Z]{2}$/, "Country code must be uppercase letters")
+            .describe("Country code in ISO 3166-1 alpha-2 format (e.g., 'US')")
+            .optional(),
+    })
+    .describe(
+        "Validate phone numbers and retrieve carrier information with optional country code",
+    );
 
-    country: z
-        .string()
-        .length(2, "Country code must be 2 characters")
-        .regex(/^[A-Z]{2}$/, "Country code must be uppercase letters")
-        .optional(),
-});
+export const EmailCountParamsSchema = z
+    .object({
+        domain: z
+            .string()
+            .min(1, "Domain is required")
+            .regex(/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid domain format"),
+    })
+    .describe(
+        "Get the total count of email addresses available for a specific domain",
+    );
 
-export const EmailCountParamsSchema = z.object({
-    domain: z
-        .string()
-        .min(1, "Domain is required")
-        .regex(/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid domain format"),
-});
+export const SimilarFinderParamsSchema = z
+    .object({
+        domain: z
+            .string()
+            .min(1, "Domain is required")
+            .regex(/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid domain format"),
+    })
+    .describe(
+        "Discover similar domains and related companies based on a given domain",
+    );
 
-export const SimilarFinderParamsSchema = z.object({
-    domain: z
-        .string()
-        .min(1, "Domain is required")
-        .regex(/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid domain format"),
-});
+export const TechnologyFinderParamsSchema = z
+    .object({
+        domain: z
+            .string()
+            .min(1, "Domain is required")
+            .regex(/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid domain format"),
+    })
+    .describe(
+        "Reveal the technology stack and tools used by any website domain",
+    );
 
-export const TechnologyFinderParamsSchema = z.object({
-    domain: z
-        .string()
-        .min(1, "Domain is required")
-        .regex(/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid domain format"),
-});
-
-export const CompaniesSearchParamsSchema = z.object({
-    query: z
-        .string()
-        .min(
-            10,
-            "Natural language query - AI assistant will select appropriate filters for you"
-        )
-        .optional(),
-    filters: z
-        .object({
-            location_city: z
-                .object({
-                    include: z.array(z.string()).optional(),
-                    exclude: z.array(z.string()).optional(),
-                })
-                .optional(),
-            location_state: z
-                .object({
-                    include: z.array(z.string()).optional(),
-                    exclude: z.array(z.string()).optional(),
-                })
-                .optional(),
-            location_country: z
-                .object({
-                    include: z.array(z.string()).optional(),
-                    exclude: z.array(z.string()).optional(),
-                })
-                .optional(),
-            industry: z
-                .object({
-                    include: z.array(z.string()).optional(),
-                    exclude: z.array(z.string()).optional(),
-                })
-                .optional(),
-            size: z
-                .object({
-                    include: z.array(z.string()).optional(),
-                    exclude: z.array(z.string()).optional(),
-                })
-                .optional(),
-            revenue: z
-                .object({
-                    include: z.array(z.string()).optional(),
-                    exclude: z.array(z.string()).optional(),
-                })
-                .optional(),
-            sic: z
-                .object({
-                    include: z.array(z.string()).optional(),
-                    exclude: z.array(z.string()).optional(),
-                })
-                .optional(),
-            naics: z
-                .object({
-                    include: z.array(z.string()).optional(),
-                    exclude: z.array(z.string()).optional(),
-                })
-                .optional(),
-            keywords: z
-                .object({
-                    include: z.array(z.string()).optional(),
-                    exclude: z.array(z.string()).optional(),
-                })
-                .optional(),
-            founded: z
-                .object({
-                    include: z.array(z.string()).optional(),
-                    exclude: z.array(z.string()).optional(),
-                })
-                .optional(),
-            similar: z
-                .object({
-                    include: z.array(z.string()).optional(),
-                    exclude: z.array(z.string()).optional(),
-                })
-                .optional(),
-        })
-        .optional(),
-    page: z
-        .number()
-        .int()
-        .min(1, "Page must be at least 1")
-        .optional()
-        .default(1),
-});
+export const CompaniesSearchParamsSchema = z
+    .object({
+        query: z
+            .string()
+            .min(
+                10,
+                "Natural language query - AI assistant will select appropriate filters for you",
+            )
+            .optional(),
+        filters: z
+            .object({
+                location_city: z
+                    .object({
+                        include: z.array(z.string()).optional(),
+                        exclude: z.array(z.string()).optional(),
+                    })
+                    .optional(),
+                location_state: z
+                    .object({
+                        include: z.array(z.string()).optional(),
+                        exclude: z.array(z.string()).optional(),
+                    })
+                    .optional(),
+                location_country: z
+                    .object({
+                        include: z.array(z.string()).optional(),
+                        exclude: z.array(z.string()).optional(),
+                    })
+                    .optional(),
+                industry: z
+                    .object({
+                        include: z.array(z.string()).optional(),
+                        exclude: z.array(z.string()).optional(),
+                    })
+                    .optional(),
+                size: z
+                    .object({
+                        include: z.array(z.string()).optional(),
+                        exclude: z.array(z.string()).optional(),
+                    })
+                    .optional(),
+                revenue: z
+                    .object({
+                        include: z.array(z.string()).optional(),
+                        exclude: z.array(z.string()).optional(),
+                    })
+                    .optional(),
+                sic: z
+                    .object({
+                        include: z.array(z.string()).optional(),
+                        exclude: z.array(z.string()).optional(),
+                    })
+                    .optional(),
+                naics: z
+                    .object({
+                        include: z.array(z.string()).optional(),
+                        exclude: z.array(z.string()).optional(),
+                    })
+                    .optional(),
+                keywords: z
+                    .object({
+                        include: z.array(z.string()).optional(),
+                        exclude: z.array(z.string()).optional(),
+                    })
+                    .optional(),
+                founded: z
+                    .object({
+                        include: z.array(z.string()).optional(),
+                        exclude: z.array(z.string()).optional(),
+                    })
+                    .optional(),
+                similar: z
+                    .object({
+                        include: z.array(z.string()).optional(),
+                        exclude: z.array(z.string()).optional(),
+                    })
+                    .optional(),
+            })
+            .optional(),
+        page: z
+            .number()
+            .int()
+            .min(1, "Page must be at least 1")
+            .optional()
+            .default(1),
+    })
+    .describe(
+        "Search for companies using natural language queries or detailed filters including location, industry, size, revenue, and more",
+    );
 
 // Additional validation schemas for common patterns
 export const PaginationSchema = z.object({
     page: z.number().int().min(1).default(1),
-    limit: z.number().int().min(1).max(100).default(10),
 });
 
 export const CountryCodeSchema = z
