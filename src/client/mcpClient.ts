@@ -45,23 +45,26 @@ export class TombaMcpClient {
     }
 
     async domainSearch(
-        params: DomainSearchParams
+        params: DomainSearchParams,
     ): Promise<DomainSearchResponse> {
         try {
             const domain = new Domain(this.client);
-            const response = await domain.domainSearch(
-                params.domain,
-                params.page?.toString(),
-                params.limit?.toString(),
-                params.department,
-                params.country
-            );
+            const requestParams: any = {};
+
+            if (params.domain) requestParams.domain = params.domain;
+            if (params.company) requestParams.company = params.company;
+            if (params.page) requestParams.page = params.page;
+            if (params.limit) requestParams.limit = params.limit;
+            if (params.country) requestParams.country = params.country;
+            if (params.department) requestParams.department = params.department;
+
+            const response = await domain.domainSearch(requestParams);
             return response as DomainSearchResponse;
         } catch (error) {
             throw new Error(
                 `Domain search failed: ${
                     error instanceof Error ? error.message : "Unknown error"
-                }`
+                }`,
             );
         }
     }
@@ -69,49 +72,61 @@ export class TombaMcpClient {
     async emailFinder(params: EmailFinderParams): Promise<FinderResponse> {
         try {
             const finder = new Finder(this.client);
-            const response = await finder.emailFinder(
-                params.domain,
-                params.firstName,
-                params.lastName
-            );
+            const requestParams: any = {};
+
+            if (params.domain) requestParams.domain = params.domain;
+            if (params.company) requestParams.company = params.company;
+            if (params.fullName) requestParams.full_name = params.fullName;
+            if (params.firstName) requestParams.first_name = params.firstName;
+            if (params.lastName) requestParams.last_name = params.lastName;
+            if (params.enrich_mobile !== undefined)
+                requestParams.enrich_mobile = params.enrich_mobile;
+
+            const response = await finder.emailFinder(requestParams);
             return response as FinderResponse;
         } catch (error) {
             throw new Error(
                 `Email finder failed: ${
                     error instanceof Error ? error.message : "Unknown error"
-                }`
+                }`,
             );
         }
     }
 
     async emailVerifier(
-        params: EmailVerifierParams
+        params: EmailVerifierParams,
     ): Promise<VerifierResponse> {
         try {
             const verifier = new Verifier(this.client);
-            const response = await verifier.emailVerifier(params.email);
+            const requestParams: any = { email: params.email };
+            if (params.enrich_mobile !== undefined)
+                requestParams.enrich_mobile = params.enrich_mobile;
+            const response = await verifier.emailVerifier(requestParams);
             return response as VerifierResponse;
         } catch (error) {
             throw new Error(
                 `Email verification failed: ${
                     error instanceof Error ? error.message : "Unknown error"
-                }`
+                }`,
             );
         }
     }
 
     async emailEnrichment(
-        params: EmailEnrichmentParams
+        params: EmailEnrichmentParams,
     ): Promise<FinderResponse> {
         try {
             const finder = new Finder(this.client);
-            const response = await finder.emailEnrichment(params.email);
+            const requestParams: any = { email: params.email };
+            if (params.enrich_mobile !== undefined)
+                requestParams.enrich_mobile = params.enrich_mobile;
+            const response = await finder.emailEnrichment(requestParams);
             return response as FinderResponse;
         } catch (error) {
             throw new Error(
                 `Email enrichment failed: ${
                     error instanceof Error ? error.message : "Unknown error"
-                }`
+                }`,
             );
         }
     }
@@ -125,23 +140,26 @@ export class TombaMcpClient {
             throw new Error(
                 `Author finder failed: ${
                     error instanceof Error ? error.message : "Unknown error"
-                }`
+                }`,
             );
         }
     }
 
     async linkedinFinder(
-        params: LinkedinFinderParams
+        params: LinkedinFinderParams,
     ): Promise<FinderResponse> {
         try {
             const finder = new Finder(this.client);
-            const response = await finder.linkedinFinder(params.url);
+            const requestParams: any = { url: params.url };
+            if (params.enrich_mobile !== undefined)
+                requestParams.enrich_mobile = params.enrich_mobile;
+            const response = await finder.linkedinFinder(requestParams);
             return response as FinderResponse;
         } catch (error) {
             throw new Error(
                 `LinkedIn finder failed: ${
                     error instanceof Error ? error.message : "Unknown error"
-                }`
+                }`,
             );
         }
     }
@@ -149,24 +167,26 @@ export class TombaMcpClient {
     async phoneFinder(params: PhoneFinderParams): Promise<PhoneResponse> {
         try {
             const phone = new Phone(this.client);
-            let response;
-            if (params.email) {
-                response = await phone.finder({ email: params.email });
-            } else if (params.domain) {
-                response = await phone.finder({ domain: params.domain });
-            } else if (params.linkedin) {
-                response = await phone.finder({ linkedin: params.linkedin });
-            } else {
+            const requestParams: any = {};
+
+            if (params.email) requestParams.email = params.email;
+            if (params.domain) requestParams.domain = params.domain;
+            if (params.linkedin) requestParams.linkedin = params.linkedin;
+            if (params.full !== undefined) requestParams.full = params.full;
+
+            if (!params.email && !params.domain && !params.linkedin) {
                 throw new Error(
-                    "At least one parameter (email, domain, or linkedin) must be provided"
+                    "At least one parameter (email, domain, or linkedin) must be provided",
                 );
             }
+
+            const response = await phone.finder(requestParams);
             return response as PhoneResponse;
         } catch (error) {
             throw new Error(
                 `Phone finder failed: ${
                     error instanceof Error ? error.message : "Unknown error"
-                }`
+                }`,
             );
         }
     }
@@ -180,7 +200,7 @@ export class TombaMcpClient {
             throw new Error(
                 `Phone validation failed: ${
                     error instanceof Error ? error.message : "Unknown error"
-                }`
+                }`,
             );
         }
     }
@@ -194,7 +214,7 @@ export class TombaMcpClient {
             throw new Error(
                 `Email count failed: ${
                     error instanceof Error ? error.message : "Unknown error"
-                }`
+                }`,
             );
         }
     }
@@ -208,13 +228,13 @@ export class TombaMcpClient {
             throw new Error(
                 `Similar finder failed: ${
                     error instanceof Error ? error.message : "Unknown error"
-                }`
+                }`,
             );
         }
     }
 
     async technologyFinder(
-        params: TechnologyFinderParams
+        params: TechnologyFinderParams,
     ): Promise<TechnologyResponse> {
         try {
             const technology = new Technology(this.client);
@@ -224,13 +244,13 @@ export class TombaMcpClient {
             throw new Error(
                 `Technology finder failed: ${
                     error instanceof Error ? error.message : "Unknown error"
-                }`
+                }`,
             );
         }
     }
 
     async companiesSearch(
-        params: CompaniesSearchRequest
+        params: CompaniesSearchRequest,
     ): Promise<CompaniesSearchResponse> {
         try {
             const reveal = new Reveal(this.client);
@@ -245,7 +265,7 @@ export class TombaMcpClient {
             throw new Error(
                 `Companies search failed: ${
                     error instanceof Error ? error.message : "Unknown error"
-                }`
+                }`,
             );
         }
     }
