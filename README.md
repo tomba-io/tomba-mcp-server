@@ -6,60 +6,68 @@ A Model Context Protocol (MCP) server for integrating with the Tomba.io API. Thi
 
 ### Tools (12 available)
 
--   **[Domain Search](https://tomba.io/domain-search)**: Find all email addresses associated with a domain
--   **[Email Finder](https://tomba.io/email-finder)**: Generate likely email addresses from names and domains
--   **[Email Verifier](https://tomba.io/email-verifier)**: Verify email deliverability and check database presence
--   **[Email Enrichment](https://tomba.io/enrichment)**: Enrich emails with additional contact data
--   **[Author Finder](https://tomba.io/author-finder)**: Discover email addresses of article authors
--   **[LinkedIn Finder](https://tomba.io/linkedin-finder)**: Find emails from LinkedIn profile URLs
--   **[Phone Finder](https://tomba.io/phone-finder)**: Search phone numbers by email, domain, or LinkedIn
--   **[Phone Validator](https://tomba.io/phone-validator)**: Validate phone numbers and check carrier info
--   **[Email Count](https://tomba.io/email-count)**: Get total email counts for domains
--   **[Similar Finder](https://tomba.io/similar-domains)**: Find similar domains based on a target domain
--   **[Technology Finder](https://tomba.io/technology-finder)**: Discover technology stacks used by websites
--   **[Companies Search](https://app.tomba.io/reveal)**: Search for companies using natural language queries with advanced filters
+- **[Domain Search](https://tomba.io/domain-search)**: Find all email addresses associated with a domain
+- **[Email Finder](https://tomba.io/email-finder)**: Generate likely email addresses from names and domains
+- **[Email Verifier](https://tomba.io/email-verifier)**: Verify email deliverability and check database presence
+- **[Email Enrichment](https://tomba.io/enrichment)**: Enrich emails with additional contact data
+- **[Author Finder](https://tomba.io/author-finder)**: Discover email addresses of article authors
+- **[LinkedIn Finder](https://tomba.io/linkedin-finder)**: Find emails from LinkedIn profile URLs
+- **[Phone Finder](https://tomba.io/phone-finder)**: Search phone numbers by email, domain, or LinkedIn
+- **[Phone Validator](https://tomba.io/phone-validator)**: Validate phone numbers and check carrier info
+- **[Email Count](https://tomba.io/email-count)**: Get total email counts for domains
+- **[Similar Finder](https://tomba.io/similar-domains)**: Find similar domains based on a target domain
+- **[Technology Finder](https://tomba.io/technology-finder)**: Discover technology stacks used by websites
+- **[Companies Search](https://app.tomba.io/reveal)**: Search for companies using natural language queries with advanced filters
 
 ### Resources (7 available)
 
--   `tomba://api/status` - API status and account info
--   `tomba://domain/{domain}` - Domain information
--   `tomba://email/{email}` - Email information
--   `tomba://similar/{domain}` - Similar domains analysis
--   `tomba://technology/{domain}` - Technology stack information
--   `tomba://docs/api` - API documentation
--   `tomba://docs/tools` - Tools documentation
+- `tomba://api/status` - API status and account info
+- `tomba://domain/{domain}` - Domain information
+- `tomba://email/{email}` - Email information
+- `tomba://similar/{domain}` - Similar domains analysis
+- `tomba://technology/{domain}` - Technology stack information
+- `tomba://docs/api` - API documentation
+- `tomba://docs/tools` - Tools documentation
 
 ### Prompts (16 pre-built workflows)
 
--   **find_contact** - Find complete contact info for a person
--   **verify_email_list** - Batch verify email addresses
--   **research_company** - Research company contacts and structure
--   **enrich_lead** - Enrich a lead with all available data
--   **find_journalists** - Find journalist contacts from articles
--   **finder_phone** - Find phone numbers for contacts
--   **validate_phone** - Validate a phone number
--   **competitor_analysis** - Analyze competitors using similar domains and technology
--   **technology_audit** - Comprehensive technology audit of a website
--   **domain_insights** - Get comprehensive insights about a domain including email count and technology
--   **bulk_domain_research** - Research multiple domains for email counts and basic information
--   **find_target_companies** - Find companies matching specific criteria using natural language search
--   **market_research** - Research companies in a specific market segment
--   **lead_generation** - Generate leads by finding companies and their contacts
--   **prospect_enrichment** - Enrich company prospects with comprehensive data
--   **industry_analysis** - Analyze companies within a specific industry and location
+- **find_contact** - Find complete contact info for a person
+- **verify_email_list** - Batch verify email addresses
+- **research_company** - Research company contacts and structure
+- **enrich_lead** - Enrich a lead with all available data
+- **find_journalists** - Find journalist contacts from articles
+- **finder_phone** - Find phone numbers for contacts
+- **validate_phone** - Validate a phone number
+- **competitor_analysis** - Analyze competitors using similar domains and technology
+- **technology_audit** - Comprehensive technology audit of a website
+- **domain_insights** - Get comprehensive insights about a domain including email count and technology
+- **bulk_domain_research** - Research multiple domains for email counts and basic information
+- **find_target_companies** - Find companies matching specific criteria using natural language search
+- **market_research** - Research companies in a specific market segment
+- **lead_generation** - Generate leads by finding companies and their contacts
+- **prospect_enrichment** - Enrich company prospects with comprehensive data
+- **industry_analysis** - Analyze companies within a specific industry and location
 
 ### Transport Options
 
--   **stdio** - Standard input/output (default, for Claude Desktop)
--   **http** - HTTP server with REST endpoints
+- **stdio** - Standard input/output (default, for Claude Desktop)
+- **http** - HTTP server with REST endpoints
 
 ## Installation
 
 ### Prerequisites
 
--   Node.js 18 or higher
--   npm or yarn
--   Tomba API account ([Sign up here](https://tomba.io))
+- Node.js 18 or higher
+- npm or yarn
+- Tomba API account ([Sign up here](https://tomba.io))
+
+## Screenshots
+
+![Screenshot 1](assets/screenshots/screenshot1.png)
+![Screenshot 2](assets/screenshots/screenshot2.png)
+![Screenshot 3](assets/screenshots/screenshot3.png)
+![Screenshot 4](assets/screenshots/screenshot4.png)
+![Screenshot 5](assets/screenshots/screenshot5.png)
 
 ### Option 1: Install via NPX (Recommended)
 
@@ -207,9 +215,9 @@ If you've built from source, use the absolute path to your installation:
 
 **Important Notes:**
 
--   Replace `your-api-key-here` and `your-secret-key-here` with your actual Tomba API credentials
--   For local installation, replace `/ABSOLUTE/PATH/TO/tomba-mcp-server` with the full path to your installation directory
--   Restart Claude Desktop after updating the configuration
+- Replace `your-api-key-here` and `your-secret-key-here` with your actual Tomba API credentials
+- For local installation, replace `/ABSOLUTE/PATH/TO/tomba-mcp-server` with the full path to your installation directory
+- Restart Claude Desktop after updating the configuration
 
 ### Getting Tomba API Credentials
 
@@ -307,11 +315,11 @@ node server/index.js --transport http --port 3000
 
 #### HTTP API Endpoints
 
--   **POST /mcp** - Send JSON-RPC requests
--   **GET /mcp** - Server-Sent Events for notifications (requires X-Session-Id header)
--   **DELETE /mcp** - Terminate a session (requires X-Session-Id header)
--   **GET /health** - Health check endpoint
--   **GET /sessions** - List active sessions (requires authentication)
+- **POST /mcp** - Send JSON-RPC requests
+- **GET /mcp** - Server-Sent Events for notifications (requires X-Session-Id header)
+- **DELETE /mcp** - Terminate a session (requires X-Session-Id header)
+- **GET /health** - Health check endpoint
+- **GET /sessions** - List active sessions (requires authentication)
 
 #### Example HTTP Request
 
@@ -373,10 +381,10 @@ yarn debug
 
 This opens a web interface where you can:
 
--   📋 View all available tools
--   🧪 Test tools interactively
--   📊 Inspect requests/responses
--   🐛 Debug in real-time
+- 📋 View all available tools
+- 🧪 Test tools interactively
+- 📊 Inspect requests/responses
+- 🐛 Debug in real-time
 
 ### Alternative Debug Methods
 
@@ -396,10 +404,10 @@ echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | node server/index.js
 
 If using VS Code, use the included debug configurations:
 
--   **Debug MCP Server**: Debug the compiled JavaScript
--   **Debug TypeScript**: Debug TypeScript source directly
--   **Debug with Inspector**: Debug with MCP Inspector
--   **Run Tests**: Debug Jest tests
+- **Debug MCP Server**: Debug the compiled JavaScript
+- **Debug TypeScript**: Debug TypeScript source directly
+- **Debug with Inspector**: Debug with MCP Inspector
+- **Run Tests**: Debug Jest tests
 
 See `DEBUG_GUIDE.md` for comprehensive debugging instructions.
 
@@ -1006,17 +1014,17 @@ Search for companies using natural language queries with advanced filters includ
 
 **Available Filters:**
 
--   `location_city`: Filter by city with include/exclude arrays
--   `location_state`: Filter by state with include/exclude arrays
--   `location_country`: Filter by country with include/exclude arrays
--   `industry`: Filter by industry with include/exclude arrays
--   `size`: Filter by company size (e.g., "1-10", "11-50", "51-200", "201-500", "501-1000", "1000+")
--   `revenue`: Filter by revenue range with include/exclude arrays
--   `founded_year`: Filter by founding year with include/exclude arrays
--   `keywords`: Filter by keywords with include/exclude arrays
--   `industry`: Filter by industry with include/exclude arrays
--   `sic`: Filter by SIC codes with include/exclude arrays
--   `naics`: Filter by NAICS codes with include/exclude arrays
+- `location_city`: Filter by city with include/exclude arrays
+- `location_state`: Filter by state with include/exclude arrays
+- `location_country`: Filter by country with include/exclude arrays
+- `industry`: Filter by industry with include/exclude arrays
+- `size`: Filter by company size (e.g., "1-10", "11-50", "51-200", "201-500", "501-1000", "1000+")
+- `revenue`: Filter by revenue range with include/exclude arrays
+- `founded_year`: Filter by founding year with include/exclude arrays
+- `keywords`: Filter by keywords with include/exclude arrays
+- `industry`: Filter by industry with include/exclude arrays
+- `sic`: Filter by SIC codes with include/exclude arrays
+- `naics`: Filter by NAICS codes with include/exclude arrays
 
 ## Rate Limiting & Usage
 
@@ -1024,11 +1032,11 @@ Search for companies using natural language queries with advanced filters includ
 
 Tomba.io implements rate limiting based on your subscription plan:
 
--   **Free Plan**: 50 requests per month
--   **Growth Plan**: 5,000 requests per month + 10,000 verifications requests
--   **Pro Plan**: 10,000 requests per month
--   **Enterprise Plan**: 50,000 requests per month
--   **Custom Plan**: Custom limits
+- **Free Plan**: 50 requests per month
+- **Growth Plan**: 5,000 requests per month + 10,000 verifications requests
+- **Pro Plan**: 10,000 requests per month
+- **Enterprise Plan**: 50,000 requests per month
+- **Custom Plan**: Custom limits
 
 Learn more about [Tomba Pricing Plans](https://tomba.io/pricing).
 
@@ -1068,10 +1076,10 @@ When you exceed your rate limit, the API returns a `429 Too Many Requests` statu
 
 ### Usage Tips
 
--   Domain search returns multiple emails per request (more efficient than individual lookups)
--   Email verification consumes credits only for valid email formats
--   Phone finder may return multiple numbers per request
--   Enrichment provides comprehensive data in a single request
+- Domain search returns multiple emails per request (more efficient than individual lookups)
+- Email verification consumes credits only for valid email formats
+- Phone finder may return multiple numbers per request
+- Enrichment provides comprehensive data in a single request
 
 ## Troubleshooting
 
@@ -1084,13 +1092,11 @@ When you exceed your rate limit, the API returns a `429 Too Many Requests` statu
     ```
 
 2. **Using NPX:**
-
     - Ensure you have a stable internet connection for the first run
     - The `-y` flag should auto-accept the installation
     - NPX will cache the package after first use
 
 3. **Using Local Installation:**
-
     - Verify absolute path is correct in your config
     - Ensure `server/index.js` exists: `ls -la server/index.js`
     - Make sure you ran `yarn build` successfully
@@ -1105,31 +1111,31 @@ When you exceed your rate limit, the API returns a `429 Too Many Requests` statu
 
 **"npx command not found":**
 
--   Ensure npm is installed: `npm --version`
--   NPX comes with npm 5.2.0+, update if needed: `npm install -g npm`
+- Ensure npm is installed: `npm --version`
+- NPX comes with npm 5.2.0+, update if needed: `npm install -g npm`
 
 **Package not found:**
 
--   Verify the package is published: `npm view tomba-mcp-server`
--   Try clearing npm cache: `npm cache clean --force`
+- Verify the package is published: `npm view tomba-mcp-server`
+- Try clearing npm cache: `npm cache clean --force`
 
 **Always downloading package:**
 
--   This is normal behavior with `-y` flag
--   NPX caches the package after first download
--   For a permanent installation, use local installation method
+- This is normal behavior with `-y` flag
+- NPX caches the package after first download
+- For a permanent installation, use local installation method
 
 ### Authentication Errors
 
--   Verify your API keys at [https://app.tomba.io/dashboard](https://app.tomba.io/dashboard)
--   Ensure environment variables are properly set in the config
--   Check that your API subscription is active
+- Verify your API keys at [https://app.tomba.io/dashboard](https://app.tomba.io/dashboard)
+- Ensure environment variables are properly set in the config
+- Check that your API subscription is active
 
 ### Tools Not Responding
 
--   Check your Tomba API rate limits
--   Verify network connectivity
--   Review server logs for error messages
+- Check your Tomba API rate limits
+- Verify network connectivity
+- Review server logs for error messages
 
 ## About Tomba
 
@@ -1151,6 +1157,6 @@ Please see the [License](LICENSE) file for more information.
 
 ## Support
 
--   [GitHub Issues](https://github.com/tomba-io/tomba-mcp-server/issues)
--   [Email Support](mailto:support@tomba.io)
--   [Website](https://tomba.io)
+- [GitHub Issues](https://github.com/tomba-io/tomba-mcp-server/issues)
+- [Email Support](mailto:support@tomba.io)
+- [Website](https://tomba.io)
