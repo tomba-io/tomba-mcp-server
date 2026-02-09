@@ -2,7 +2,7 @@
     "manifest_version": "0.2",
     "name": "tomba-mcp-server",
     "display_name": "Tomba MCP Server",
-    "version": "1.2.1",
+    "version": "1.4.0",
     "description": "MCP server for Tomba email finder and verification API",
     "long_description": "This MCP server integrates with the Tomba.io API to provide tools for finding and verifying email addresses, enriching contact information, and discovering phone numbers. It offers a variety of tools, resources, and prompts to help users leverage Tomba's capabilities for lead generation, email verification, and contact enrichment.",
     "author": {
@@ -43,7 +43,9 @@
         "entry_point": "server/index.js",
         "mcp_config": {
             "command": "node",
-            "args": ["${__dirname}/server/index.js"],
+            "args": [
+                "${__dirname}/server/index.js"
+            ],
             "env": {
                 "TOMBA_API_KEY": "${user_config.TOMBA_API_KEY}",
                 "TOMBA_SECRET_KEY": "${user_config.TOMBA_SECRET_KEY}"
@@ -104,73 +106,111 @@
         {
             "name": "find_contact",
             "description": "Find complete contact information for a person at a company",
-            "arguments": ["firstName", "lastName", "company"],
+            "arguments": [
+                "firstName",
+                "lastName",
+                "company"
+            ],
             "text": "Find the contact information for {firstName} {lastName} who works at {company}."
         },
         {
             "name": "verify_email_list",
             "description": "Verify a list of email addresses for deliverability",
-            "arguments": ["emails"],
+            "arguments": [
+                "emails"
+            ],
             "text": "Verify the following email addresses for deliverability: {emails}."
         },
         {
             "name": "research_company",
             "description": "Research a company's contact information and organizational structure",
-            "arguments": ["domain", "department"],
+            "arguments": [
+                "domain",
+                "department"
+            ],
             "text": "Research the contact information and organizational structure for {domain} in the {department} department."
         },
         {
             "name": "enrich_lead",
             "description": "Enrich a lead with all available contact information",
-            "arguments": ["email", "linkedin"],
+            "arguments": [
+                "email",
+                "linkedin"
+            ],
             "text": "Enrich the lead with email {email} and LinkedIn profile {linkedin} with all available contact information."
         },
         {
             "name": "find_journalists",
             "description": "Find contact information for journalists who wrote specific articles",
-            "arguments": ["urls"],
+            "arguments": [
+                "urls"
+            ],
             "text": "Find the contact information for journalists who wrote the following articles: {urls}."
         },
         {
             "name": "finder_phone",
             "description": "Find phone numbers for a contact",
-            "arguments": ["email", "linkedin", "domain"],
+            "arguments": [
+                "email",
+                "linkedin",
+                "domain"
+            ],
             "text": "Find phone numbers for the contact with email {email}, LinkedIn profile {linkedin}, or domain {domain}."
         },
         {
             "name": "validate_phone",
             "description": "Validate a phone number",
-            "arguments": ["phone"],
+            "arguments": [
+                "phone"
+            ],
             "text": "Validate the phone number {phone} and provide carrier information."
         },
         {
             "name": "competitor_analysis",
             "description": "Analyze competitors using similar domains and technology",
-            "arguments": ["domain", "include_technology"],
+            "arguments": [
+                "domain",
+                "include_technology"
+            ],
             "text": "Analyze competitors for {domain} and optionally include technology comparison if {include_technology} is true."
         },
         {
             "name": "technology_audit",
             "description": "Comprehensive technology audit of a website",
-            "arguments": ["domain", "include_similar"],
+            "arguments": [
+                "domain",
+                "include_similar"
+            ],
             "text": "Perform a comprehensive technology audit for {domain} and optionally include similar domain comparison if {include_similar} is true."
         },
         {
             "name": "domain_insights",
             "description": "Get comprehensive insights about a domain including email count and technology",
-            "arguments": ["domain", "include_samples"],
+            "arguments": [
+                "domain",
+                "include_samples"
+            ],
             "text": "Get comprehensive insights about {domain} including email count and technology, optionally include sample emails if {include_samples} is true."
         },
         {
             "name": "bulk_domain_research",
             "description": "Research multiple domains for email counts and basic information",
-            "arguments": ["domains", "include_technology"],
+            "arguments": [
+                "domains",
+                "include_technology"
+            ],
             "text": "Research the following domains for email counts and basic information: {domains}. Optionally include technology analysis if {include_technology} is true."
         },
         {
             "name": "find_target_companies",
             "description": "Find companies matching specific criteria using natural language search with advanced filters",
-            "arguments": ["location", "industry", "size", "type", "revenue"],
+            "arguments": [
+                "location",
+                "industry",
+                "size",
+                "type",
+                "revenue"
+            ],
             "text": "Find companies matching the query '{query}' in {location}, focusing on {industry} industry with company size {size}, type {type}, and revenue {revenue}."
         },
         {
@@ -189,7 +229,11 @@
         {
             "name": "lead_generation",
             "description": "Generate leads by finding companies and their contacts",
-            "arguments": ["company_query", "target_department", "contact_role"],
+            "arguments": [
+                "company_query",
+                "target_department",
+                "contact_role"
+            ],
             "text": "Generate leads by searching for companies matching '{company_query}', then find contacts in {target_department} department with role {contact_role}."
         },
         {
@@ -231,10 +275,16 @@
             "required": true
         }
     },
-    "privacy_policies": ["https://tomba.io/privacy-policy"],
+    "privacy_policies": [
+        "https://tomba.io/privacy-policy"
+    ],
     "compatibility": {
         "claude_desktop": ">=0.10.0",
-        "platforms": ["darwin", "win32", "linux"],
+        "platforms": [
+            "darwin",
+            "win32",
+            "linux"
+        ],
         "runtimes": {
             "node": ">=18.0.0"
         }
