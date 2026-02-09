@@ -181,13 +181,8 @@ export const promptsList: Prompt[] = [
     {
         name: "find_target_companies",
         description:
-            "Find companies matching specific criteria using natural language search",
+            "Find companies matching specific criteria using advanced filters",
         arguments: [
-            {
-                name: "query",
-                description: "Natural language search query for companies",
-                required: true,
-            },
             {
                 name: "location",
                 description: "Target location (city, state, or country)",
@@ -195,33 +190,62 @@ export const promptsList: Prompt[] = [
             },
             {
                 name: "industry",
-                description: "Industry sector to focus on",
+                description:
+                    "Industry sector (e.g., 'Computer Software', 'Financial Services', 'Hospital & Health Care'). Based on LinkedIn Industry Codes V2",
                 required: false,
             },
             {
                 name: "size",
-                description: "Company size range (e.g., '51-200', '201-500')",
+                description:
+                    "Company size range: 1-10 (Micro), 11-50 (Small), 51-250 (Mid-sized), 251-1K (Medium-large), 1K-5K (Large), 5K-10K (Very large), 10K-50K (Enterprise), 50K-100K (Massive), 100K+ (Global)",
+                required: false,
+            },
+            {
+                name: "type",
+                description:
+                    "Company type: education, government, nonprofit, private, public, or personal",
+                required: false,
+            },
+            {
+                name: "revenue",
+                description:
+                    "Revenue range: $0-$1M, $1M-$10M, $10M-$50M, $50M-$100M, $100M-$250M, $250M-$500M, $500M-$1B, $1B-$10B, $10B+",
                 required: false,
             },
         ],
     },
     {
         name: "market_research",
-        description: "Research companies in a specific market segment",
+        description:
+            "Research companies in a specific market segment with comprehensive filtering",
         arguments: [
             {
                 name: "industry",
-                description: "Industry to research",
+                description:
+                    "Industry to research (e.g., 'Computer Software', 'Financial Services', 'Retail'). Based on LinkedIn Industry Codes V2",
                 required: true,
             },
             {
                 name: "location",
-                description: "Geographic location",
+                description: "Geographic location (city, state, or country)",
                 required: true,
             },
             {
                 name: "size_range",
-                description: "Company size range (e.g., '51-200')",
+                description:
+                    "Company size: 1-10, 11-50, 51-250, 251-1K, 1K-5K, 5K-10K, 10K-50K, 50K-100K, 100K+",
+                required: false,
+            },
+            {
+                name: "revenue_range",
+                description:
+                    "Revenue range: $0-$1M, $1M-$10M, $10M-$50M, $50M-$100M, $100M-$250M, $250M-$500M, $500M-$1B, $1B-$10B, $10B+",
+                required: false,
+            },
+            {
+                name: "company_type",
+                description:
+                    "Company type: education, government, nonprofit, private, public, personal",
                 required: false,
             },
             {
@@ -282,22 +306,35 @@ export const promptsList: Prompt[] = [
     {
         name: "industry_analysis",
         description:
-            "Analyze companies within a specific industry and location",
+            "Analyze companies within a specific industry and location with detailed segmentation",
         arguments: [
             {
                 name: "industry",
-                description: "Industry to analyze",
+                description:
+                    "Industry to analyze (e.g., 'Computer Software', 'Hospital & Health Care', 'Banking'). Based on LinkedIn Industry Codes V2",
                 required: true,
             },
             {
                 name: "location",
-                description: "Geographic location",
+                description: "Geographic location (city, state, or country)",
                 required: true,
             },
             {
                 name: "company_sizes",
                 description:
-                    "Comma-separated list of company sizes (e.g., '51-200,201-500')",
+                    "Comma-separated sizes: 1-10, 11-50, 51-250, 251-1K, 1K-5K, 5K-10K, 10K-50K, 50K-100K, 100K+",
+                required: false,
+            },
+            {
+                name: "revenue_ranges",
+                description:
+                    "Comma-separated revenue: $0-$1M, $1M-$10M, $10M-$50M, $50M-$100M, $100M-$250M, $250M-$500M, $500M-$1B, $1B-$10B, $10B+",
+                required: false,
+            },
+            {
+                name: "company_types",
+                description:
+                    "Comma-separated types: education, government, nonprofit, private, public, personal",
                 required: false,
             },
             {

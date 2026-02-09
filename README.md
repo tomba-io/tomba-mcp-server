@@ -42,11 +42,20 @@ A Model Context Protocol (MCP) server for integrating with the Tomba.io API. Thi
 - **technology_audit** - Comprehensive technology audit of a website
 - **domain_insights** - Get comprehensive insights about a domain including email count and technology
 - **bulk_domain_research** - Research multiple domains for email counts and basic information
-- **find_target_companies** - Find companies matching specific criteria using natural language search
-- **market_research** - Research companies in a specific market segment
+- **find_target_companies** - Find companies with advanced filters (size, type, revenue, industry)
+- **market_research** - Research companies in a market segment with comprehensive filtering
 - **lead_generation** - Generate leads by finding companies and their contacts
 - **prospect_enrichment** - Enrich company prospects with comprehensive data
-- **industry_analysis** - Analyze companies within a specific industry and location
+- **industry_analysis** - Analyze companies within an industry with detailed segmentation
+
+#### Filter Options for Company Search Prompts
+
+| Filter       | Available Values                                                                                                                                                     |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Size**     | 1-10 (Micro), 11-50 (Small), 51-250 (Mid-sized), 251-1K (Medium-large), 1K-5K (Large), 5K-10K (Very large), 10K-50K (Enterprise), 50K-100K (Massive), 100K+ (Global) |
+| **Type**     | education, government, nonprofit, private, public, personal                                                                                                          |
+| **Revenue**  | $0-$1M, $1M-$10M, $10M-$50M, $50M-$100M, $100M-$250M, $250M-$500M, $500M-$1B, $1B-$10B, $10B+                                                                        |
+| **Industry** | Based on LinkedIn Industry Codes V2 (140+ industries including Computer Software, Financial Services, Hospital & Health Care, etc.)                                  |
 
 ### Transport Options
 
@@ -1017,14 +1026,15 @@ Search for companies using natural language queries with advanced filters includ
 - `location_city`: Filter by city with include/exclude arrays
 - `location_state`: Filter by state with include/exclude arrays
 - `location_country`: Filter by country with include/exclude arrays
-- `industry`: Filter by industry with include/exclude arrays
-- `size`: Filter by company size (e.g., "1-10", "11-50", "51-200", "201-500", "501-1000", "1000+")
-- `revenue`: Filter by revenue range with include/exclude arrays
-- `founded_year`: Filter by founding year with include/exclude arrays
+- `industry`: Filter by industry (based on LinkedIn Industry Codes V2 - 140+ industries)
+- `type`: Filter by company type: `education`, `government`, `nonprofit`, `private`, `public`, `personal`
+- `size`: Filter by company size: `1-10`, `11-50`, `51-250`, `251-1K`, `1K-5K`, `5K-10K`, `10K-50K`, `50K-100K`, `100K+`
+- `revenue`: Filter by revenue range: `$0-$1M`, `$1M-$10M`, `$10M-$50M`, `$50M-$100M`, `$100M-$250M`, `$250M-$500M`, `$500M-$1B`, `$1B-$10B`, `$10B+`
+- `founded`: Filter by founding year with include/exclude arrays
 - `keywords`: Filter by keywords with include/exclude arrays
-- `industry`: Filter by industry with include/exclude arrays
 - `sic`: Filter by SIC codes with include/exclude arrays
 - `naics`: Filter by NAICS codes with include/exclude arrays
+- `similar`: Filter by similar domains with include/exclude arrays
 
 ## Rate Limiting & Usage
 

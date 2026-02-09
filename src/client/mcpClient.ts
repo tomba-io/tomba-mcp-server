@@ -254,8 +254,7 @@ export class TombaMcpClient {
     ): Promise<CompaniesSearchResponse> {
         try {
             const reveal = new Reveal(this.client);
-            const requestParams: any = {
-                query: params.query,
+            const requestParams = {
                 filters: params.filters,
                 page: params.page,
             };

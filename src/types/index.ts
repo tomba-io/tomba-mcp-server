@@ -356,22 +356,295 @@ export const CompaniesSearchParamsSchema = z
                     .optional(),
                 industry: z
                     .object({
-                        include: z.array(z.string()).optional(),
+                        include: z
+                            .array(
+                                z.enum([
+                                    // Technology & Software
+                                    "Computer Software",
+                                    "Information Technology and Services",
+                                    "Internet",
+                                    "Computer Hardware",
+                                    "Computer Networking",
+                                    "Computer & Network Security",
+                                    "Semiconductors",
+                                    "Telecommunications",
+                                    "Wireless",
+                                    // Business Services
+                                    "Management Consulting",
+                                    "Human Resources",
+                                    "Staffing and Recruiting",
+                                    "Professional Training & Coaching",
+                                    "Business Supplies and Equipment",
+                                    "Outsourcing/Offshoring",
+                                    // Financial Services
+                                    "Financial Services",
+                                    "Banking",
+                                    "Investment Banking",
+                                    "Investment Management",
+                                    "Venture Capital & Private Equity",
+                                    "Insurance",
+                                    "Accounting",
+                                    // Healthcare & Life Sciences
+                                    "Hospital & Health Care",
+                                    "Medical Devices",
+                                    "Pharmaceuticals",
+                                    "Biotechnology",
+                                    "Health, Wellness and Fitness",
+                                    "Mental Health Care",
+                                    "Veterinary",
+                                    // Manufacturing & Industrial
+                                    "Automotive",
+                                    "Aviation & Aerospace",
+                                    "Chemicals",
+                                    "Civil Engineering",
+                                    "Construction",
+                                    "Electrical/Electronic Manufacturing",
+                                    "Industrial Automation",
+                                    "Machinery",
+                                    "Manufacturing",
+                                    "Mechanical or Industrial Engineering",
+                                    "Mining & Metals",
+                                    "Oil & Energy",
+                                    "Plastics",
+                                    "Renewables & Environment",
+                                    "Utilities",
+                                    // Retail & Consumer Goods
+                                    "Retail",
+                                    "Consumer Electronics",
+                                    "Consumer Goods",
+                                    "Consumer Services",
+                                    "Cosmetics",
+                                    "Food & Beverages",
+                                    "Food Production",
+                                    "Luxury Goods & Jewelry",
+                                    "Sporting Goods",
+                                    "Supermarkets",
+                                    "Wine and Spirits",
+                                    // Media & Entertainment
+                                    "Broadcast Media",
+                                    "Entertainment",
+                                    "Media Production",
+                                    "Motion Pictures and Film",
+                                    "Music",
+                                    "Newspapers",
+                                    "Online Media",
+                                    "Publishing",
+                                    "Animation",
+                                    "Computer Games",
+                                    "Gambling & Casinos",
+                                    // Marketing & Advertising
+                                    "Marketing and Advertising",
+                                    "Market Research",
+                                    "Public Relations and Communications",
+                                    "Events Services",
+                                    "Graphic Design",
+                                    // Education
+                                    "Education Management",
+                                    "E-Learning",
+                                    "Higher Education",
+                                    "Primary/Secondary Education",
+                                    "Research",
+                                    // Legal & Government
+                                    "Law Practice",
+                                    "Legal Services",
+                                    "Government Administration",
+                                    "Government Relations",
+                                    "Judiciary",
+                                    "Legislative Office",
+                                    "Military",
+                                    "Public Policy",
+                                    "Public Safety",
+                                    // Real Estate & Property
+                                    "Real Estate",
+                                    "Commercial Real Estate",
+                                    "Property Management",
+                                    // Transportation & Logistics
+                                    "Airlines/Aviation",
+                                    "Logistics and Supply Chain",
+                                    "Maritime",
+                                    "Package/Freight Delivery",
+                                    "Railroad Manufacture",
+                                    "Shipbuilding",
+                                    "Transportation/Trucking/Railroad",
+                                    "Warehousing",
+                                    // Hospitality & Travel
+                                    "Hospitality",
+                                    "Hotels",
+                                    "Restaurants",
+                                    "Food & Beverages",
+                                    "Leisure, Travel & Tourism",
+                                    "Recreational Facilities and Services",
+                                    // Non-Profit & Social
+                                    "Nonprofit Organization Management",
+                                    "Philanthropy",
+                                    "Religious Institutions",
+                                    "Think Tanks",
+                                    "Civic & Social Organization",
+                                    "Political Organization",
+                                    // Other Industries
+                                    "Agriculture",
+                                    "Apparel & Fashion",
+                                    "Architecture & Planning",
+                                    "Arts and Crafts",
+                                    "Building Materials",
+                                    "Design",
+                                    "Environmental Services",
+                                    "Facilities Services",
+                                    "Fine Art",
+                                    "Fishery",
+                                    "Furniture",
+                                    "Glass, Ceramics & Concrete",
+                                    "Import and Export",
+                                    "Individual & Family Services",
+                                    "International Affairs",
+                                    "International Trade and Development",
+                                    "Law Enforcement",
+                                    "Libraries",
+                                    "Nanotechnology",
+                                    "Museums and Institutions",
+                                    "Packaging and Containers",
+                                    "Paper & Forest Products",
+                                    "Performing Arts",
+                                    "Photography",
+                                    "Printing",
+                                    "Program Development",
+                                    "Ranching",
+                                    "Security and Investigations",
+                                    "Sports",
+                                    "Textiles",
+                                    "Tobacco",
+                                    "Translation and Localization",
+                                    "Writing and Editing",
+                                    "Wholesale",
+                                ]),
+                            )
+                            .optional()
+                            .describe(
+                                "Industries to include. Based on LinkedIn Industry Codes V2. Use keywords filter if industry not listed.",
+                            ),
                         exclude: z.array(z.string()).optional(),
                     })
-                    .optional(),
+                    .optional()
+                    .describe(
+                        "Filter by industry (based on LinkedIn Industry Codes V2). If your target industry is not listed, use the 'keywords' filter instead for more flexible matching.",
+                    ),
+                type: z
+                    .object({
+                        include: z
+                            .array(
+                                z.enum([
+                                    "education", // School, college, or university
+                                    "government", // Government agency or department
+                                    "nonprofit", // Non-profit organization
+                                    "private", // Privately owned, not publicly traded
+                                    "public", // Publicly traded on a stock exchange
+                                    "personal", // Individual's personal website
+                                ]),
+                            )
+                            .optional()
+                            .describe(
+                                "Company types to include: education, government, nonprofit, private, public, personal",
+                            ),
+                        exclude: z
+                            .array(
+                                z.enum([
+                                    "education",
+                                    "government",
+                                    "nonprofit",
+                                    "private",
+                                    "public",
+                                    "personal",
+                                ]),
+                            )
+                            .optional()
+                            .describe("Company types to exclude"),
+                    })
+                    .optional()
+                    .describe(
+                        "Filter by company type. Available types: education (school/college/university), government (agency/department), nonprofit (non-profit organization), private (privately owned), public (publicly traded), personal (individual's website)",
+                    ),
                 size: z
                     .object({
-                        include: z.array(z.string()).optional(),
-                        exclude: z.array(z.string()).optional(),
+                        include: z
+                            .array(
+                                z.enum([
+                                    "1-10", // Micro-sized team
+                                    "11-50", // Small-sized business
+                                    "51-250", // Mid-sized company
+                                    "251-1K", // Medium-large business
+                                    "1K-5K", // Large company
+                                    "5K-10K", // Very large company
+                                    "10K-50K", // Enterprise-scale company
+                                    "50K-100K", // Massive corporation
+                                    "100K+", // Global enterprise
+                                ]),
+                            )
+                            .optional()
+                            .describe(
+                                "Company sizes to include: 1-10 (Micro), 11-50 (Small), 51-250 (Mid-sized), 251-1K (Medium-large), 1K-5K (Large), 5K-10K (Very large), 10K-50K (Enterprise), 50K-100K (Massive), 100K+ (Global)",
+                            ),
+                        exclude: z
+                            .array(
+                                z.enum([
+                                    "1-10",
+                                    "11-50",
+                                    "51-250",
+                                    "251-1K",
+                                    "1K-5K",
+                                    "5K-10K",
+                                    "10K-50K",
+                                    "50K-100K",
+                                    "100K+",
+                                ]),
+                            )
+                            .optional()
+                            .describe("Company sizes to exclude"),
                     })
-                    .optional(),
+                    .optional()
+                    .describe(
+                        "Filter by company size range. Available ranges: 1-10 (Micro-sized team), 11-50 (Small-sized business), 51-250 (Mid-sized company), 251-1K (Medium-large business), 1K-5K (Large company), 5K-10K (Very large company), 10K-50K (Enterprise-scale company), 50K-100K (Massive corporation), 100K+ (Global enterprise)",
+                    ),
                 revenue: z
                     .object({
-                        include: z.array(z.string()).optional(),
-                        exclude: z.array(z.string()).optional(),
+                        include: z
+                            .array(
+                                z.enum([
+                                    "$0-$1M", // Startup or very small business revenue
+                                    "$1M-$10M", // Small business revenue range
+                                    "$10M-$50M", // Mid-sized business revenue range
+                                    "$50M-$100M", // Large business revenue range
+                                    "$100M-$250M", // Very large business revenue range
+                                    "$250M-$500M", // Enterprise-level revenue range
+                                    "$500M-$1B", // Major corporation revenue range
+                                    "$1B-$10B", // Large corporation revenue range
+                                    "$10B+", // Global enterprise revenue range
+                                ]),
+                            )
+                            .optional()
+                            .describe(
+                                "Revenue ranges to include: $0-$1M (Startup), $1M-$10M (Small), $10M-$50M (Mid-sized), $50M-$100M (Large), $100M-$250M (Very large), $250M-$500M (Enterprise), $500M-$1B (Major corp), $1B-$10B (Large corp), $10B+ (Global)",
+                            ),
+                        exclude: z
+                            .array(
+                                z.enum([
+                                    "$0-$1M",
+                                    "$1M-$10M",
+                                    "$10M-$50M",
+                                    "$50M-$100M",
+                                    "$100M-$250M",
+                                    "$250M-$500M",
+                                    "$500M-$1B",
+                                    "$1B-$10B",
+                                    "$10B+",
+                                ]),
+                            )
+                            .optional()
+                            .describe("Revenue ranges to exclude"),
                     })
-                    .optional(),
+                    .optional()
+                    .describe(
+                        "Filter by annual revenue range. Available ranges: $0-$1M (Startup/very small), $1M-$10M (Small business), $10M-$50M (Mid-sized), $50M-$100M (Large), $100M-$250M (Very large), $250M-$500M (Enterprise), $500M-$1B (Major corporation), $1B-$10B (Large corporation), $10B+ (Global enterprise)",
+                    ),
                 sic: z
                     .object({
                         include: z.array(z.string()).optional(),
