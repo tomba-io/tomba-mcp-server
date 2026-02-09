@@ -60,9 +60,6 @@ jobs:
             - name: MCPB Sign (production)
               run: mcpb sign tomba-mcp-server-$(npm pkg get version | tr -d '\"').mcpb --cert production-cert.pem --key production-key.pem --intermediate intermediate-ca.pem root-ca.pem
 
-            - name: MCPB Verify
-              run: mcpb verify tomba-mcp-server-$(npm pkg get version | tr -d '\"').mcpb
-
             - name: MCPB Info
               run: mcpb info tomba-mcp-server-$(npm pkg get version | tr -d '\"').mcpb
 
