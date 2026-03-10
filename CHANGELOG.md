@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/tomba-io/tomba-mcp-server/compare/v1.4.0...v1.6.0) (2026-03-10)
+
+
+### Features
+
+* add ESLint and Jest configuration files, update test scripts, and enhance type safety in TombaMcpClient ([c8da65e](https://github.com/tomba-io/tomba-mcp-server/commit/c8da65efce95891b5803030b3773196d232aa2db))
+
 ## [1.4.0](https://github.com/tomba-io/tomba-mcp-server/compare/v1.2.1...v1.4.0) (2026-02-09)
 
 
