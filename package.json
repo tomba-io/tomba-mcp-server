@@ -10,9 +10,9 @@
         "dev": "tsx src/index.ts",
         "debug": "npm run build && npx @modelcontextprotocol/inspector node server/index.js --transport http",
         "debug:dev": "tsx --env-file=.env src/index.ts | npx @modelcontextprotocol/inspector",
-        "test": "jest",
-        "test:watch": "jest --watch",
-        "test:coverage": "jest --coverage",
+        "test": "NODE_OPTIONS='--experimental-vm-modules' jest",
+        "test:watch": "NODE_OPTIONS='--experimental-vm-modules' jest --watch",
+        "test:coverage": "NODE_OPTIONS='--experimental-vm-modules' jest --coverage",
         "test:integration": "npm run build && node test/integration.js",
         "lint": "eslint src/**/*.ts",
         "lint:fix": "eslint src/**/*.ts --fix",
@@ -43,7 +43,7 @@
         "@modelcontextprotocol/sdk": "^1.18.2",
         "cors": "^2.8.5",
         "express": "^5.1.0",
-        "tomba": "1.0.8",
+        "tomba": "1.0.9",
         "zod": "^4.1.12"
     },
     "devDependencies": {

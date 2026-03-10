@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     parser: "@typescript-eslint/parser",
     parserOptions: {
         ecmaVersion: 2020,
@@ -8,15 +8,20 @@ export default {
     plugins: ["@typescript-eslint"],
     extends: [
         "eslint:recommended",
-        "@typescript-eslint/recommended",
-        "@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
     ],
     root: true,
     env: {
         node: true,
         jest: true,
     },
-    ignorePatterns: [".eslintrc.js", "server/", "coverage/"],
+    ignorePatterns: [
+        ".eslintrc.cjs",
+        "server/",
+        "coverage/",
+        "src/__tests__/*",
+    ],
     rules: {
         "@typescript-eslint/interface-name-prefix": "off",
         "@typescript-eslint/explicit-function-return-type": "off",

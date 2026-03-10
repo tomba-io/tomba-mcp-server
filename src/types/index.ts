@@ -60,6 +60,7 @@ export interface AuthorFinderParams {
 export interface LinkedinFinderParams {
     url: string;
     enrich_mobile?: boolean;
+    full?: boolean;
 }
 
 export interface PhoneFinderParams {
@@ -704,14 +705,11 @@ export const DomainSchema = z
     .min(1)
     .regex(/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
 
-export const EmailSchema = z.string().email();
+export const EmailSchema = z.email();
 
-export const URLSchema = z.string().url();
+export const URLSchema = z.url();
 
-export const LinkedInURLSchema = z
-    .string()
-    .url()
-    .regex(/linkedin\.com/);
+export const LinkedInURLSchema = z.url().regex(/linkedin\.com/);
 
 export const PhoneSchema = z.string().regex(/^\+?[1-9]\d{1,14}$/);
 

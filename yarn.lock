@@ -4572,10 +4572,10 @@ toidentifier@~1.0.1:
   resolved "https://registry.yarnpkg.com/toidentifier/-/toidentifier-1.0.1.tgz#3be34321a88a820ed1bd80dfaa33e479fbb8dd35"
   integrity sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==
 
-tomba@1.0.8:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/tomba/-/tomba-1.0.8.tgz#66eb747ff1d5268b0d42fc0365af7ea7bfb1f4d7"
-  integrity sha512-hbiNhxEUXYS9JXQL5ynm+23HEKNw/VkyW0QghC7vxGJvy5I2laruq7gugFcddplvbxOHQTAvg4yA51NtRDlQPg==
+tomba@1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/tomba/-/tomba-1.0.9.tgz#344f3d1ee52213b8feadec6c5629b0c80b968ac5"
+  integrity sha512-xu2D5052H1PQkDU+ephPlTq/YR6pVkL3O2kAfh38MpxNYONyRs2sOIpL35o9pNHYMWSh7QY0Yz2AIkP6E+WT6Q==
   dependencies:
     axios "^1.12.2"
 

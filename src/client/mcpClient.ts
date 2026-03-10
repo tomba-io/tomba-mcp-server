@@ -49,7 +49,7 @@ export class TombaMcpClient {
     ): Promise<DomainSearchResponse> {
         try {
             const domain = new Domain(this.client);
-            const requestParams: any = {};
+            const requestParams: DomainSearchParams = {};
 
             if (params.domain) requestParams.domain = params.domain;
             if (params.company) requestParams.company = params.company;
@@ -59,7 +59,7 @@ export class TombaMcpClient {
             if (params.department) requestParams.department = params.department;
 
             const response = await domain.domainSearch(requestParams);
-            return response as DomainSearchResponse;
+            return response;
         } catch (error) {
             throw new Error(
                 `Domain search failed: ${
@@ -72,18 +72,18 @@ export class TombaMcpClient {
     async emailFinder(params: EmailFinderParams): Promise<FinderResponse> {
         try {
             const finder = new Finder(this.client);
-            const requestParams: any = {};
+            const requestParams: EmailFinderParams = {};
 
             if (params.domain) requestParams.domain = params.domain;
             if (params.company) requestParams.company = params.company;
-            if (params.fullName) requestParams.full_name = params.fullName;
-            if (params.firstName) requestParams.first_name = params.firstName;
-            if (params.lastName) requestParams.last_name = params.lastName;
+            if (params.fullName) requestParams.fullName = params.fullName;
+            if (params.firstName) requestParams.firstName = params.firstName;
+            if (params.lastName) requestParams.lastName = params.lastName;
             if (params.enrich_mobile !== undefined)
                 requestParams.enrich_mobile = params.enrich_mobile;
 
             const response = await finder.emailFinder(requestParams);
-            return response as FinderResponse;
+            return response;
         } catch (error) {
             throw new Error(
                 `Email finder failed: ${
@@ -98,11 +98,14 @@ export class TombaMcpClient {
     ): Promise<VerifierResponse> {
         try {
             const verifier = new Verifier(this.client);
-            const requestParams: any = { email: params.email };
+            const requestParams: EmailVerifierParams = { email: params.email };
             if (params.enrich_mobile !== undefined)
                 requestParams.enrich_mobile = params.enrich_mobile;
-            const response = await verifier.emailVerifier(requestParams);
-            return response as VerifierResponse;
+            const response = await verifier.emailVerifier(
+                requestParams.email,
+                requestParams.enrich_mobile,
+            );
+            return response;
         } catch (error) {
             throw new Error(
                 `Email verification failed: ${
@@ -117,11 +120,16 @@ export class TombaMcpClient {
     ): Promise<FinderResponse> {
         try {
             const finder = new Finder(this.client);
-            const requestParams: any = { email: params.email };
+            const requestParams: EmailEnrichmentParams = {
+                email: params.email,
+            };
             if (params.enrich_mobile !== undefined)
                 requestParams.enrich_mobile = params.enrich_mobile;
-            const response = await finder.emailEnrichment(requestParams);
-            return response as FinderResponse;
+            const response = await finder.emailEnrichment(
+                requestParams.email,
+                requestParams.enrich_mobile,
+            );
+            return response;
         } catch (error) {
             throw new Error(
                 `Email enrichment failed: ${
@@ -135,7 +143,7 @@ export class TombaMcpClient {
         try {
             const finder = new Finder(this.client);
             const response = await finder.authorFinder(params.url);
-            return response as FinderResponse;
+            return response;
         } catch (error) {
             throw new Error(
                 `Author finder failed: ${
@@ -150,11 +158,16 @@ export class TombaMcpClient {
     ): Promise<FinderResponse> {
         try {
             const finder = new Finder(this.client);
-            const requestParams: any = { url: params.url };
+            const requestParams: LinkedinFinderParams = { url: params.url };
             if (params.enrich_mobile !== undefined)
                 requestParams.enrich_mobile = params.enrich_mobile;
-            const response = await finder.linkedinFinder(requestParams);
-            return response as FinderResponse;
+            if (params.full !== undefined) requestParams.full = params.full;
+            const response = await finder.linkedinFinder(
+                requestParams.url,
+                requestParams.enrich_mobile,
+                requestParams.full,
+            );
+            return response;
         } catch (error) {
             throw new Error(
                 `LinkedIn finder failed: ${
@@ -167,7 +180,7 @@ export class TombaMcpClient {
     async phoneFinder(params: PhoneFinderParams): Promise<PhoneResponse> {
         try {
             const phone = new Phone(this.client);
-            const requestParams: any = {};
+            const requestParams: PhoneFinderParams = {};
 
             if (params.email) requestParams.email = params.email;
             if (params.domain) requestParams.domain = params.domain;
@@ -181,7 +194,7 @@ export class TombaMcpClient {
             }
 
             const response = await phone.finder(requestParams);
-            return response as PhoneResponse;
+            return response;
         } catch (error) {
             throw new Error(
                 `Phone finder failed: ${
@@ -194,8 +207,10 @@ export class TombaMcpClient {
     async phoneValidator(params: PhoneValidatorParams): Promise<PhoneResponse> {
         try {
             const phone = new Phone(this.client);
-            const response = await phone.validator(params.phone);
-            return response as PhoneResponse;
+            const response = (await phone.validator(
+                params.phone,
+            )) as PhoneResponse;
+            return response;
         } catch (error) {
             throw new Error(
                 `Phone validation failed: ${
@@ -259,7 +274,7 @@ export class TombaMcpClient {
                 page: params.page,
             };
             const response = await reveal.companiesSearch(requestParams);
-            return response as CompaniesSearchResponse;
+            return response;
         } catch (error) {
             throw new Error(
                 `Companies search failed: ${

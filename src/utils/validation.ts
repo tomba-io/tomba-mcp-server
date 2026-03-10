@@ -4,7 +4,11 @@ import { z } from "zod";
  * Custom error class for validation errors
  */
 export class ValidationError extends Error {
-    constructor(message: string, public field?: string, public code?: string) {
+    constructor(
+        message: string,
+        public field?: string,
+        public code?: string,
+    ) {
         super(message);
         this.name = "ValidationError";
     }
@@ -16,7 +20,7 @@ export class ValidationError extends Error {
 export function validateSchema<T>(
     schema: z.ZodSchema<T>,
     data: unknown,
-    context?: string
+    context?: string,
 ): T {
     try {
         return schema.parse(data);
@@ -39,7 +43,7 @@ export function validateSchema<T>(
  */
 export function safeValidate<T>(
     schema: z.ZodSchema<T>,
-    data: unknown
+    data: unknown,
 ): { success: true; data: T } | { success: false; error: z.ZodError } {
     const result = schema.safeParse(data);
     if (result.success) {
@@ -54,12 +58,12 @@ export function safeValidate<T>(
 export function validateToolArguments<T>(
     schema: z.ZodSchema<T>,
     args: unknown,
-    toolName: string
+    toolName: string,
 ): T {
     return validateSchema(
         schema,
         args,
-        `Invalid arguments for tool '${toolName}'`
+        `Invalid arguments for tool '${toolName}'`,
     );
 }
 
@@ -69,7 +73,7 @@ export function validateToolArguments<T>(
 export function validateConfig<T>(
     schema: z.ZodSchema<T>,
     config: unknown,
-    configName: string = "configuration"
+    configName: string = "configuration",
 ): T {
     return validateSchema(schema, config, `Invalid ${configName}`);
 }
@@ -100,10 +104,10 @@ export function createValidationMiddleware<T>(schema: z.ZodSchema<T>) {
  */
 export function validateFields(
     validations: Array<{
-        schema: z.ZodSchema<any>;
+        schema: z.ZodSchema<unknown>;
         data: unknown;
         field: string;
-    }>
+    }>,
 ): void {
     const errors: string[] = [];
 
