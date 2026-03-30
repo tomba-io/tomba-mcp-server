@@ -2,6 +2,10 @@
 
 A Model Context Protocol (MCP) server for integrating with the Tomba.io API. This server provides comprehensive email discovery, verification, and enrichment capabilities through a standardized MCP interface.
 
+## Hosted deployment
+
+A hosted deployment is available on [Fronteir AI](https://fronteir.ai/mcp/tomba-io-tomba-mcp-server).
+
 ## Features
 
 ### Tools (12 available)
