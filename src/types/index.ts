@@ -32,6 +32,8 @@ export interface DomainSearchParams {
         | "administrative"
         | "facilities"
         | "accounting";
+    enrich_mobile?: boolean;
+    webhook_url?: string;
 }
 
 export interface EmailFinderParams {
@@ -41,26 +43,31 @@ export interface EmailFinderParams {
     firstName?: string;
     lastName?: string;
     enrich_mobile?: boolean;
+    webhook_url?: string;
 }
 
 export interface EmailVerifierParams {
     email: string;
     enrich_mobile?: boolean;
+    webhook_url?: string;
 }
 
 export interface EmailEnrichmentParams {
     email: string;
     enrich_mobile?: boolean;
+    webhook_url?: string;
 }
 
 export interface AuthorFinderParams {
     url: string;
+    webhook_url?: string;
 }
 
 export interface LinkedinFinderParams {
     url: string;
     enrich_mobile?: boolean;
     full?: boolean;
+    webhook_url?: string;
 }
 
 export interface PhoneFinderParams {
@@ -68,6 +75,7 @@ export interface PhoneFinderParams {
     domain?: string;
     linkedin?: string;
     full?: boolean;
+    webhook_url?: string;
 }
 
 export interface PhoneValidatorParams {
@@ -161,6 +169,16 @@ export const DomainSearchParamsSchema = z
             ])
             .optional()
             .describe("Filter results by department"),
+        enrich_mobile: z
+            .boolean()
+            .optional()
+            .describe("Whether to enrich with mobile phone data"),
+        webhook_url: z
+            .url("Invalid webhook URL format")
+            .optional()
+            .describe(
+                "Optional webhook URL to receive asynchronous notifications when the search is complete. If not provided, results will be returned in the response.",
+            ),
     })
     .describe(
         "Search for email addresses associated with a domain name or company",
@@ -198,10 +216,16 @@ export const EmailFinderParamsSchema = z
             .max(50, "Last name too long")
             .regex(/^[a-zA-Z\s-']+$/, "Invalid characters in last name")
             .optional(),
-        enrichMobile: z
+        enrich_mobile: z
             .boolean()
             .optional()
             .describe("Whether to enrich with mobile phone data"),
+        webhook_url: z
+            .url("Invalid webhook URL format")
+            .optional()
+            .describe(
+                "Optional webhook URL to receive asynchronous notifications when the search is complete. If not provided, results will be returned in the response.",
+            ),
     })
     .describe(
         "Find email addresses by providing a domain and person's first/last name",
@@ -214,6 +238,12 @@ export const EmailVerifierParamsSchema = z
             .boolean()
             .optional()
             .describe("Whether to enrich with mobile phone data"),
+        webhook_url: z
+            .url("Invalid webhook URL format")
+            .optional()
+            .describe(
+                "Optional webhook URL to receive asynchronous notifications when the search is complete. If not provided, results will be returned in the response.",
+            ),
     })
     .describe(
         "Verify email address deliverability and validity with detailed verification data",
@@ -226,6 +256,12 @@ export const EmailEnrichmentParamsSchema = z
             .boolean()
             .optional()
             .describe("Whether to enrich with mobile phone data"),
+        webhook_url: z
+            .url("Invalid webhook URL format")
+            .optional()
+            .describe(
+                "Optional webhook URL to receive asynchronous notifications when the search is complete. If not provided, results will be returned in the response.",
+            ),
     })
     .describe(
         "Enrich email addresses with additional data including social profiles and company information",
@@ -249,6 +285,12 @@ export const LinkedinFinderParamsSchema = z
             .boolean()
             .optional()
             .describe("Whether to enrich with mobile phone data"),
+        webhook_url: z
+            .url("Invalid webhook URL format")
+            .optional()
+            .describe(
+                "Optional webhook URL to receive asynchronous notifications when the search is complete. If not provided, results will be returned in the response.",
+            ),
     })
     .describe(
         "Find email addresses from LinkedIn profile URLs with optional phone enrichment",
@@ -270,6 +312,12 @@ export const PhoneFinderParamsSchema = z
             .boolean()
             .optional()
             .describe("Whether to return full phone details"),
+        webhook_url: z
+            .url("Invalid webhook URL format")
+            .optional()
+            .describe(
+                "Optional webhook URL to receive asynchronous notifications when the search is complete. If not provided, results will be returned in the response.",
+            ),
     })
     .refine((data) => data.email || data.domain || data.linkedin, {
         message: "At least one of email, domain, or linkedin must be provided",
@@ -684,6 +732,12 @@ export const CompaniesSearchParamsSchema = z
             .min(1, "Page must be at least 1")
             .optional()
             .default(1),
+        webhook_url: z
+            .url("Invalid webhook URL format")
+            .optional()
+            .describe(
+                "Optional webhook URL to receive asynchronous notifications when the search is complete. If not provided, results will be returned in the response.",
+            ),
     })
     .describe(
         "Search for companies using natural language queries or detailed filters including location, industry, size, revenue, and more",
