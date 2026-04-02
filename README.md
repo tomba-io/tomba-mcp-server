@@ -140,6 +140,24 @@ yarn build
 
 ## Configuration
 
+### OpenClaw Skill
+
+This repository now includes a workspace-local OpenClaw skill at `skills/tomba-contact-intelligence/SKILL.md`.
+
+The skill is designed to help OpenClaw choose the right Tomba MCP tools for contact discovery, company research, email verification, phone lookup, and prospect enrichment workflows.
+
+To use it:
+
+1. Open this repository as your OpenClaw workspace, or copy the `skills/tomba-contact-intelligence` directory into your OpenClaw skills directory.
+2. Ensure the Tomba MCP server is configured and available to OpenClaw.
+3. Start a new OpenClaw session so the skill is loaded.
+
+Example prompts:
+
+- "Find the best contact for partnerships at stripe.com and verify the email before you return it."
+- "Research fintech companies in Germany, then identify likely sales contacts for the top matches."
+- "Enrich this prospect with email, phone, company technology, and similar competitors: jane@acme.com"
+
 ### Claude Desktop Setup
 
 To use this server with Claude Desktop, add the configuration to your `claude_desktop_config.json` file.
