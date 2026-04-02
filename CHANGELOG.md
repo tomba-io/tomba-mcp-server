@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://github.com/tomba-io/tomba-mcp-server/compare/v1.6.0...v1.8.0) (2026-04-02)
+
+
+### Features
+
+* add OpenClaw skill for enhanced contact discovery and enrichment workflows ([27f0f0f](https://github.com/tomba-io/tomba-mcp-server/commit/27f0f0f44dc919296075b884f2394a4bcb5fa83b))
+* add optional enrich_mobile and webhook_url parameters to various search and enrichment interfaces ([122496f](https://github.com/tomba-io/tomba-mcp-server/commit/122496fa20565b465f88591060fb8c1aed9f1883))
+* add README and SKILL files for Tomba Contact Intelligence skill ([d2f477d](https://github.com/tomba-io/tomba-mcp-server/commit/d2f477da76a91845e38d9021694566a30d6b9fc0))
+
 ## [1.6.0](https://github.com/tomba-io/tomba-mcp-server/compare/v1.4.0...v1.6.0) (2026-03-10)
 
 
