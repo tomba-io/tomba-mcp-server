@@ -33,5 +33,27 @@
                 }
             ]
         }
+    ],
+    "remotes": [
+        {
+            "type": "streamable-http",
+            "url": "https://mcp.tomba.io/mcp",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "description": "Bearer token: base64 encode your API key and secret as ta_key:ts_secret",
+                    "value": "Bearer {credentials}",
+                    "isRequired": true,
+                    "isSecret": true,
+                    "variables": {
+                        "credentials": {
+                            "description": "Base64 encoded API credentials (ta_key:ts_secret)",
+                            "isRequired": true,
+                            "isSecret": true
+                        }
+                    }
+                }
+            ]
+        }
     ]
 }
