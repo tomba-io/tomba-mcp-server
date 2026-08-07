@@ -91,7 +91,7 @@ Add to your `claude_desktop_config.json` (`~/Library/Application Support/Claude/
     "mcpServers": {
         "tomba": {
             "command": "npx",
-            "args": ["-y", "tomba-mcp-server"],
+            "args": ["-y", "@tomba-io/tomba-mcp-server"],
             "env": {
                 "TOMBA_API_KEY": "your-api-key-here",
                 "TOMBA_SECRET_KEY": "your-secret-key-here"
@@ -110,7 +110,7 @@ Add to your `claude_desktop_config.json` (`%APPDATA%\Claude\claude_desktop_confi
     "mcpServers": {
         "tomba": {
             "command": "npx",
-            "args": ["-y", "tomba-mcp-server"],
+            "args": ["-y", "@tomba-io/tomba-mcp-server"],
             "env": {
                 "TOMBA_API_KEY": "your-api-key-here",
                 "TOMBA_SECRET_KEY": "your-secret-key-here"
@@ -173,7 +173,7 @@ This method automatically uses the latest published version:
     "mcpServers": {
         "tomba": {
             "command": "npx",
-            "args": ["-y", "tomba-mcp-server"],
+            "args": ["-y", "@tomba-io/tomba-mcp-server"],
             "env": {
                 "TOMBA_API_KEY": "your-api-key-here",
                 "TOMBA_SECRET_KEY": "your-secret-key-here"
@@ -190,7 +190,7 @@ This method automatically uses the latest published version:
     "mcpServers": {
         "tomba": {
             "command": "npx",
-            "args": ["-y", "tomba-mcp-server"],
+            "args": ["-y", "@tomba-io/tomba-mcp-server"],
             "env": {
                 "TOMBA_API_KEY": "your-api-key-here",
                 "TOMBA_SECRET_KEY": "your-secret-key-here"
@@ -265,7 +265,7 @@ For HTTP transport with npx:
             "command": "npx",
             "args": [
                 "-y",
-                "tomba-mcp-server",
+                "@tomba-io/tomba-mcp-server",
                 "--transport",
                 "http",
                 "--port",
@@ -1144,7 +1144,7 @@ When you exceed your rate limit, the API returns a `429 Too Many Requests` statu
 
 **Package not found:**
 
-- Verify the package is published: `npm view tomba-mcp-server`
+- Verify the package is published: `npm view @tomba-io/tomba-mcp-server`
 - Try clearing npm cache: `npm cache clean --force`
 
 **Always downloading package:**

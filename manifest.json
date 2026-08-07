@@ -1,6 +1,6 @@
 {
     "manifest_version": "0.2",
-    "name": "tomba-mcp-server",
+    "name": "@tomba-io/tomba-mcp-server",
     "display_name": "Tomba MCP Server",
     "version": "1.8.0",
     "description": "MCP server for Tomba email finder and verification API",
