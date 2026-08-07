@@ -78,6 +78,8 @@ A Model Context Protocol (MCP) server for integrating with the Tomba.io API. Thi
 ![Screenshot 4](assets/screenshots/screenshot4.png)
 ![Screenshot 5](assets/screenshots/screenshot5.png)
 
+> **Note:** The npm package has been renamed from `tomba-mcp-server` to `@tomba-io/tomba-mcp-server`. Please update your configurations accordingly.
+
 ### Option 1: Install via NPX (Recommended)
 
 The easiest way to use the Tomba MCP server is via npx, which doesn't require cloning the repository:
