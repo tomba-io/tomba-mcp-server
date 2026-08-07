@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.0](https://github.com/tomba-io/tomba-mcp-server/compare/v1.8.0...v1.10.0) (2026-08-07)
+
+
+### Features
+
+* add server.json configuration for Tomba MCP Server and remove obsolete smithery.yaml ([052338c](https://github.com/tomba-io/tomba-mcp-server/commit/052338c25ef5c8f9969e90e4bf49e80c14f4ca51))
+* update package name to @tomba-io/tomba-mcp-server in README, manifest, and package files ([cf38798](https://github.com/tomba-io/tomba-mcp-server/commit/cf38798c39e34c4220692cd3e46a2515241cc2b9))
+
 ## [1.8.0](https://github.com/tomba-io/tomba-mcp-server/compare/v1.6.0...v1.8.0) (2026-04-02)
 
 

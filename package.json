@@ -1,7 +1,7 @@
 {
     "name": "@tomba-io/tomba-mcp-server",
     "mcpName": "io.github.tomba-io/tomba-mcp-server",
-    "version": "1.8.0",
+    "version": "1.10.0",
     "description": "MCP Server for Tomba.io API integration",
     "main": "server/index.js",
     "type": "module",
