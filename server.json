@@ -8,12 +8,12 @@
         "url": "https://github.com/tomba-io/tomba-mcp-server",
         "source": "github"
     },
-    "version": "1.8.0",
+    "version": "1.10.0",
     "packages": [
         {
             "registryType": "npm",
             "identifier": "@tomba-io/tomba-mcp-server",
-            "version": "1.8.0",
+            "version": "1.10.0",
             "runtimeHint": "npx",
             "transport": {
                 "type": "stdio"
