@@ -1,0 +1,37 @@
+{
+    "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+    "name": "io.github.tomba-io/tomba-mcp-server",
+    "title": "Tomba MCP Server",
+    "description": "MCP server for Tomba email finder, verification, and contact enrichment API",
+    "websiteUrl": "https://tomba.io",
+    "repository": {
+        "url": "https://github.com/tomba-io/tomba-mcp-server",
+        "source": "github"
+    },
+    "version": "1.8.0",
+    "packages": [
+        {
+            "registryType": "npm",
+            "identifier": "@tomba-io/tomba-mcp-server",
+            "version": "1.8.0",
+            "runtimeHint": "npx",
+            "transport": {
+                "type": "stdio"
+            },
+            "environmentVariables": [
+                {
+                    "name": "TOMBA_API_KEY",
+                    "description": "Tomba API key (format: ta_*)",
+                    "isRequired": true,
+                    "isSecret": true
+                },
+                {
+                    "name": "TOMBA_SECRET_KEY",
+                    "description": "Tomba secret key (format: ts_*)",
+                    "isRequired": true,
+                    "isSecret": true
+                }
+            ]
+        }
+    ]
+}
