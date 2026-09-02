@@ -694,4 +694,253 @@ export const toolsList: Tool[] = [
             required: ["filters"],
         },
     },
+    {
+        name: "email_sources",
+        description: "Find where an email address was found on the web",
+        annotations: { readOnlyHint: true },
+        inputSchema: {
+            type: "object",
+            properties: {
+                email: { type: "string", description: "Email address to find sources for" },
+            },
+            required: ["email"],
+        },
+    },
+    {
+        name: "email_format",
+        description: "Get the email format patterns used by a specific domain",
+        annotations: { readOnlyHint: true },
+        inputSchema: {
+            type: "object",
+            properties: {
+                domain: { type: "string", description: "Domain name to get email format for" },
+            },
+            required: ["domain"],
+        },
+    },
+    {
+        name: "domain_status",
+        description: "Check if a domain is a webmail provider or disposable email service",
+        annotations: { readOnlyHint: true },
+        inputSchema: {
+            type: "object",
+            properties: {
+                domain: { type: "string", description: "Domain name to check status for" },
+            },
+            required: ["domain"],
+        },
+    },
+    {
+        name: "autocomplete",
+        description: "Autocomplete company names and retrieve logo and domain information",
+        annotations: { readOnlyHint: true },
+        inputSchema: {
+            type: "object",
+            properties: {
+                query: { type: "string", description: "Partial company name or domain to search" },
+            },
+            required: ["query"],
+        },
+    },
+    {
+        name: "location",
+        description: "Get employees location count by country for a domain",
+        annotations: { readOnlyHint: true },
+        inputSchema: {
+            type: "object",
+            properties: {
+                domain: { type: "string", description: "Domain name to get location data for" },
+            },
+            required: ["domain"],
+        },
+    },
+    {
+        name: "person_enrichment",
+        description: "Find person data including name, position, company, and social profiles by email",
+        annotations: { readOnlyHint: true },
+        inputSchema: {
+            type: "object",
+            properties: {
+                email: { type: "string", description: "Email address to find person data for" },
+            },
+            required: ["email"],
+        },
+    },
+    {
+        name: "company_enrichment",
+        description: "Find company data including industry, size, location, and social profiles by domain",
+        annotations: { readOnlyHint: true },
+        inputSchema: {
+            type: "object",
+            properties: {
+                domain: { type: "string", description: "Domain name to find company data for" },
+            },
+            required: ["domain"],
+        },
+    },
+    {
+        name: "combined_enrichment",
+        description: "Combined person and company enrichment by email - returns both person and company data",
+        annotations: { readOnlyHint: true },
+        inputSchema: {
+            type: "object",
+            properties: {
+                email: { type: "string", description: "Email address for combined enrichment" },
+            },
+            required: ["email"],
+        },
+    },
+    {
+        name: "account_info",
+        description: "Get current Tomba account information including plan, credits, and usage limits",
+        annotations: { readOnlyHint: true },
+        inputSchema: {
+            type: "object",
+            properties: {},
+        },
+    },
+    {
+        name: "usage_info",
+        description: "Get current API usage statistics across all endpoints",
+        annotations: { readOnlyHint: true },
+        inputSchema: {
+            type: "object",
+            properties: {},
+        },
+    },
+    {
+        name: "list_flags",
+        description: "List submitted data flags for incorrect data reports",
+        annotations: { readOnlyHint: true },
+        inputSchema: {
+            type: "object",
+            properties: {
+                page: {
+                    type: "number",
+                    description: "Page number for pagination",
+                    default: 1,
+                },
+                limit: {
+                    type: "number",
+                    description: "Maximum number of results per page (1-100)",
+                    default: 10,
+                },
+            },
+        },
+    },
+    {
+        name: "create_flag",
+        description: "Report incorrect data (e.g. hard bounce, wrong email) for credit recovery",
+        inputSchema: {
+            type: "object",
+            properties: {
+                flag_type: {
+                    type: "string",
+                    enum: ["email", "organization", "phone", "author_url", "website"],
+                    description: "Type of data being flagged",
+                },
+                value: {
+                    type: "string",
+                    description: "The value being flagged (e.g. the email address or domain)",
+                },
+                reason: {
+                    type: "string",
+                    enum: ["hard_bounce", "invalid_email", "wrong_person", "outdated", "other", "wrong_company", "wrong_phone", "broken_url"],
+                    description: "Reason for flagging the data",
+                },
+                comment: {
+                    type: "string",
+                    description: "Optional comment with additional details",
+                },
+            },
+            required: ["flag_type", "value", "reason"],
+        },
+    },
+    {
+        name: "list_leads",
+        description: "List leads with optional domain filter and pagination",
+        annotations: { readOnlyHint: true },
+        inputSchema: {
+            type: "object",
+            properties: {
+                page: {
+                    type: "number",
+                    description: "Page number for pagination",
+                    default: 1,
+                },
+                limit: {
+                    type: "number",
+                    description: "Maximum number of results per page (1-100)",
+                    default: 10,
+                },
+                domain: {
+                    type: "string",
+                    description: "Filter leads by domain",
+                },
+            },
+        },
+    },
+    {
+        name: "create_lead",
+        description: "Create a new lead record with email and list assignment",
+        inputSchema: {
+            type: "object",
+            properties: {
+                email: {
+                    type: "string",
+                    description: "Email address of the lead",
+                },
+                list_id: {
+                    type: "number",
+                    description: "ID of the leads list to add this lead to",
+                },
+                first_name: {
+                    type: "string",
+                    description: "First name of the lead",
+                },
+                last_name: {
+                    type: "string",
+                    description: "Last name of the lead",
+                },
+                company: {
+                    type: "string",
+                    description: "Company name of the lead",
+                },
+                position: {
+                    type: "string",
+                    description: "Job position of the lead",
+                },
+            },
+            required: ["email", "list_id"],
+        },
+    },
+    {
+        name: "list_keys",
+        description: "List your API keys",
+        annotations: { readOnlyHint: true },
+        inputSchema: {
+            type: "object",
+            properties: {},
+        },
+    },
+    {
+        name: "get_logs",
+        description: "Get API request logs from the last 3 months",
+        annotations: { readOnlyHint: true },
+        inputSchema: {
+            type: "object",
+            properties: {
+                page: {
+                    type: "number",
+                    description: "Page number for pagination",
+                    default: 1,
+                },
+                limit: {
+                    type: "number",
+                    description: "Maximum number of results per page (1-100)",
+                    default: 10,
+                },
+            },
+        },
+    },
 ];

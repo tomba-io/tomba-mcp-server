@@ -743,6 +743,88 @@ export const CompaniesSearchParamsSchema = z
         "Search for companies using natural language queries or detailed filters including location, industry, size, revenue, and more",
     );
 
+export interface EmailSourcesParams { email: string; }
+export interface EmailFormatParams { domain: string; }
+export interface DomainStatusParams { domain: string; }
+export interface AutocompleteParams { query: string; }
+export interface LocationParams { domain: string; }
+export interface PersonEnrichmentParams { email: string; }
+export interface CompanyEnrichmentParams { domain: string; }
+export interface CombinedEnrichmentParams { email: string; }
+
+export const EmailSourcesParamsSchema = z.object({
+    email: z.email("Invalid email format").min(1, "Email is required"),
+}).describe("Find where an email address was found on the web");
+
+export const EmailFormatParamsSchema = z.object({
+    domain: z.string().min(1, "Domain is required").regex(/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid domain format"),
+}).describe("Get the email format patterns used by a specific domain");
+
+export const DomainStatusParamsSchema = z.object({
+    domain: z.string().min(1, "Domain is required").regex(/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid domain format"),
+}).describe("Check if a domain is a webmail provider or disposable email service");
+
+export const AutocompleteParamsSchema = z.object({
+    query: z.string().min(1, "Query is required"),
+}).describe("Autocomplete company names and retrieve domain information");
+
+export const LocationParamsSchema = z.object({
+    domain: z.string().min(1, "Domain is required").regex(/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid domain format"),
+}).describe("Get employees location count by country for a domain");
+
+export const PersonEnrichmentParamsSchema = z.object({
+    email: z.email("Invalid email format").min(1, "Email is required"),
+}).describe("Find person data by email address");
+
+export const CompanyEnrichmentParamsSchema = z.object({
+    domain: z.string().min(1, "Domain is required").regex(/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid domain format"),
+}).describe("Find company data by domain name");
+
+export const CombinedEnrichmentParamsSchema = z.object({
+    email: z.email("Invalid email format").min(1, "Email is required"),
+}).describe("Combined person and company enrichment by email");
+
+export interface ListFlagsParams { page?: number; limit?: number; }
+export interface CreateFlagParams { flag_type: string; value: string; reason: string; comment?: string; }
+export interface ListLeadsParams { page?: number; limit?: number; domain?: string; }
+export interface CreateLeadParams { email: string; list_id: number; first_name?: string; last_name?: string; company?: string; position?: string; }
+export interface ListKeysParams {}
+export interface GetLogsParams { page?: number; limit?: number; }
+
+export const ListFlagsParamsSchema = z.object({
+    page: z.number().int().min(1).optional().default(1),
+    limit: z.number().int().min(1).max(100).optional().default(10),
+}).describe("List submitted data flags with pagination");
+
+export const CreateFlagParamsSchema = z.object({
+    flag_type: z.enum(["email", "organization", "phone", "author_url", "website"]),
+    value: z.string().min(2).max(255),
+    reason: z.enum(["hard_bounce", "invalid_email", "wrong_person", "outdated", "other", "wrong_company", "wrong_phone", "broken_url"]),
+    comment: z.string().max(1000).optional(),
+}).describe("Report incorrect data for credit recovery");
+
+export const ListLeadsParamsSchema = z.object({
+    page: z.number().int().min(1).optional().default(1),
+    limit: z.number().int().min(1).max(100).optional().default(10),
+    domain: z.string().optional(),
+}).describe("List leads with optional domain filter");
+
+export const CreateLeadParamsSchema = z.object({
+    email: z.email("Invalid email format"),
+    list_id: z.number().int().min(1),
+    first_name: z.string().optional(),
+    last_name: z.string().optional(),
+    company: z.string().optional(),
+    position: z.string().optional(),
+}).describe("Create a new lead");
+
+export const ListKeysParamsSchema = z.object({}).describe("List API keys");
+
+export const GetLogsParamsSchema = z.object({
+    page: z.number().int().min(1).optional().default(1),
+    limit: z.number().int().min(1).max(100).optional().default(10),
+}).describe("Get API request logs");
+
 // Additional validation schemas for common patterns
 export const PaginationSchema = z.object({
     page: z.number().int().min(1).default(1),

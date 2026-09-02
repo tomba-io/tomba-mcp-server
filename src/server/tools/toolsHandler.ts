@@ -16,6 +16,20 @@ import {
     SimilarFinderParamsSchema,
     TechnologyFinderParamsSchema,
     CompaniesSearchParamsSchema,
+    EmailSourcesParamsSchema,
+    EmailFormatParamsSchema,
+    DomainStatusParamsSchema,
+    AutocompleteParamsSchema,
+    LocationParamsSchema,
+    PersonEnrichmentParamsSchema,
+    CompanyEnrichmentParamsSchema,
+    CombinedEnrichmentParamsSchema,
+    ListFlagsParamsSchema,
+    CreateFlagParamsSchema,
+    ListLeadsParamsSchema,
+    CreateLeadParamsSchema,
+    ListKeysParamsSchema,
+    GetLogsParamsSchema,
 } from "../../types/index.js";
 import {
     validateToolArguments,
@@ -224,6 +238,257 @@ export async function handleToolCall(
                         {
                             type: "text",
                             text: JSON.stringify(companiesResult, null, 2),
+                        },
+                    ],
+                };
+
+            case "email_sources":
+                const sourcesParams = validateToolArguments(
+                    EmailSourcesParamsSchema,
+                    args,
+                    "email_sources",
+                );
+                const sourcesResult = await client.emailSources(sourcesParams);
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: JSON.stringify(sourcesResult, null, 2),
+                        },
+                    ],
+                };
+
+            case "email_format":
+                const formatParams = validateToolArguments(
+                    EmailFormatParamsSchema,
+                    args,
+                    "email_format",
+                );
+                const formatResult = await client.emailFormat(formatParams);
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: JSON.stringify(formatResult, null, 2),
+                        },
+                    ],
+                };
+
+            case "domain_status":
+                const statusParams = validateToolArguments(
+                    DomainStatusParamsSchema,
+                    args,
+                    "domain_status",
+                );
+                const statusResult = await client.domainStatus(statusParams);
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: JSON.stringify(statusResult, null, 2),
+                        },
+                    ],
+                };
+
+            case "autocomplete":
+                const autocompleteParams = validateToolArguments(
+                    AutocompleteParamsSchema,
+                    args,
+                    "autocomplete",
+                );
+                const autocompleteResult =
+                    await client.autoComplete(autocompleteParams);
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: JSON.stringify(autocompleteResult, null, 2),
+                        },
+                    ],
+                };
+
+            case "location":
+                const locationParams = validateToolArguments(
+                    LocationParamsSchema,
+                    args,
+                    "location",
+                );
+                const locationResult =
+                    await client.getLocation(locationParams);
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: JSON.stringify(locationResult, null, 2),
+                        },
+                    ],
+                };
+
+            case "person_enrichment":
+                const personParams = validateToolArguments(
+                    PersonEnrichmentParamsSchema,
+                    args,
+                    "person_enrichment",
+                );
+                const personResult =
+                    await client.personEnrichment(personParams);
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: JSON.stringify(personResult, null, 2),
+                        },
+                    ],
+                };
+
+            case "company_enrichment":
+                const companyParams = validateToolArguments(
+                    CompanyEnrichmentParamsSchema,
+                    args,
+                    "company_enrichment",
+                );
+                const companyResult =
+                    await client.companyEnrichment(companyParams);
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: JSON.stringify(companyResult, null, 2),
+                        },
+                    ],
+                };
+
+            case "combined_enrichment":
+                const combinedParams = validateToolArguments(
+                    CombinedEnrichmentParamsSchema,
+                    args,
+                    "combined_enrichment",
+                );
+                const combinedResult =
+                    await client.combinedEnrichment(combinedParams);
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: JSON.stringify(combinedResult, null, 2),
+                        },
+                    ],
+                };
+
+            case "account_info":
+                const accountResult = await client.getAccount();
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: JSON.stringify(accountResult, null, 2),
+                        },
+                    ],
+                };
+
+            case "usage_info":
+                const usageResult = await client.getUsage();
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: JSON.stringify(usageResult, null, 2),
+                        },
+                    ],
+                };
+
+            case "list_flags":
+                const listFlagsParams = validateToolArguments(
+                    ListFlagsParamsSchema,
+                    args,
+                    "list_flags",
+                );
+                const listFlagsResult = await client.listFlags(listFlagsParams);
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: JSON.stringify(listFlagsResult, null, 2),
+                        },
+                    ],
+                };
+
+            case "create_flag":
+                const createFlagParams = validateToolArguments(
+                    CreateFlagParamsSchema,
+                    args,
+                    "create_flag",
+                );
+                const createFlagResult = await client.createFlag(createFlagParams);
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: JSON.stringify(createFlagResult, null, 2),
+                        },
+                    ],
+                };
+
+            case "list_leads":
+                const listLeadsParams = validateToolArguments(
+                    ListLeadsParamsSchema,
+                    args,
+                    "list_leads",
+                );
+                const listLeadsResult = await client.listLeads(listLeadsParams);
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: JSON.stringify(listLeadsResult, null, 2),
+                        },
+                    ],
+                };
+
+            case "create_lead":
+                const createLeadParams = validateToolArguments(
+                    CreateLeadParamsSchema,
+                    args,
+                    "create_lead",
+                );
+                const createLeadResult = await client.createLead(createLeadParams);
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: JSON.stringify(createLeadResult, null, 2),
+                        },
+                    ],
+                };
+
+            case "list_keys":
+                validateToolArguments(
+                    ListKeysParamsSchema,
+                    args,
+                    "list_keys",
+                );
+                const listKeysResult = await client.listKeys();
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: JSON.stringify(listKeysResult, null, 2),
+                        },
+                    ],
+                };
+
+            case "get_logs":
+                const getLogsParams = validateToolArguments(
+                    GetLogsParamsSchema,
+                    args,
+                    "get_logs",
+                );
+                const getLogsResult = await client.getLogs(getLogsParams);
+                return {
+                    content: [
+                        {
+                            type: "text",
+                            text: JSON.stringify(getLogsResult, null, 2),
                         },
                     ],
                 };

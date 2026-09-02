@@ -4,20 +4,49 @@ A Model Context Protocol (MCP) server for integrating with the Tomba.io API. Thi
 
 ## Features
 
-### Tools (12 available)
+### Tools (28 available)
 
+#### Email Discovery
 - **[Domain Search](https://tomba.io/domain-search)**: Find all email addresses associated with a domain
 - **[Email Finder](https://tomba.io/email-finder)**: Generate likely email addresses from names and domains
-- **[Email Verifier](https://tomba.io/email-verifier)**: Verify email deliverability and check database presence
-- **[Email Enrichment](https://tomba.io/enrichment)**: Enrich emails with additional contact data
 - **[Author Finder](https://tomba.io/author-finder)**: Discover email addresses of article authors
 - **[LinkedIn Finder](https://tomba.io/linkedin-finder)**: Find emails from LinkedIn profile URLs
+- **[Email Count](https://tomba.io/email-count)**: Get total email counts for domains
+- **[Email Sources](https://docs.tomba.io/api)**: Find where an email address was found on the web
+- **[Email Format](https://docs.tomba.io/api)**: Get the email format patterns used by a domain
+
+#### Verification
+- **[Email Verifier](https://tomba.io/email-verifier)**: Verify email deliverability and check database presence
+
+#### Enrichment
+- **[Email Enrichment](https://tomba.io/enrichment)**: Enrich emails with additional contact data
+- **[Person Enrichment](https://docs.tomba.io/api)**: Find person data by email (name, position, social profiles)
+- **[Company Enrichment](https://docs.tomba.io/api)**: Find company data by domain (industry, size, location)
+- **[Combined Enrichment](https://docs.tomba.io/api)**: Combined person + company enrichment by email
+
+#### Phone
 - **[Phone Finder](https://tomba.io/phone-finder)**: Search phone numbers by email, domain, or LinkedIn
 - **[Phone Validator](https://tomba.io/phone-validator)**: Validate phone numbers and check carrier info
-- **[Email Count](https://tomba.io/email-count)**: Get total email counts for domains
+
+#### Domain Intelligence
+- **[Domain Status](https://docs.tomba.io/api)**: Check if a domain is webmail or disposable
+- **[Autocomplete](https://docs.tomba.io/api)**: Company name suggestions with logo and domain info
 - **[Similar Finder](https://tomba.io/similar-domains)**: Find similar domains based on a target domain
 - **[Technology Finder](https://tomba.io/technology-finder)**: Discover technology stacks used by websites
+- **[Location](https://docs.tomba.io/api)**: Get employees location count by country
+
+#### Company Search
 - **[Companies Search](https://app.tomba.io/reveal)**: Search for companies using natural language queries with advanced filters
+
+#### Account & Management
+- **Account Info**: Get current account information, plan, and credits
+- **Usage Info**: Get API usage statistics across all endpoints
+- **List Flags**: List submitted data flags with status and credit refunds
+- **Create Flag**: Report incorrect data (hard bounces, invalid emails) for credit recovery
+- **List Leads**: List leads with optional domain filter
+- **Create Lead**: Add a new lead to a list
+- **List Keys**: List API keys
+- **Get Logs**: Get recent API request logs
 
 ### Resources (7 available)
 
@@ -36,7 +65,7 @@ A Model Context Protocol (MCP) server for integrating with the Tomba.io API. Thi
 - **research_company** - Research company contacts and structure
 - **enrich_lead** - Enrich a lead with all available data
 - **find_journalists** - Find journalist contacts from articles
-- **finder_phone** - Find phone numbers for contacts
+- **phone_finder** - Find phone numbers for contacts
 - **validate_phone** - Validate a phone number
 - **competitor_analysis** - Analyze competitors using similar domains and technology
 - **technology_audit** - Comprehensive technology audit of a website
@@ -56,6 +85,34 @@ A Model Context Protocol (MCP) server for integrating with the Tomba.io API. Thi
 | **Type**     | education, government, nonprofit, private, public, personal                                                                                                          |
 | **Revenue**  | $0-$1M, $1M-$10M, $10M-$50M, $50M-$100M, $100M-$250M, $250M-$500M, $500M-$1B, $1B-$10B, $10B+                                                                        |
 | **Industry** | Based on LinkedIn Industry Codes V2 (140+ industries including Computer Software, Financial Services, Hospital & Health Care, etc.)                                  |
+
+### Performance & Reliability
+
+#### Timeout
+
+All API calls have a **120-second timeout**. Tomba searches run in real time against live infrastructure — response times vary with the target company's SMTP server speed, website responsiveness, and the depth of catch-all detection.
+
+#### Retry with Exponential Backoff
+
+All API calls automatically retry up to **3 times** with exponential backoff on:
+- `429 Too Many Requests` (rate limit exceeded)
+- `5xx` server errors
+
+Retry delays: 1s → 2s → 4s.
+
+#### Rate Limits
+
+Rate limits are enforced per endpoint and per plan:
+
+| Plan | Per Second | Per Minute | Per Day |
+| --- | :---: | :---: | :---: |
+| Free | 1 | 2 | 5 |
+| Basic | 3 | 50 | 500 |
+| Growth | 5 | 80 | 1,000 |
+| Pro | 8 | 150 | 4,000 |
+| 50,000+ plans | Unlimited | Unlimited | Unlimited |
+
+No credits are charged when Tomba cannot provide a result. Duplicate requests within 30 days are not counted again.
 
 ### Transport Options
 
