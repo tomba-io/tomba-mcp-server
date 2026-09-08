@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/tomba-io-tomba-mcp-server-badge.png)](https://mseep.ai/app/tomba-io-tomba-mcp-server)
+
 # [<img src="https://tomba.io/logo.svg" alt="Tomba" width="25"/>](https://tomba.io/) Tomba.io MCP Server
 
 A Model Context Protocol (MCP) server for integrating with the Tomba.io API. This server provides comprehensive email discovery, verification, and enrichment capabilities through a standardized MCP interface.
