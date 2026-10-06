@@ -2,7 +2,7 @@
     "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
     "name": "io.github.tomba-io/tomba-mcp-server",
     "title": "Tomba MCP Server",
-    "description": "MCP server for Tomba email finder, verification, and contact enrichment API",
+    "description": "MCP server for Tomba Find, verify and enrich every B2B contact API",
     "websiteUrl": "https://tomba.io",
     "repository": {
         "url": "https://github.com/tomba-io/tomba-mcp-server",
@@ -40,10 +40,38 @@
             "url": "https://mcp.tomba.io/mcp",
             "headers": [
                 {
+                    "name": "X-Tomba-Key",
+                    "description": "Tomba API key (ta_...). Optional: OAuth is used when no credentials are sent",
+                    "value": "{api_key}",
+                    "isRequired": false,
+                    "isSecret": true,
+                    "variables": {
+                        "api_key": {
+                            "description": "Tomba API key (format: ta_*)",
+                            "isRequired": true,
+                            "isSecret": true
+                        }
+                    }
+                },
+                {
+                    "name": "X-Tomba-Secret",
+                    "description": "Tomba secret key (ts_...). Use together with X-Tomba-Key",
+                    "value": "{secret_key}",
+                    "isRequired": false,
+                    "isSecret": true,
+                    "variables": {
+                        "secret_key": {
+                            "description": "Tomba secret key (format: ts_*)",
+                            "isRequired": true,
+                            "isSecret": true
+                        }
+                    }
+                },
+                {
                     "name": "Authorization",
-                    "description": "Bearer token: base64 encode your API key and secret as ta_key:ts_secret",
+                    "description": "Optional alternative to X-Tomba-Key/X-Tomba-Secret: Bearer base64(ta_key:ts_secret). Omit all headers to sign in with OAuth (no keys needed)",
                     "value": "Bearer {credentials}",
-                    "isRequired": true,
+                    "isRequired": false,
                     "isSecret": true,
                     "variables": {
                         "credentials": {
