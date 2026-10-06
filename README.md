@@ -7,6 +7,7 @@ A Model Context Protocol (MCP) server for integrating with the Tomba.io API. Thi
 ### Tools (28 available)
 
 #### Email Discovery
+
 - **[Domain Search](https://tomba.io/domain-search)**: Find all email addresses associated with a domain
 - **[Email Finder](https://tomba.io/email-finder)**: Generate likely email addresses from names and domains
 - **[Author Finder](https://tomba.io/author-finder)**: Discover email addresses of article authors
@@ -16,19 +17,23 @@ A Model Context Protocol (MCP) server for integrating with the Tomba.io API. Thi
 - **[Email Format](https://docs.tomba.io/api)**: Get the email format patterns used by a domain
 
 #### Verification
+
 - **[Email Verifier](https://tomba.io/email-verifier)**: Verify email deliverability and check database presence
 
 #### Enrichment
+
 - **[Email Enrichment](https://tomba.io/enrichment)**: Enrich emails with additional contact data
 - **[Person Enrichment](https://docs.tomba.io/api)**: Find person data by email (name, position, social profiles)
 - **[Company Enrichment](https://docs.tomba.io/api)**: Find company data by domain (industry, size, location)
 - **[Combined Enrichment](https://docs.tomba.io/api)**: Combined person + company enrichment by email
 
 #### Phone
+
 - **[Phone Finder](https://tomba.io/phone-finder)**: Search phone numbers by email, domain, or LinkedIn
 - **[Phone Validator](https://tomba.io/phone-validator)**: Validate phone numbers and check carrier info
 
 #### Domain Intelligence
+
 - **[Domain Status](https://docs.tomba.io/api)**: Check if a domain is webmail or disposable
 - **[Autocomplete](https://docs.tomba.io/api)**: Company name suggestions with logo and domain info
 - **[Similar Finder](https://tomba.io/similar-domains)**: Find similar domains based on a target domain
@@ -36,9 +41,11 @@ A Model Context Protocol (MCP) server for integrating with the Tomba.io API. Thi
 - **[Location](https://docs.tomba.io/api)**: Get employees location count by country
 
 #### Company Search
+
 - **[Companies Search](https://app.tomba.io/reveal)**: Search for companies using natural language queries with advanced filters
 
 #### Account & Management
+
 - **Account Info**: Get current account information, plan, and credits
 - **Usage Info**: Get API usage statistics across all endpoints
 - **List Flags**: List submitted data flags with status and credit refunds
@@ -95,6 +102,7 @@ All API calls have a **120-second timeout**. Tomba searches run in real time aga
 #### Retry with Exponential Backoff
 
 All API calls automatically retry up to **3 times** with exponential backoff on:
+
 - `429 Too Many Requests` (rate limit exceeded)
 - `5xx` server errors
 
@@ -104,13 +112,13 @@ Retry delays: 1s → 2s → 4s.
 
 Rate limits are enforced per endpoint and per plan:
 
-| Plan | Per Second | Per Minute | Per Day |
-| --- | :---: | :---: | :---: |
-| Free | 1 | 2 | 5 |
-| Basic | 3 | 50 | 500 |
-| Growth | 5 | 80 | 1,000 |
-| Pro | 8 | 150 | 4,000 |
-| 50,000+ plans | Unlimited | Unlimited | Unlimited |
+| Plan          | Per Second | Per Minute |  Per Day  |
+| ------------- | :--------: | :--------: | :-------: |
+| Free          |     1      |     2      |     5     |
+| Basic         |     3      |     50     |    500    |
+| Growth        |     5      |     80     |   1,000   |
+| Pro           |     8      |    150     |   4,000   |
+| 50,000+ plans | Unlimited  | Unlimited  | Unlimited |
 
 No credits are charged when Tomba cannot provide a result. Duplicate requests within 30 days are not counted again.
 
@@ -201,13 +209,26 @@ yarn build
 
 ### OpenClaw Skill
 
-This repository now includes a workspace-local OpenClaw skill at `skills/tomba-contact-intelligence/SKILL.md`.
+This repository includes workspace-local skills in `skills/`. The Cursor plugin (`.cursor-plugin/plugin.json`) loads them as well.
 
-The skill is designed to help OpenClaw choose the right Tomba MCP tools for contact discovery, company research, email verification, phone lookup, and prospect enrichment workflows.
+`skills/tomba-contact-intelligence/SKILL.md` is the main skill. It helps the agent pick the right Tomba MCP tools for contact discovery, company research, email verification, phone lookup, and prospect enrichment workflows.
+
+Each MCP tool also has its own skill folder, `skills/tomba-<tool-name>/SKILL.md`. Each one covers the tool's inputs, workflow, expected output, and an example call:
+
+| Group        | Skills                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Email        | [`tomba-email-finder`](skills/tomba-email-finder/SKILL.md), [`tomba-email-verifier`](skills/tomba-email-verifier/SKILL.md), [`tomba-email-enrichment`](skills/tomba-email-enrichment/SKILL.md), [`tomba-email-count`](skills/tomba-email-count/SKILL.md), [`tomba-email-sources`](skills/tomba-email-sources/SKILL.md), [`tomba-email-format`](skills/tomba-email-format/SKILL.md)                                                                             |
+| Discovery    | [`tomba-domain-search`](skills/tomba-domain-search/SKILL.md), [`tomba-author-finder`](skills/tomba-author-finder/SKILL.md), [`tomba-linkedin-finder`](skills/tomba-linkedin-finder/SKILL.md)                                                                                                                                                                                                                                                                   |
+| Phone        | [`tomba-phone-finder`](skills/tomba-phone-finder/SKILL.md), [`tomba-phone-validator`](skills/tomba-phone-validator/SKILL.md)                                                                                                                                                                                                                                                                                                                                   |
+| Company      | [`tomba-companies-search`](skills/tomba-companies-search/SKILL.md), [`tomba-company-enrichment`](skills/tomba-company-enrichment/SKILL.md), [`tomba-similar-finder`](skills/tomba-similar-finder/SKILL.md), [`tomba-technology-finder`](skills/tomba-technology-finder/SKILL.md), [`tomba-autocomplete`](skills/tomba-autocomplete/SKILL.md), [`tomba-location`](skills/tomba-location/SKILL.md), [`tomba-domain-status`](skills/tomba-domain-status/SKILL.md) |
+| Enrichment   | [`tomba-person-enrichment`](skills/tomba-person-enrichment/SKILL.md), [`tomba-combined-enrichment`](skills/tomba-combined-enrichment/SKILL.md)                                                                                                                                                                                                                                                                                                                 |
+| Leads        | [`tomba-list-leads`](skills/tomba-list-leads/SKILL.md), [`tomba-create-lead`](skills/tomba-create-lead/SKILL.md)                                                                                                                                                                                                                                                                                                                                               |
+| Data quality | [`tomba-list-flags`](skills/tomba-list-flags/SKILL.md), [`tomba-create-flag`](skills/tomba-create-flag/SKILL.md)                                                                                                                                                                                                                                                                                                                                               |
+| Account      | [`tomba-account-info`](skills/tomba-account-info/SKILL.md), [`tomba-usage-info`](skills/tomba-usage-info/SKILL.md), [`tomba-list-keys`](skills/tomba-list-keys/SKILL.md), [`tomba-get-logs`](skills/tomba-get-logs/SKILL.md)                                                                                                                                                                                                                                   |
 
 To use it:
 
-1. Open this repository as your OpenClaw workspace, or copy the `skills/tomba-contact-intelligence` directory into your OpenClaw skills directory.
+1. Open this repository as your OpenClaw workspace, or copy the `skills/tomba-*` directories you need into your OpenClaw skills directory.
 2. Ensure the Tomba MCP server is configured and available to OpenClaw.
 3. Start a new OpenClaw session so the skill is loaded.
 
@@ -216,6 +237,27 @@ Example prompts:
 - "Find the best contact for partnerships at stripe.com and verify the email before you return it."
 - "Research fintech companies in Germany, then identify likely sales contacts for the top matches."
 - "Enrich this prospect with email, phone, company technology, and similar competitors: jane@acme.com"
+
+### Claude Code Plugin
+
+This repository is also a Claude Code plugin marketplace (`.claude-plugin/`). The plugin bundles every skill in `skills/` and connects to the hosted MCP server at `https://mcp.tomba.io/mcp`:
+
+```bash
+/plugin marketplace add tomba-io/tomba-mcp-server
+/plugin install tomba@tomba
+```
+
+Then run `/mcp` and authenticate the `tomba` server with OAuth. No API keys are needed. Plugin skills are namespaced, for example `/tomba:tomba-domain-search zapier.com`.
+
+### Codex Plugin
+
+`.codex-plugin/plugin.json` packages the same skills for OpenAI Codex. It loads the remote server from `.mcp.json`. After installing the plugin, sign in with OAuth:
+
+```bash
+codex mcp login tomba
+```
+
+To use API keys instead of OAuth, send the `X-Tomba-Key` and `X-Tomba-Secret` headers, or `Authorization: Bearer <base64(ta_key:ts_secret)>`, to `https://mcp.tomba.io/mcp`.
 
 ### Claude Desktop Setup
 

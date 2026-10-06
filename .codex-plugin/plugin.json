@@ -1,0 +1,27 @@
+{
+    "name": "tomba",
+    "version": "1.10.0",
+    "description": "Find, verify and enrich every B2B contact via the Tomba MCP server",
+    "author": {
+        "name": "Tomba technology web service LLC",
+        "email": "info@tomba.io",
+        "url": "https://tomba.io"
+    },
+    "homepage": "https://tomba.io",
+    "repository": "https://github.com/tomba-io/tomba-mcp-server",
+    "license": "MIT",
+    "keywords": ["email-finder", "email-verification", "enrichment", "lead-generation", "mcp"],
+    "skills": "./skills/",
+    "mcpServers": "./.mcp.json",
+    "interface": {
+        "displayName": "Tomba",
+        "shortDescription": "Find, verify, and enrich professional emails and company data",
+        "developerName": "Tomba technology web service LLC",
+        "category": "Productivity",
+        "websiteURL": "https://tomba.io",
+        "logo": "./assets/logo.svg",
+        "composerIcon": "./assets/logo.svg",
+        "brandColor": "#1A56DB",
+        "defaultPrompt": "Find marketing contacts at zapier.com and verify the top email"
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "mcpServers": {
+        "tomba": {
+            "type": "http",
+            "url": "https://mcp.tomba.io/mcp"
+        }
+    }
+}

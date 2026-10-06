@@ -1,0 +1,17 @@
+{
+    "name": "tomba",
+    "owner": {
+        "name": "Tomba technology web service LLC",
+        "email": "info@tomba.io",
+        "url": "https://tomba.io"
+    },
+    "description": "Official Tomba contact intelligence plugin",
+    "plugins": [
+        {
+            "name": "tomba",
+            "source": "./",
+            "description": "Find, verify and enrich every B2B contact via the Tomba MCP server",
+            "version": "1.10.0"
+        }
+    ]
+}

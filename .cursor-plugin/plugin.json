@@ -1,0 +1,21 @@
+{
+    "name": "tomba",
+    "displayName": "Tomba",
+    "version": "1.10.0",
+    "description": "Find, verify and enrich every B2B contact via the Tomba MCP server",
+    "author": {
+        "name": "Tomba technology web service LLC",
+        "email": "info@tomba.io"
+    },
+    "homepage": "https://tomba.io",
+    "repository": "https://github.com/tomba-io/tomba-mcp-server",
+    "license": "MIT",
+    "logo": "assets/logo.svg",
+    "keywords": ["email-finder", "email-verification", "enrichment", "lead-generation", "mcp"],
+    "skills": "./skills/",
+    "mcpServers": {
+        "tomba": {
+            "url": "https://mcp.tomba.io/mcp"
+        }
+    }
+}
