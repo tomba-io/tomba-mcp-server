@@ -19,7 +19,7 @@
         "longDescription": "Tomba is a B2B contact data tool for sales prospecting and lead generation. It finds and verifies professional email addresses and enriches contacts and companies, using Tomba's database of public business contact data.\n\nWhat you can do:\n- Find a person's work email from their name and company domain, or from a LinkedIn profile or article URL\n- Verify whether an email address is deliverable before you send to it\n- List the contacts at a company by department and country\n- Enrich an email or domain with person and company details: job title, company size, industry, location, and social profiles\n- Find and validate phone numbers\n- Build target account lists filtered by location, industry, size, revenue, and keywords\n- Research a company's technology stack, employee locations, and similar companies\n- Save leads and report incorrect data in your Tomba account\n\nWho it is for: sales, business development, recruiting, marketing, and PR teams who need accurate business contact information.\n\nLimitations: results are limited to Tomba's coverage of public business data, so some people or companies return no match. Lookups use your Tomba plan's credits. Requires a Tomba account: sign in with OAuth, or use your Tomba API key and secret. Tomba does not send emails.",
         "capabilities": ["Interactive", "Write"],
         "developerName": "Tomba technology web service LLC",
-        "category": "Business and Operations",
+        "category": "Business & Operations",
         "websiteURL": "https://tomba.io",
         "supportURL": "https://help.tomba.io/en/",
         "privacyPolicyURL": "https://tomba.io/legal/privacy-policy",
